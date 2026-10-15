@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using Multiple Panels on Different Edges in LXDE - lxde</title>
+    <meta name="description" content="The Lightweight X11 Desktop Environment (LXDE) natively supports adding multiple panels and placing them on different screen edges at the same time. Through its default desktop component, LXPanel, users can configure independent panels along the top, bott">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/using-multiple-panels-on-different-edges-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Using Multiple Panels on Different Edges in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/using-multiple-panels-on-different-edges-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Lightweight X11 Desktop Environment (LXDE) natively supports adding multiple panels and placing them on different screen edges at the same time. Through its default desktop component, LXPanel, users can configure independent panels along the top, bott" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="using-multiple-panels-on-different-edges-in-lxde">Using Multiple
+Panels on Different Edges in LXDE</h1>
+<p>The Lightweight X11 Desktop Environment (LXDE) natively supports
+adding multiple panels and placing them on different screen edges at the
+same time. Through its default desktop component, LXPanel, users can
+configure independent panels along the top, bottom, left, and right
+borders of the display. This guide covers how LXDE handles multiple
+panels, the steps to assign them to different edges, and how to
+customize them to fit your workflow.</p>
+<h3 id="managing-multiple-panels-in-lxpanel">Managing Multiple Panels in
+LXPanel</h3>
+<p>LXDE does not restrict the user interface to a single taskbar. Each
+panel created in LXPanel acts as an independent entity capable of
+holding its own plugins, applets, and geometry settings. For instance,
+you can place a primary taskbar along the bottom edge, an application
+launcher dock on the left edge, and a system monitor or clock along the
+top edge simultaneously.</p>
+<h3 id="how-to-add-and-position-a-new-panel">How to Add and Position a
+New Panel</h3>
+<p>To configure multiple panels on different edges of your screen,
+follow these steps:</p>
+<ol type="1">
+<li><strong>Create a New Panel:</strong> Right-click on any empty area
+of an existing panel and select <strong>Create New Panel</strong>. A
+blank panel will immediately appear on an available screen
+boundary.</li>
+<li><strong>Open Panel Settings:</strong> Right-click the newly created
+panel and choose <strong>Panel Settings</strong>.</li>
+<li><strong>Set the Edge Alignment:</strong> In the settings window,
+navigate to the <strong>Geometry</strong> tab. Look for the
+<strong>Edge</strong> setting, which provides a drop-down menu with four
+options:
+<ul>
+<li><strong>Top</strong></li>
+<li><strong>Bottom</strong></li>
+<li><strong>Left</strong></li>
+<li><strong>Right</strong></li>
+</ul></li>
+<li><strong>Adjust Dimensions:</strong> While in the Geometry tab, you
+can set the panel width, height, icon sizes, and whether the panel
+dynamically shrinks to fit its icons or stretches to fill the edge.</li>
+<li><strong>Add Plugins:</strong> Switch to the <strong>Panel
+Applets</strong> tab to populate the new panel with launchers, window
+lists, system trays, or application menus.</li>
+</ol>
+<h3 id="multi-monitor-considerations">Multi-Monitor Considerations</h3>
+<p>If you operate a multi-monitor setup, LXPanel allows you to assign
+specific panels not only to distinct edges, but also to specific
+monitors. Within the same Geometry tab, the <strong>Monitor</strong>
+selection allows you to bind a panel to a specific display index,
+ensuring panels on opposite edges do not interfere across extended
+desktop environments.</p>
+<h3 id="configuration-storage">Configuration Storage</h3>
+<p>All panel configurations are stored as plain text files within your
+user home directory, typically under
+<code>~/.config/lxpanel/LXDE/panels/</code>. Each panel creates its own
+dedicated configuration file (such as <code>panel</code> for the
+default, followed by custom names like <code>panel_0</code> or
+user-defined aliases), making it easy to duplicate, script, or back up
+custom layouts.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LXDE Core Gettext Localization Package Guide - lxde</title>
+    <meta name="description" content="In the Lightweight X11 Desktop Environment (LXDE), system translations and internationalization depend on GNU gettext message catalogs. This guide identifies the specific package responsible for delivering gettext localization strings to the core LXDE ses">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/lxde-core-gettext-localization-package-guide">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LXDE Core Gettext Localization Package Guide - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/lxde-core-gettext-localization-package-guide" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In the Lightweight X11 Desktop Environment (LXDE), system translations and internationalization depend on GNU gettext message catalogs. This guide identifies the specific package responsible for delivering gettext localization strings to the core LXDE ses" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="lxde-core-gettext-localization-package-guide">LXDE Core Gettext
+Localization Package Guide</h1>
+<p>In the Lightweight X11 Desktop Environment (LXDE), system
+translations and internationalization depend on GNU gettext message
+catalogs. This guide identifies the specific package responsible for
+delivering gettext localization strings to the core LXDE session
+components, details how different Linux distributions package these
+files, and explains how to verify their presence on your system.</p>
+<h3 id="the-core-localization-package-lxsession-data">The Core
+Localization Package: lxsession-data</h3>
+<p>In Debian, Ubuntu, and derivative Linux distributions, the package
+that explicitly provides gettext localization strings for the core LXDE
+suite is <strong><code>lxsession-data</code></strong>.</p>
+<p>In distributions that do not separate architecture-independent assets
+from core binaries—such as Arch Linux, Fedora, and openSUSE—these
+localization strings are bundled directly within the main
+<strong><code>lxsession</code></strong> package.</p>
+<h3 id="what-the-package-provides">What the Package Provides</h3>
+<p>The <code>lxsession-data</code> package contains all the non-binary
+assets required by <code>lxsession</code>, the standard session manager
+of the LXDE desktop. Its localization contents include:</p>
+<ul>
+<li><strong>Compiled Gettext Catalogs (<code>.mo</code> files):</strong>
+Stored under
+<code>/usr/share/locale/&lt;language&gt;/LC_MESSAGES/lxsession.mo</code>.</li>
+<li><strong>Desktop Interface Translations:</strong> Localized strings
+for session management dialogs, including shutdown, reboot, suspend, and
+logout prompts (<code>lxsession-logout</code>).</li>
+<li><strong>Session Configuration Localization:</strong> Translated
+interfaces for LXDE default application preferences
+(<code>lxsession-default-apps</code>) and the LXDE session configuration
+manager.</li>
+</ul>
+<h3 id="localization-across-the-broader-lxde-ecosystem">Localization
+Across the Broader LXDE Ecosystem</h3>
+<p>LXDE operates on a modular architecture. While
+<code>lxsession-data</code> handles session-level localization, gettext
+strings for other core parts of the desktop environment are supplied by
+their respective data packages:</p>
+<ul>
+<li><strong><code>pcmanfm</code> / <code>libfm-data</code>:</strong>
+Provides localization for the desktop surface, file management, and
+folder handling.</li>
+<li><strong><code>lxpanel</code> / <code>lxpanel-data</code>:</strong>
+Provides translated strings for the application menu, taskbar, system
+tray, and desktop applets.</li>
+<li><strong><code>lxde-common</code>:</strong> Delivers system-wide
+profile scripts, default desktop configuration files, and generic menu
+definitions.</li>
+<li><strong><code>lxappearance</code> /
+<code>lxappearance-data</code>:</strong> Handles translations for GTK
+theme and icon selection dialogs.</li>
+</ul>
+<h3 id="verification-and-installation">Verification and
+Installation</h3>
+<p>To ensure core LXDE gettext translations are present on a Debian or
+Ubuntu-based system, check or install the package using the Advanced
+Package Tool:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install lxsession-data</span></code></pre></div>
+<p>To confirm the gettext <code>.mo</code> files exist for your locale,
+list the contents of the localization directory:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> /usr/share/locale/<span class="pp">*</span>/LC_MESSAGES/lxsession.mo</span></code></pre></div>
+<p>On RPM-based systems such as Fedora, ensure the parent package is
+installed:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dnf install lxsession</span></code></pre></div>
+<p>Once installed, <code>lxsession</code> automatically selects the
+appropriate gettext strings matching the system environment variables
+(<code>LANG</code> or <code>LC_MESSAGES</code>).</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

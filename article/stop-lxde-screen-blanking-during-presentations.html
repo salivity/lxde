@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stop LXDE Screen Blanking During Presentations - lxde</title>
+    <meta name="description" content="This guide explains how to prevent your monitor from sleeping or turning off during presentations in the Lightweight X11 Desktop Environment (LXDE). By modifying XScreenSaver preferences, toggling Presentation Mode in the power manager, or disabling Displ">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/stop-lxde-screen-blanking-during-presentations">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Stop LXDE Screen Blanking During Presentations - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/stop-lxde-screen-blanking-during-presentations" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide explains how to prevent your monitor from sleeping or turning off during presentations in the Lightweight X11 Desktop Environment (LXDE). By modifying XScreenSaver preferences, toggling Presentation Mode in the power manager, or disabling Displ" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="stop-lxde-screen-blanking-during-presentations">Stop LXDE Screen
+Blanking During Presentations</h1>
+<p>This guide explains how to prevent your monitor from sleeping or
+turning off during presentations in the Lightweight X11 Desktop
+Environment (LXDE). By modifying XScreenSaver preferences, toggling
+Presentation Mode in the power manager, or disabling Display Power
+Management Signaling (DPMS) via configuration files, you can ensure your
+display remains active without interruption.</p>
+<h3 id="method-1-disable-xscreensaver">Method 1: Disable
+XScreenSaver</h3>
+<p>LXDE relies on XScreenSaver for screen locking and blanking by
+default.</p>
+<ol type="1">
+<li>Open the LXDE application menu.</li>
+<li>Navigate to <strong>Preferences</strong> &gt;
+<strong>Screensaver</strong>.</li>
+<li>In the <strong>Display Modes</strong> tab, locate the
+<strong>Mode:</strong> drop-down menu.</li>
+<li>Select <strong>Disable Screen Saver</strong>.</li>
+<li>Close the window to apply the changes.</li>
+</ol>
+<h3 id="method-2-enable-presentation-mode-in-power-manager">Method 2:
+Enable Presentation Mode in Power Manager</h3>
+<p>If your LXDE distribution uses <code>xfce4-power-manager</code> to
+control screen brightness and sleep states:</p>
+<ol type="1">
+<li>Locate the power or battery icon in the system tray.</li>
+<li>Right-click the icon and check <strong>Presentation
+Mode</strong>.</li>
+<li>Alternatively, open <strong>Preferences</strong> &gt; <strong>Power
+Management</strong>, go to the <strong>General</strong> tab, and toggle
+the <strong>Presentation Mode</strong> switch to active. This
+temporarily suppresses monitor sleep and screensaver triggers.</li>
+</ol>
+<h3 id="method-3-disable-dpms-and-blanking-via-command-line">Method 3:
+Disable DPMS and Blanking via Command Line</h3>
+<p>For an immediate fix before a presentation, you can disable DPMS
+timeouts using the <code>xset</code> utility. Open a terminal and
+run:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">xset</span> s off</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">xset</span> <span class="at">-dpms</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">xset</span> s noblank</span></code></pre></div>
+<ul>
+<li><code>xset s off</code> disables the X screensaver timer.</li>
+<li><code>xset -dpms</code> turns off Display Power Management
+Signaling.</li>
+<li><code>xset s noblank</code> prevents video blanking.</li>
+</ul>
+<h3 id="method-4-permanently-disable-screen-blanking">Method 4:
+Permanently Disable Screen Blanking</h3>
+<p>To ensure the display never turns off automatically across system
+reboots, add the <code>xset</code> commands to your LXDE autostart
+configuration:</p>
+<ol type="1">
+<li><p>Open the autostart file in a text editor:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/lxsession/LXDE/autostart</span></code></pre></div>
+<p><em>(Note: On systems like Raspberry Pi OS, the path may be
+<code>~/.config/lxsession/LXDE-pi/autostart</code>)</em></p></li>
+<li><p>Add the following lines to the end of the file:</p>
+<pre class="text"><code>@xset s off
+@xset -dpms
+@xset s noblank</code></pre></li>
+<li><p>Save the file and restart your session.</p></li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

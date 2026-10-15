@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Lock Desktop Icons in LXDE - lxde</title>
+    <meta name="description" content="The Lightweight X11 Desktop Environment (LXDE) uses the PCManFM file manager to manage desktop icons, but it lacks a direct graphical interface toggle to lock icons in place. To prevent icons from being accidentally moved, deleted, or reorganized, you can">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-lock-desktop-icons-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Lock Desktop Icons in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-lock-desktop-icons-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Lightweight X11 Desktop Environment (LXDE) uses the PCManFM file manager to manage desktop icons, but it lacks a direct graphical interface toggle to lock icons in place. To prevent icons from being accidentally moved, deleted, or reorganized, you can" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-lock-desktop-icons-in-lxde">How to Lock Desktop Icons in
+LXDE</h1>
+<p>The Lightweight X11 Desktop Environment (LXDE) uses the PCManFM file
+manager to manage desktop icons, but it lacks a direct graphical
+interface toggle to lock icons in place. To prevent icons from being
+accidentally moved, deleted, or reorganized, you can manually lock the
+desktop layout by setting write restrictions on the PCManFM
+configuration file and the desktop folder. This guide details the exact
+steps required to freeze your desktop icon positions and restore them if
+changes are needed later.</p>
+<h3 id="step-1-arrange-your-desktop">Step 1: Arrange Your Desktop</h3>
+<p>Before applying any lock settings, ensure your icons are positioned
+exactly where you want them.</p>
+<ol type="1">
+<li>Drag and organize all icons on your desktop to their final
+locations.</li>
+<li>Right-click on the desktop, open <strong>Desktop
+Preferences</strong>, and ensure settings like "Snap to grid" or
+auto-alignment match your preference.</li>
+<li>Log out and log back in, or restart the system, to force PCManFM to
+save the current icon coordinates to its configuration file.</li>
+</ol>
+<h3 id="step-2-lock-the-desktop-configuration-file">Step 2: Lock the
+Desktop Configuration File</h3>
+<p>PCManFM writes desktop icon positions to a configuration file located
+in your user profile. Removing write access to this file prevents the
+desktop manager from saving any changes to icon locations.</p>
+<ol type="1">
+<li>Open the LXDE terminal (<strong>LXTerminal</strong>).</li>
+<li>Run the following command to make the desktop configuration file
+read-only:</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 444 ~/.config/pcmanfm/LXDE/desktop-items-0.conf</span></code></pre></div>
+<p><em>Note: Depending on your Linux distribution, the profile name
+might be <code>default</code> instead of <code>LXDE</code>. If the file
+is not found, run:</em></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 444 ~/.config/pcmanfm/default/desktop-items-0.conf</span></code></pre></div>
+<p>Once this permission is set, any movement of an icon will revert back
+to its original locked position after the desktop is refreshed or the
+system reboots.</p>
+<h3 id="step-3-prevent-accidental-deletion-and-new-files">Step 3:
+Prevent Accidental Deletion and New Files</h3>
+<p>While locking the configuration file locks the visual coordinates,
+users can still drag icons into the trash or drop new files onto the
+desktop. To prevent this, lock the <code>Desktop</code> directory
+itself:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 555 ~/Desktop</span></code></pre></div>
+<p>Setting permissions to <code>555</code> (read and execute only) stops
+any files from being created, moved, renamed, or deleted within the
+desktop workspace.</p>
+<h3 id="how-to-unlock-the-desktop-for-future-changes">How to Unlock the
+Desktop for Future Changes</h3>
+<p>If you need to rearrange your layout or add new shortcuts in the
+future, restore write permissions with the following terminal
+commands:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 755 ~/Desktop</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 644 ~/.config/pcmanfm/LXDE/desktop-items-0.conf</span></code></pre></div>
+<p>After making your adjustments, simply re-run the commands from Step 2
+and Step 3 to lock the layout again.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

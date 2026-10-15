@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal LXDE RAM Usage and Memory Footprint - lxde</title>
+    <meta name="description" content="A completely stripped-down, bare-bones installation of the Lightweight X11 Desktop Environment (LXDE) typically consumes between 80 MB and 130 MB of RAM on a standard 64-bit Linux distribution. Through aggressive optimization—such as eliminating desktop d">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/minimal-lxde-ram-usage-and-memory-footprint">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Minimal LXDE RAM Usage and Memory Footprint - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/minimal-lxde-ram-usage-and-memory-footprint" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A completely stripped-down, bare-bones installation of the Lightweight X11 Desktop Environment (LXDE) typically consumes between 80 MB and 130 MB of RAM on a standard 64-bit Linux distribution. Through aggressive optimization—such as eliminating desktop d" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="minimal-lxde-ram-usage-and-memory-footprint">Minimal LXDE RAM
+Usage and Memory Footprint</h1>
+<p>A completely stripped-down, bare-bones installation of the
+Lightweight X11 Desktop Environment (LXDE) typically consumes between 80
+MB and 130 MB of RAM on a standard 64-bit Linux distribution. Through
+aggressive optimization—such as eliminating desktop display managers,
+disabling background daemons, and running a micro-distribution base—idle
+memory usage can be pushed as low as 45 MB to 70 MB. This guide breaks
+down the memory profile of a minimal LXDE environment, its core
+components, and how to achieve the lowest possible RAM footprint.</p>
+<h3 id="typical-memory-numbers-by-configuration">Typical Memory Numbers
+by Configuration</h3>
+<ul>
+<li><strong>Stock Distribution LXDE (Debian/Lubuntu legacy):</strong>
+200 MB – 350 MB RAM</li>
+<li><strong>Standard Minimal Install (Netinstall +
+<code>lxde-core</code> + LightDM):</strong> 120 MB – 160 MB RAM</li>
+<li><strong>Bare-Bones LXDE (Base OS + <code>xinit</code> +
+<code>lxde-core</code> without display manager):</strong> 80 MB – 110 MB
+RAM</li>
+<li><strong>Extreme Micro-Configuration (Alpine/Void/musl base +
+stripped components):</strong> 45 MB – 70 MB RAM</li>
+</ul>
+<p>On 32-bit (x86) architectures, these memory figures are approximately
+20% to 30% lower due to smaller pointer sizes, allowing extreme
+configurations to idle around 35 MB to 50 MB.</p>
+<h3 id="component-by-component-ram-breakdown">Component-by-Component RAM
+Breakdown</h3>
+<p>The total memory footprint of a running LXDE session is the sum of
+the underlying X server, the desktop components, and system
+services:</p>
+<ul>
+<li><strong>Xorg Server:</strong> 25 MB – 45 MB<br />
+The core display server required to render graphical elements.</li>
+<li><strong>Openbox Window Manager:</strong> 8 MB – 15 MB<br />
+The default window manager for LXDE, responsible for window frames,
+placement, and keybindings.</li>
+<li><strong>LXPanel:</strong> 15 MB – 25 MB<br />
+Provides the taskbar, system tray, and application menu. Memory expands
+if numerous applets (such as weather, volume, or complex monitors) are
+added.</li>
+<li><strong>PCManFM (Desktop Mode):</strong> 20 MB – 35 MB<br />
+Handles desktop icons and wallpaper rendering. Running PCManFM purely as
+an on-demand file manager rather than an active desktop daemon saves
+this allocation entirely.</li>
+<li><strong>LXSession:</strong> 8 MB – 15 MB<br />
+Manages session startup, polkit integration, and desktop settings.</li>
+</ul>
+<h3 id="how-to-strip-lxde-to-bare-bones">How to Strip LXDE to Bare
+Bones</h3>
+<p>To achieve an idle footprint under 100 MB, install only the necessary
+components and bypass default desktop overhead:</p>
+<ol type="1">
+<li><p><strong>Start from a Minimal Base:</strong><br />
+Begin with a minimal OS installer (such as Debian Netinst, Arch Linux,
+or Alpine Linux) with no graphical environment preselected.</p></li>
+<li><p><strong>Install <code>lxde-core</code>, Not the Full
+Meta-Package:</strong><br />
+Avoid the full <code>lxde</code> meta-package, which pulls in
+accessories, image viewers, terminal emulators, and games. Install only
+<code>lxde-core</code> and an X11 server:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> install <span class="at">--no-install-recommends</span> xserver-xorg-core xinit lxde-core</span></code></pre></div></li>
+<li><p><strong>Omit the Display Manager:</strong><br />
+Display managers like LightDM, GDM, or SDDM consume between 25 MB and 60
+MB of background memory. Instead, log in via the text console (TTY) and
+launch the desktop environment using <code>startx</code> configured with
+<code>exec startlxde</code> in your <code>~/.xinitrc</code>.</p></li>
+<li><p><strong>Disable Desktop Management:</strong><br />
+If you do not need icons on your desktop, launch Openbox and LXPanel
+without PCManFM managing the root window, or configure PCManFM to
+disable desktop handling. A simple lightweight tool like
+<code>feh</code> can set a background image using under 2 MB of
+temporary memory.</p></li>
+<li><p><strong>Trim Background System Services:</strong><br />
+Replace heavy service managers where possible:</p>
+<ul>
+<li>Use <code>dhcpcd</code> or <code>iwd</code> instead of
+<code>NetworkManager</code>.</li>
+<li>Disable Bluetooth services (<code>bluetoothd</code>), print services
+(<code>cups</code>), and standard error-reporting daemons if they are
+not required.</li>
+<li>Use basic ALSA or an optimized PipeWire setup rather than legacy
+PulseAudio implementations.</li>
+</ul></li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How LXDE Handles Tar.gz Desktop Themes - lxde</title>
+    <meta name="description" content="LXDE (Lightweight X11 Desktop Environment) does not natively extract or apply .tar.gz desktop theme archives automatically. Instead, it relies on the user or an archive manager to unpack the files into specific theme directories, after which LXDE&#39;s config">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-lxde-handles-tar-gz-desktop-themes">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How LXDE Handles Tar.gz Desktop Themes - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-lxde-handles-tar-gz-desktop-themes" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="LXDE (Lightweight X11 Desktop Environment) does not natively extract or apply .tar.gz desktop theme archives automatically. Instead, it relies on the user or an archive manager to unpack the files into specific theme directories, after which LXDE&#39;s config" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-lxde-handles-targz-desktop-themes">How LXDE Handles Tar.gz
+Desktop Themes</h1>
+<p>LXDE (Lightweight X11 Desktop Environment) does not natively extract
+or apply <code>.tar.gz</code> desktop theme archives automatically.
+Instead, it relies on the user or an archive manager to unpack the files
+into specific theme directories, after which LXDE's configuration
+utilities—principally LXAppearance and the Openbox Configuration
+Manager—detect and apply the newly exposed theme assets.</p>
+<h3 id="theme-composition-in-lxde">Theme Composition in LXDE</h3>
+<p>An LXDE desktop theme typically consists of two distinct components
+packaged inside the <code>.tar.gz</code> archive:</p>
+<ol type="1">
+<li><strong>GTK Themes (Widgets):</strong> Controls the appearance of
+buttons, menus, scrollbars, and application windows.</li>
+<li><strong>Openbox Themes (Window Borders):</strong> Dictates the style
+of title bars, window borders, and control buttons (minimize, maximize,
+close).</li>
+</ol>
+<p>Because LXDE is modular, it does not have a single unified background
+service that parses compressed <code>.tar.gz</code> files on the fly.
+The archive must be decompressed so that the underlying subsystems can
+read the raw configuration files, such as <code>gtkrc</code> (for GTK2),
+<code>gtk.css</code> (for GTK3), and <code>themerc</code> (for
+Openbox).</p>
+<h3 id="the-installation-and-extraction-process">The Installation and
+Extraction Process</h3>
+<p>To make a <code>.tar.gz</code> theme available to LXDE, the archive
+must be extracted to the appropriate filesystem hierarchy:</p>
+<ul>
+<li><strong>User-Specific Installation:</strong> Extracting the contents
+into the hidden directory <code>~/.themes</code> (or
+<code>~/.local/share/themes</code> on newer systems) makes the theme
+accessible exclusively to the logged-in user.</li>
+<li><strong>System-Wide Installation:</strong> Extracting the contents
+into <code>/usr/share/themes</code> (requiring root privileges) makes
+the theme available to all user accounts on the machine.</li>
+</ul>
+<p>For icon themes packaged as <code>.tar.gz</code>, the files must
+instead be extracted to <code>~/.icons</code>,
+<code>~/.local/share/icons</code>, or <code>/usr/share/icons</code>.</p>
+<h3 id="how-lxde-detects-the-extracted-theme">How LXDE Detects the
+Extracted Theme</h3>
+<p>Once the archive is extracted, LXDE interacts with the files using
+its built-in configuration tools:</p>
+<ul>
+<li><strong>LXAppearance:</strong> This is LXDE's primary GUI theme
+switcher. When launched, LXAppearance scans
+<code>/usr/share/themes</code> and <code>~/.themes</code>. If the
+extracted archive contains a valid folder structure with a
+<code>gtk-2.0</code> or <code>gtk-3.0</code> subdirectory, the theme's
+name immediately appears in the list of available widget styles.</li>
+<li><strong>Openbox Configuration Tool (<code>obconf</code>):</strong>
+If the archive includes an Openbox window decoration theme,
+<code>obconf</code> scans the <code>openbox-3</code> subdirectories
+inside the theme path. Notably, Openbox supports an archive format with
+the <code>.obt</code> extension, which is simply a <code>.tar.gz</code>
+file containing an Openbox theme. While <code>obconf</code> allows users
+to install <code>.obt</code> files directly via its GUI, generic
+<code>.tar.gz</code> packages must generally be extracted manually
+before Openbox recognizes them.</li>
+</ul>
+<p>After selecting the desired theme in LXAppearance and clicking
+"Apply," the tool writes the changes to
+<code>~/.config/gtk-3.0/settings.ini</code>, <code>~/.gtkrc-2.0</code>,
+and the Openbox configuration file
+(<code>~/.config/openbox/lxde-rc.xml</code>), instantly updating the
+desktop's appearance.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

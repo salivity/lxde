@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure Custom Date Formats in LXDE Clock - lxde</title>
+    <meta name="description" content="This guide explains how to customize the date and time display on the LXDE desktop panel using standard formatting codes. By accessing the Digital Clock applet preferences, you can adjust the appearance to show day names, full dates, 12-hour or 24-hour ti">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/configure-custom-date-formats-in-lxde-clock">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Configure Custom Date Formats in LXDE Clock - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/configure-custom-date-formats-in-lxde-clock" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide explains how to customize the date and time display on the LXDE desktop panel using standard formatting codes. By accessing the Digital Clock applet preferences, you can adjust the appearance to show day names, full dates, 12-hour or 24-hour ti" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="configure-custom-date-formats-in-lxde-clock">Configure Custom
+Date Formats in LXDE Clock</h1>
+<p>This guide explains how to customize the date and time display on the
+LXDE desktop panel using standard formatting codes. By accessing the
+Digital Clock applet preferences, you can adjust the appearance to show
+day names, full dates, 12-hour or 24-hour time, and custom separators to
+suit your workflow.</p>
+<h3 id="accessing-the-clock-settings">Accessing the Clock Settings</h3>
+<ol type="1">
+<li>Right-click directly on the digital clock located in your LXDE panel
+(usually at the bottom-right corner of the screen).</li>
+<li>Select <strong>"Digital Clock" Settings</strong> from the context
+menu.</li>
+<li>In the preferences window that appears, locate the input field
+labeled <strong>Clock Format</strong>.</li>
+</ol>
+<h3 id="customizing-the-format-string">Customizing the Format
+String</h3>
+<p>The clock applet uses standard C <code>strftime</code> format codes.
+Enter your preferred combination of characters and specifiers into the
+<strong>Clock Format</strong> field.</p>
+<p>Common formatting codes include:</p>
+<ul>
+<li><strong>%Y</strong> – Four-digit year (e.g., 2026)</li>
+<li><strong>%y</strong> – Two-digit year (e.g., 26)</li>
+<li><strong>%B</strong> – Full month name (e.g., October)</li>
+<li><strong>%b</strong> – Abbreviated month name (e.g., Oct)</li>
+<li><strong>%m</strong> – Two-digit month number (01 to 12)</li>
+<li><strong>%d</strong> – Two-digit day of the month (01 to 31)</li>
+<li><strong>%e</strong> – Day of the month with a leading space for
+single digits (1 to 31)</li>
+<li><strong>%A</strong> – Full weekday name (e.g., Monday)</li>
+<li><strong>%a</strong> – Abbreviated weekday name (e.g., Mon)</li>
+<li><strong>%H</strong> – Hour in 24-hour format (00 to 23)</li>
+<li><strong>%I</strong> – Hour in 12-hour format (01 to 12)</li>
+<li><strong>%M</strong> – Minute (00 to 59)</li>
+<li><strong>%S</strong> – Second (00 to 59)</li>
+<li><strong>%p</strong> – AM or PM indicator</li>
+</ul>
+<h3 id="format-examples">Format Examples</h3>
+<p>You can combine these specifiers with spaces, commas, colons, or
+dashes:</p>
+<ul>
+<li><p><strong>Standard Date and 24-Hour Time:</strong><br />
+<code>%Y-%m-%d %H:%M</code><br />
+<em>Output: 2026-03-30 14:45</em></p></li>
+<li><p><strong>Weekday, Date, and 12-Hour Time with
+AM/PM:</strong><br />
+<code>%a, %b %d, %Y - %I:%M %p</code><br />
+<em>Output: Mon, Mar 30, 2026 - 02:45 PM</em></p></li>
+<li><p><strong>Minimalist Date and Time:</strong><br />
+<code>%d/%m/%y %H:%M:%S</code><br />
+<em>Output: 30/03/26 14:45:00</em></p></li>
+</ul>
+<h3 id="customizing-the-tooltip">Customizing the Tooltip</h3>
+<p>In the same settings dialog, you can modify the <strong>Tooltip
+Format</strong> field using the identical specifiers listed above. This
+controls what information appears when you hover your cursor over the
+clock. For example, setting the tooltip to <code>%A, %B %d, %Y</code>
+allows you to keep the panel clock compact while still checking the full
+date on hover.</p>
+<h3 id="saving-the-changes">Saving the Changes</h3>
+<p>Once you have entered your desired format strings, click
+<strong>Close</strong>. The panel will update immediately to reflect the
+new layout.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

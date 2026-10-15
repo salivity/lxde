@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Run LXDE on Less Than 256MB RAM - lxde</title>
+    <meta name="description" content="Running the Lightweight X11 Desktop Environment (LXDE) on hardware with less than 256MB of RAM requires aggressive resource management and system trimming. While LXDE is natively lightweight, modern operating system defaults will easily exceed a 256MB cei">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-run-lxde-on-less-than-256-mb-ram">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Run LXDE on Less Than 256MB RAM - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-run-lxde-on-less-than-256-mb-ram" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Running the Lightweight X11 Desktop Environment (LXDE) on hardware with less than 256MB of RAM requires aggressive resource management and system trimming. While LXDE is natively lightweight, modern operating system defaults will easily exceed a 256MB cei" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-run-lxde-on-less-than-256mb-ram">How to Run LXDE on Less
+Than 256MB RAM</h1>
+<p>Running the Lightweight X11 Desktop Environment (LXDE) on hardware
+with less than 256MB of RAM requires aggressive resource management and
+system trimming. While LXDE is natively lightweight, modern operating
+system defaults will easily exceed a 256MB ceiling, triggering heavy
+swap usage or kernel out-of-memory (OOM) errors. This guide outlines the
+essential adjustments—including zram deployment, daemon elimination,
+desktop component trimming, and lightweight software substitution—needed
+to keep your baseline memory footprint well within workable limits.</p>
+<h2 id="1-configure-zram-and-swap-space">1. Configure Zram and Swap
+Space</h2>
+<p>On a machine with under 256MB of RAM, physical memory will saturate
+quickly. Managing virtual memory correctly is vital for stability.</p>
+<ul>
+<li><strong>Enable zram:</strong> Install and enable
+<code>zram-tools</code> or <code>zram-config</code>. Zram creates a
+compressed block device inside your physical RAM (using algorithms like
+LZ4 or ZSTD). This effectively doubles your usable memory capacity with
+minimal CPU overhead, preventing frequent disk-based swapping.</li>
+<li><strong>Create a Dedicated Swap Partition:</strong> Maintain a
+physical swap partition on a fast drive (at least 512MB to 1GB). Set the
+Linux <code>swappiness</code> value to a moderate setting (e.g.,
+<code>vm.swappiness=60</code> if using zram, or lower if using slow
+mechanical media) to ensure the kernel swaps idle pages before memory
+starvation occurs.</li>
+</ul>
+<h2 id="2-strip-down-lxde-startup-services">2. Strip Down LXDE Startup
+Services</h2>
+<p>By default, LXDE launches several utilities that idle in the
+background and consume memory.</p>
+<ul>
+<li><strong>Disable Desktop Icons in PCManFM:</strong> PCManFM manages
+the desktop background and icons, which consumes memory to maintain icon
+cache and wallpaper buffers. Launch <code>pcmanfm --desktop-off</code>
+or edit <code>~/.config/lxsession/LXDE/autostart</code> to disable
+PCManFM from managing the desktop entirely.</li>
+<li><strong>Trim <code>lxpanel</code> Applets:</strong> Remove
+memory-intensive plugins from the panel. Eliminate system tray monitors,
+complex clocks, weather applets, and volume managers. Keep the panel
+strictly to a basic taskbar and window list.</li>
+<li><strong>Remove Unnecessary Autostart Entries:</strong> Open
+<code>/etc/xdg/lxsession/LXDE/autostart</code> and
+<code>~/.config/lxsession/LXDE/autostart</code>. Remove entries such as
+<code>lxpolkit</code> (if authentication popups are not required),
+<code>xscreensaver</code>, clipboard managers, and update checkers.</li>
+</ul>
+<h2 id="3-tune-the-openbox-window-manager">3. Tune the Openbox Window
+Manager</h2>
+<p>LXDE relies on Openbox to manage windows. You can reduce its overhead
+further via <code>~/.config/openbox/rc.xml</code> or using the
+<code>obconf</code> GUI tool:</p>
+<ul>
+<li>Disable window content previews while moving or resizing.</li>
+<li>Turn off window animations and focus-stealing effects.</li>
+<li>Use a solid background color instead of loading a high-resolution
+wallpaper into the X server's pixmap cache.</li>
+</ul>
+<h2 id="4-eliminate-heavy-background-daemons">4. Eliminate Heavy
+Background Daemons</h2>
+<p>Modern distributions run various system services that are redundant
+on minimal or legacy hardware:</p>
+<ul>
+<li><strong>Replace NetworkManager:</strong> NetworkManager and its
+associated applet (<code>nm-applet</code>) consume 15MB to 30MB of RAM.
+Replace it with <code>wpa_supplicant</code> and standard
+<code>/etc/network/interfaces</code> configurations, or use a
+featherweight CLI tool like <code>connman</code>.</li>
+<li><strong>Disable Unneeded System Services:</strong> Run
+<code>systemctl disable</code> on daemons you do not strictly require,
+such as <code>bluetooth.service</code>, <code>cups.service</code>
+(printing), <code>avahi-daemon</code> (network discovery), and
+<code>modemmanager.service</code>.</li>
+<li><strong>Consider Non-systemd Init Systems:</strong> If your Linux
+distribution supports it (e.g., Devuan, Void Linux, or Alpine Linux),
+using <code>runit</code>, <code>OpenRC</code>, or <code>sysvinit</code>
+saves roughly 15MB to 30MB of idle memory compared to
+<code>systemd</code>.</li>
+</ul>
+<h2 id="5-select-strictly-minimal-default-applications">5. Select
+Strictly Minimal Default Applications</h2>
+<p>Standard modern GUI applications (especially web browsers) will
+instantly crash or freeze a system with under 256MB RAM. Replace
+standard tools with low-footprint alternatives:</p>
+<ul>
+<li><strong>Web Browsing:</strong> Mainstream browsers like Firefox and
+Chromium cannot run effectively in this environment. Use lightweight
+browsers such as <strong>NetSurf</strong> or <strong>Dillo</strong> for
+basic static web pages. For command-line browsing, rely on
+<strong>w3m</strong> or <strong>Lynx</strong>.</li>
+<li><strong>Terminal Emulator:</strong> Replace standard terminals with
+<strong>xterm</strong>, <strong>urxvt</strong> (rxvt-unicode), or
+<strong>st</strong> instead of LXTerminal.</li>
+<li><strong>Text Editing:</strong> Use <strong>Leafpad</strong> or
+terminal editors like <strong>nano</strong> and <strong>vim</strong>
+instead of heavy IDEs or bloated graphical editors.</li>
+<li><strong>PDF and Document Viewing:</strong> Use
+<strong>mupdf</strong> or <strong>zathura</strong> instead of Evince or
+Atril.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

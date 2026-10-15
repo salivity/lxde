@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map a Keyboard Shortcut for xkill in LXDE - lxde</title>
+    <meta name="description" content="This guide explains how to quickly force-close unresponsive graphical programs in the Lightweight X11 Desktop Environment (LXDE) by binding the xkill command to a custom keyboard shortcut. By editing Openbox&#39;s configuration file, you can map an intuitive">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/map-a-keyboard-shortcut-for-xkill-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Map a Keyboard Shortcut for xkill in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/map-a-keyboard-shortcut-for-xkill-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide explains how to quickly force-close unresponsive graphical programs in the Lightweight X11 Desktop Environment (LXDE) by binding the xkill command to a custom keyboard shortcut. By editing Openbox&#39;s configuration file, you can map an intuitive" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="map-a-keyboard-shortcut-for-xkill-in-lxde">Map a Keyboard
+Shortcut for xkill in LXDE</h1>
+<p>This guide explains how to quickly force-close unresponsive graphical
+programs in the Lightweight X11 Desktop Environment (LXDE) by binding
+the <code>xkill</code> command to a custom keyboard shortcut. By editing
+Openbox's configuration file, you can map an intuitive key
+combination—such as <strong>Ctrl+Alt+Escape</strong>—to launch the
+crosshair cursor and terminate frozen windows instantly without opening
+a terminal or task manager.</p>
+<h2 id="recommended-key-combination">Recommended Key Combination</h2>
+<p>The standard, most intuitive key combination for <code>xkill</code>
+across X11 desktop environments is:</p>
+<ul>
+<li><strong>Ctrl + Alt + Escape</strong></li>
+</ul>
+<p>This combination mimics the traditional behavior of older desktop
+environments and minimizes the risk of accidental presses while
+remaining fast and easy to trigger with one hand.</p>
+<hr />
+<h2 id="step-by-step-configuration">Step-by-Step Configuration</h2>
+<p>Because LXDE utilizes the Openbox window manager, keyboard shortcuts
+are handled through the Openbox XML configuration file rather than a
+graphical control panel.</p>
+<h3 id="1-open-the-configuration-file">1. Open the Configuration
+File</h3>
+<p>Open your terminal and launch your preferred text editor to modify
+the LXDE Openbox configuration file:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/openbox/lxde-rc.xml</span></code></pre></div>
+<p><em>(Note: If this file does not exist, copy the system template by
+running
+<code>cp /etc/xdg/openbox/lxde-rc.xml ~/.config/openbox/lxde-rc.xml</code>
+first.)</em></p>
+<h3 id="2-locate-the-keyboard-section">2. Locate the Keyboard
+Section</h3>
+<p>Scroll down or search within the file for the
+<code>&lt;keyboard&gt;</code> tag. All custom keybindings are placed
+between the opening <code>&lt;keyboard&gt;</code> tag and the closing
+<code>&lt;/keyboard&gt;</code> tag.</p>
+<h3 id="3-add-the-xkill-keybinding">3. Add the <code>xkill</code>
+Keybinding</h3>
+<p>Add the following XML block directly inside the
+<code>&lt;keyboard&gt;</code> section:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">keybind</span> <span class="ot">key=</span><span class="st">&quot;C-A-Escape&quot;</span>&gt;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;Execute&quot;</span>&gt;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">command</span>&gt;xkill&lt;/<span class="kw">command</span>&gt;</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">action</span>&gt;</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">keybind</span>&gt;</span></code></pre></div>
+<ul>
+<li><strong><code>C-A-Escape</code></strong> translates to
+<code>Control</code> + <code>Alt</code> + <code>Escape</code>. If you
+prefer an alternative hotkey, such as <strong>Ctrl+Alt+K</strong>,
+change the attribute to <code>key="C-A-k"</code>.</li>
+</ul>
+<h3 id="4-save-and-apply-changes">4. Save and Apply Changes</h3>
+<ol type="1">
+<li>Save the file and exit the editor (in <code>nano</code>, press
+<strong>Ctrl+O</strong>, <strong>Enter</strong>, then
+<strong>Ctrl+X</strong>).</li>
+<li>Reload Openbox to apply the new shortcut immediately without logging
+out:</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openbox</span> <span class="at">--reconfigure</span></span></code></pre></div>
+<hr />
+<h2 id="how-to-use-the-shortcut">How to Use the Shortcut</h2>
+<ol type="1">
+<li>Press <strong>Ctrl + Alt + Escape</strong>.</li>
+<li>Your mouse pointer will change into a crosshair or an
+<strong>X</strong> icon.</li>
+<li>Left-click on any unresponsive application window to immediately
+terminate its process.</li>
+<li>To cancel the action without killing any program, right-click
+anywhere on the screen.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Displaying Fan Speed and Sensor Data in LXDE - lxde</title>
+    <meta name="description" content="The Lightweight X11 Desktop Environment (LXDE) handles hardware monitoring through a modular, minimalist approach rather than a bloated, all-in-one control center. Because LXDE is designed to conserve system resources, it does not include an extensive nat">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/displaying-fan-speed-and-sensor-data-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Displaying Fan Speed and Sensor Data in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/displaying-fan-speed-and-sensor-data-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Lightweight X11 Desktop Environment (LXDE) handles hardware monitoring through a modular, minimalist approach rather than a bloated, all-in-one control center. Because LXDE is designed to conserve system resources, it does not include an extensive nat" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displaying-fan-speed-and-sensor-data-in-lxde">Displaying Fan
+Speed and Sensor Data in LXDE</h1>
+<p>The Lightweight X11 Desktop Environment (LXDE) handles hardware
+monitoring through a modular, minimalist approach rather than a bloated,
+all-in-one control center. Because LXDE is designed to conserve system
+resources, it does not include an extensive native suite for advanced
+telemetry like fan speeds; instead, it relies on the Linux kernel's
+<code>lm-sensors</code> framework, presenting this data via lightweight
+panel applets, system tray utilities, and desktop overlay tools.</p>
+<h3 id="the-underlying-telemetry-architecture">The Underlying Telemetry
+Architecture</h3>
+<p>LXDE delegates hardware communication directly to kernel drivers via
+<code>sysfs</code> and <code>lm-sensors</code>. The operating system
+exposes sensor readouts—such as revolutions per minute (RPM) for cooling
+fans, thermal zones, and voltages—in <code>/sys/class/hwmon/</code>. Any
+component running within LXDE reads from these standardized paths to
+render sensor values on the desktop.</p>
+<h3 id="built-in-lxpanel-capabilities-and-limitations">Built-in LXPanel
+Capabilities and Limitations</h3>
+<p>The default taskbar in LXDE, <code>lxpanel</code>, includes basic
+monitoring plugins, primarily the <strong>Thermal Monitor</strong> and
+the <strong>CPU Usage Monitor</strong>.</p>
+<ul>
+<li><strong>Thermal Monitor:</strong> Displays CPU and system
+temperatures as numeric values or colored bars directly in the
+panel.</li>
+<li><strong>Fan Speed Limitations:</strong> Standard
+<code>lxpanel</code> builds do not feature a dedicated native fan speed
+applet out of the box. While thermal tracking is integrated, fan RPM
+metrics require supplementary desktop utilities to be represented
+visually.</li>
+</ul>
+<h3 id="system-tray-integration-via-psensor">System Tray Integration via
+Psensor</h3>
+<p>The primary method for displaying fan speeds within an LXDE panel is
+through the Notification Area (system tray) using a GTK-based frontend
+called <strong>Psensor</strong>.</p>
+<p>When running inside an LXDE session:</p>
+<ul>
+<li>Psensor queries <code>lm-sensors</code> to detect motherboard fan
+headers.</li>
+<li>It places an icon in the LXPanel system tray that can display live
+numerical RPM readouts or color-coded alert states.</li>
+<li>Hovering over or clicking the tray icon reveals a flyout menu or a
+detailed graphing window, illustrating real-time fan RPM curves
+alongside thermal data.</li>
+</ul>
+<h3 id="on-desktop-display-using-conky">On-Desktop Display Using
+Conky</h3>
+<p>Advanced users frequently pair LXDE with <strong>Conky</strong>, a
+lightweight system monitor that renders directly onto the desktop
+background window (the root window managed by <code>pcmanfm</code>).</p>
+<p>Conky can be configured to read specific fan sensors using variables
+such as <code>${hwmon &lt;index&gt; fan &lt;index&gt;}</code> or via
+custom scripts executing <code>sensors</code>. This allows fan speeds to
+appear as customized text readouts, percentage bars, or dynamic graphs
+embedded natively onto the desktop wallpaper without consuming
+noticeable CPU or memory overhead.</p>
+<h3 id="standalone-docks-and-gtk-monitors">Standalone Docks and GTK
+Monitors</h3>
+<p>For continuous, dedicated monitoring that matches the aesthetic of
+LXDE, lightweight GTK tools like <strong>GKrellM</strong> or
+<strong>HardInfo</strong> are used:</p>
+<ul>
+<li><strong>GKrellM:</strong> Renders a compact, vertical stack of
+system meters—including animated fan indicators and precise RPM
+readouts—that can be docked at the side of the LXDE workspace.</li>
+<li><strong>HardInfo:</strong> Provides a system-profiler window where
+users can view static and live sensor tables under a dedicated "Sensors"
+tab.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

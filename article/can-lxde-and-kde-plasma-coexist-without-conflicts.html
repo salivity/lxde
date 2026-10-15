@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can LXDE and KDE Plasma Coexist Without Conflicts? - lxde</title>
+    <meta name="description" content="Installing LXDE alongside KDE Plasma on the same Linux installation is entirely possible and generally safe. Linux operating systems are designed to support multiple desktop environments simultaneously by keeping user session profiles, configurations, and">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/can-lxde-and-kde-plasma-coexist-without-conflicts">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Can LXDE and KDE Plasma Coexist Without Conflicts? - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/can-lxde-and-kde-plasma-coexist-without-conflicts" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Installing LXDE alongside KDE Plasma on the same Linux installation is entirely possible and generally safe. Linux operating systems are designed to support multiple desktop environments simultaneously by keeping user session profiles, configurations, and" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="can-lxde-and-kde-plasma-coexist-without-conflicts">Can LXDE and
+KDE Plasma Coexist Without Conflicts?</h1>
+<p>Installing LXDE alongside KDE Plasma on the same Linux installation
+is entirely possible and generally safe. Linux operating systems are
+designed to support multiple desktop environments simultaneously by
+keeping user session profiles, configurations, and core components
+separated. While hard technical conflicts that break your system are
+rare, coexisting environments can introduce minor usability overlap,
+such as duplicated default applications, visual inconsistencies between
+Qt and GTK toolkits, and display manager configurations that require
+basic management.</p>
+<h3 id="how-linux-manages-multiple-desktop-environments">How Linux
+Manages Multiple Desktop Environments</h3>
+<p>Linux isolates desktop environments through standard packaging
+systems and session specifications set by freedesktop.org. KDE Plasma
+relies primarily on the Qt framework and KDE Frameworks, storing its
+configurations under <code>~/.config/</code> with Plasma-specific naming
+conventions. LXDE relies primarily on GTK (specifically GTK 2 or GTK 3,
+depending on the distribution version) and uses the lightweight Openbox
+window manager.</p>
+<p>Because their binaries, libraries, and core daemons have distinct
+names and file paths, installing LXDE alongside KDE Plasma will not
+overwrite crucial system files or corrupt desktop configurations.</p>
+<h3 id="managing-the-display-manager">Managing the Display Manager</h3>
+<p>When you have both desktop environments installed, you only need one
+active display manager (the graphical login screen) to manage both
+sessions.</p>
+<ul>
+<li><strong>KDE Plasma</strong> typically defaults to
+<strong>SDDM</strong>.</li>
+<li><strong>LXDE</strong> typically defaults to <strong>LXDM</strong> or
+<strong>LightDM</strong>.</li>
+</ul>
+<p>You do not need to install or run both display managers
+simultaneously. SDDM can launch an LXDE session, and LightDM or LXDM can
+launch a KDE Plasma session. You can easily switch between LXDE and KDE
+Plasma by clicking the desktop session drop-down menu on your chosen
+login screen before authenticating.</p>
+<h3 id="common-minor-inconveniences">Common Minor Inconveniences</h3>
+<p>While catastrophic software conflicts do not occur, running LXDE and
+KDE Plasma together creates a few minor visual and organization
+issues:</p>
+<ul>
+<li><strong>Application Duplication:</strong> Both environments come
+with their own suite of default utilities. Installing both means you
+will see two terminal emulators (Konsole and LXTerminal), two file
+managers (Dolphin and PCManFM), and multiple text editors or image
+viewers in your application menus.</li>
+<li><strong>Theming Inconsistencies:</strong> KDE Plasma uses Qt styling
+engines (like Breeze), while LXDE relies on GTK styling. Applications
+designed for one toolkit may not immediately match the color palette,
+fonts, or window borders of the other environment unless unified themes
+(such as Breeze-GTK) are applied.</li>
+<li><strong>Background Daemons and Autostart:</strong> Some
+desktop-specific background processes (such as notification daemons,
+policy kit agents, or clipboard managers) place <code>.desktop</code>
+files in <code>/etc/xdg/autostart/</code>. Most modern desktop services
+use an <code>OnlyShowIn</code> or <code>NotShowIn</code> parameter to
+prevent them from launching in the wrong environment, but improperly
+configured third-party tools may occasionally trigger redundant
+background processes.</li>
+</ul>
+<h3 id="recommendations-for-a-smooth-setup">Recommendations for a Smooth
+Setup</h3>
+<p>To keep your system clean when using both desktop environments:</p>
+<ol type="1">
+<li><strong>Stick with one display manager:</strong> Keep SDDM or
+LightDM active rather than enabling multiple display services via
+<code>systemctl</code>.</li>
+<li><strong>Review Default Applications:</strong> Ensure your preferred
+web browser, file manager, and text editor are explicitly set in system
+settings so file associations remain predictable across both
+sessions.</li>
+<li><strong>Consider Separate User Accounts (Optional):</strong> If you
+require a completely clean boundary between the heavy customization of
+KDE Plasma and the minimalist setup of LXDE, creating a separate Linux
+user account for each desktop environment will keep configuration files,
+menus, and caches isolated.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

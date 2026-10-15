@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify LXDE App Crashes Caused by Memory Exhaustion - lxde</title>
+    <meta name="description" content="When an application unexpectedly closes inside the Lightweight X11 Desktop Environment (LXDE), the cause is frequently a lack of available system RAM, triggering the Linux kernel&#39;s Out-Of-Memory (OOM) killer. Because LXDE is designed for lightweight and r">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/verify-lxde-app-crashes-caused-by-memory-exhaustion">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Verify LXDE App Crashes Caused by Memory Exhaustion - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/verify-lxde-app-crashes-caused-by-memory-exhaustion" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When an application unexpectedly closes inside the Lightweight X11 Desktop Environment (LXDE), the cause is frequently a lack of available system RAM, triggering the Linux kernel&#39;s Out-Of-Memory (OOM) killer. Because LXDE is designed for lightweight and r" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="verify-lxde-app-crashes-caused-by-memory-exhaustion">Verify LXDE
+App Crashes Caused by Memory Exhaustion</h1>
+<p>When an application unexpectedly closes inside the Lightweight X11
+Desktop Environment (LXDE), the cause is frequently a lack of available
+system RAM, triggering the Linux kernel's Out-Of-Memory (OOM) killer.
+Because LXDE is designed for lightweight and resource-constrained
+systems, memory exhaustion is a common issue. This guide details how to
+inspect kernel logs, analyze system journals, check termination signals,
+and verify whether a crash was directly caused by memory starvation.</p>
+<h3 id="1-check-the-kernel-ring-buffer-via-dmesg">1. Check the Kernel
+Ring Buffer via <code>dmesg</code></h3>
+<p>When the operating system runs out of physical memory and swap space,
+the kernel invokes the OOM killer to terminate the highest-consuming
+process to protect the system. This event is always logged in the kernel
+ring buffer.</p>
+<p>Open your terminal in LXDE and execute:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dmesg</span> <span class="at">-T</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-i</span> <span class="at">-E</span> <span class="st">&#39;oom|out of memory|killed process&#39;</span></span></code></pre></div>
+<p>If memory exhaustion caused the termination, you will see output
+resembling:</p>
+<pre class="text"><code>Out of memory: Killed process 1234 (app_name) total-vm:2048560kB, anon-rss:512240kB, file-rss:0kB, shmem-rss:0kB</code></pre>
+<p>The <code>-T</code> flag prints human-readable timestamps, allowing
+you to match the exact time your application disappeared in LXDE with
+the kernel log entry.</p>
+<h3 id="2-inspect-the-systemd-journal">2. Inspect the Systemd
+Journal</h3>
+<p>On modern Linux distributions running LXDE, system events are logged
+via <code>journalctl</code>. If the incident occurred before the current
+session or the <code>dmesg</code> buffer has rolled over, the journal
+provides persistent logs.</p>
+<p>Search for kernel-level memory management events with:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">-k</span> <span class="at">--grep</span><span class="op">=</span><span class="st">&quot;Out of memory&quot;</span></span></code></pre></div>
+<p>Alternatively, filter logs specifically around the time the
+application exited:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">--since</span> <span class="st">&quot;10 minutes ago&quot;</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-i</span> <span class="at">-E</span> <span class="st">&quot;killed|oom&quot;</span></span></code></pre></div>
+<p>Look for messages indicating that the kernel initiated an OOM kill or
+that your specific process received a <code>SIGKILL</code> due to memory
+constraints.</p>
+<h3 id="3-check-system-log-files">3. Check System Log Files</h3>
+<p>On distributions that utilize traditional logging daemons (such as
+Debian or older Raspberry Pi OS installations), check the
+<code>/var/log</code> directory.</p>
+<p>Run one of the following commands:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-i</span> <span class="st">&quot;oom-killer&quot;</span> /var/log/syslog</span></code></pre></div>
+<p>or for distributions using <code>/var/log/messages</code>:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-i</span> <span class="st">&quot;oom-killer&quot;</span> /var/log/messages</span></code></pre></div>
+<p>These logs will display a memory dump table alongside the killed
+process name, documenting total free memory, swap availability, and page
+allocation failures at the moment of the crash.</p>
+<h3 id="4-analyze-process-exit-codes-and-core-dumps">4. Analyze Process
+Exit Codes and Core Dumps</h3>
+<p>An application closed by the kernel's OOM killer does not get the
+opportunity to perform cleanup routines. It is forcefully terminated
+with a <code>SIGKILL</code> (Signal 9).</p>
+<ul>
+<li><p><strong>Terminal Execution:</strong> Launch the problematic
+application directly from the LXDE terminal (e.g.,
+<code>lxterminal</code>). If the app crashes due to an OOM kill, the
+terminal typically prints <code>Killed</code> rather than
+<code>Segmentation fault</code> (Signal 11) or <code>Aborted</code>
+(Signal 6).</p></li>
+<li><p><strong>Exit Status:</strong> Immediately after the crash occurs,
+check the return code:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$?</span></span></code></pre></div>
+<p>An exit status of <code>137</code> indicates that the process was
+terminated by Signal 9 (<span class="math inline">\(128 + 9\)</span>),
+which strongly suggests an OOM termination.</p></li>
+</ul>
+<h3 id="5-monitor-real-time-memory-pressure">5. Monitor Real-Time Memory
+Pressure</h3>
+<p>To confirm that the application consistently exhausts memory under
+regular usage, launch a resource monitor in LXDE before reproducing the
+crash.</p>
+<p>Open a terminal and run:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">watch</span> <span class="at">-n</span> 1 free <span class="at">-m</span></span></code></pre></div>
+<p>Observe the <code>available</code> column and the <code>Swap</code>
+row. If <code>available</code> drops toward zero and swap consumption
+climbs to 100% just before the application closes, the crash is
+definitively linked to memory exhaustion.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

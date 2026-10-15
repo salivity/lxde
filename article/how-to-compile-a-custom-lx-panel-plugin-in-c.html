@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Compile a Custom LXPanel Plugin in C - lxde</title>
+    <meta name="description" content="This guide provides a straightforward walkthrough for creating, compiling, and deploying a custom C plugin for the LXDE taskbar, LXPanel. It outlines the required development libraries, provides a minimal C source template using the LXPanel and GTK APIs,">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-compile-a-custom-lx-panel-plugin-in-c">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Compile a Custom LXPanel Plugin in C - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-compile-a-custom-lx-panel-plugin-in-c" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide provides a straightforward walkthrough for creating, compiling, and deploying a custom C plugin for the LXDE taskbar, LXPanel. It outlines the required development libraries, provides a minimal C source template using the LXPanel and GTK APIs," />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-compile-a-custom-lxpanel-plugin-in-c">How to Compile a
+Custom LXPanel Plugin in C</h1>
+<p>This guide provides a straightforward walkthrough for creating,
+compiling, and deploying a custom C plugin for the LXDE taskbar,
+LXPanel. It outlines the required development libraries, provides a
+minimal C source template using the LXPanel and GTK APIs, demonstrates
+the compilation command needed to produce a shared object library, and
+explains how to install and activate the plugin within your desktop
+environment.</p>
+<h3 id="1-install-required-dependencies">1. Install Required
+Dependencies</h3>
+<p>Building an LXPanel plugin requires the GCC compiler,
+<code>pkg-config</code>, GTK+ 2.0 development files, and the LXPanel
+development headers. Install them using your distribution's package
+manager:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install build-essential pkg-config libgtk2.0-dev lxpanel-dev</span></code></pre></div>
+<h3 id="2-write-the-plugin-source-code">2. Write the Plugin Source
+Code</h3>
+<p>Create a new C file named <code>myplugin.c</code>. LXPanel plugins
+interface with the panel using the <code>lxpanel/plugin.h</code> header
+and define standard callbacks for initialization and rendering.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;gtk/gtk.h&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;lxpanel/plugin.h&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">/* Constructor function called when the plugin is loaded */</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> GtkWidget <span class="op">*</span>myplugin_constructor<span class="op">(</span>LXPanel <span class="op">*</span>panel<span class="op">,</span> config_setting_t <span class="op">*</span>settings<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* Create a basic GTK label widget */</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    GtkWidget <span class="op">*</span>label <span class="op">=</span> gtk_label_new<span class="op">(</span><span class="st">&quot;Custom Plugin&quot;</span><span class="op">);</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    gtk_widget_show<span class="op">(</span>label<span class="op">);</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> label<span class="op">;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">/* Register the plugin module with LXPanel */</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>FM_DEFINE_MODULE<span class="op">(</span>lxpanel_gtk<span class="op">,</span> myplugin<span class="op">)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>LXPanelPluginInit lxpanel_gtk_myplugin_plugin_init <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>name <span class="op">=</span> <span class="st">&quot;myplugin&quot;</span><span class="op">,</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>description <span class="op">=</span> <span class="st">&quot;A minimal custom LXPanel plugin&quot;</span><span class="op">,</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>new_instance <span class="op">=</span> myplugin_constructor</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<h3 id="3-compile-the-plugin">3. Compile the Plugin</h3>
+<p>Compile the source code into a shared object file (<code>.so</code>)
+using <code>gcc</code>. The <code>-fPIC</code> (Position Independent
+Code) and <code>-shared</code> flags are required, while
+<code>pkg-config</code> provides the necessary include flags and linker
+paths.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-Wall</span> <span class="at">-O2</span> <span class="at">-shared</span> <span class="at">-fPIC</span> <span class="va">$(</span><span class="ex">pkg-config</span> <span class="at">--cflags</span> lxpanel gtk+-2.0<span class="va">)</span> myplugin.c <span class="at">-o</span> myplugin.so <span class="va">$(</span><span class="ex">pkg-config</span> <span class="at">--libs</span> lxpanel gtk+-2.0<span class="va">)</span></span></code></pre></div>
+<h3 id="4-install-the-shared-library">4. Install the Shared Library</h3>
+<p>LXPanel searches specific directories for plugin libraries. Locate
+your system's LXPanel plugin directory (typically
+<code>/usr/lib/lxpanel/plugins</code> or
+<code>/usr/lib/&lt;architecture&gt;-linux-gnu/lxpanel/plugins</code>)
+and copy the shared library there:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> cp myplugin.so <span class="va">$(</span><span class="ex">pkg-config</span> <span class="at">--variable</span><span class="op">=</span>pluginsdir lxpanel<span class="va">)</span>/</span></code></pre></div>
+<p>If <code>pkg-config --variable=pluginsdir lxpanel</code> does not
+return a path, manually copy the file to
+<code>/usr/lib/lxpanel/plugins/</code>:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> cp myplugin.so /usr/lib/lxpanel/plugins/</span></code></pre></div>
+<h3 id="5-load-the-plugin-into-lxpanel">5. Load the Plugin into
+LXPanel</h3>
+<p>To load the newly installed plugin, restart the panel:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lxpanelctl</span> restart</span></code></pre></div>
+<p>Right-click on the panel, select <strong>Add / Remove Panel
+Items</strong>, click <strong>Add</strong>, and choose
+<strong>myplugin</strong> from the list of available plugins to display
+it on the panel.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

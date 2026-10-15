@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure LXDE Desktop to Run in Kiosk Mode - lxde</title>
+    <meta name="description" content="Configuring an LXDE desktop environment to run exclusively in kiosk mode involves stripping away user interface elements like the desktop manager and taskbar, disabling power management to keep the display active, and configuring the system to automatical">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/configure-lxde-desktop-to-run-in-kiosk-mode">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Configure LXDE Desktop to Run in Kiosk Mode - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/configure-lxde-desktop-to-run-in-kiosk-mode" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Configuring an LXDE desktop environment to run exclusively in kiosk mode involves stripping away user interface elements like the desktop manager and taskbar, disabling power management to keep the display active, and configuring the system to automatical" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="configure-lxde-desktop-to-run-in-kiosk-mode">Configure LXDE
+Desktop to Run in Kiosk Mode</h1>
+<p>Configuring an LXDE desktop environment to run exclusively in kiosk
+mode involves stripping away user interface elements like the desktop
+manager and taskbar, disabling power management to keep the display
+active, and configuring the system to automatically launch a single
+full-screen application on startup. This guide outlines the step-by-step
+process to transform a standard LXDE installation into a locked-down,
+single-purpose kiosk workstation using Openbox configurations and the
+LXDE autostart script.</p>
+<h3 id="step-1-install-required-utilities">Step 1: Install Required
+Utilities</h3>
+<p>A functional kiosk generally requires an application to display (such
+as Chromium) and a utility to hide the mouse cursor when it is
+inactive.</p>
+<p>Open a terminal and install Chromium and <code>unclutter</code>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install chromium-browser unclutter</span></code></pre></div>
+<h3 id="step-2-configure-system-auto-login">Step 2: Configure System
+Auto-Login</h3>
+<p>The system must log in automatically to the designated kiosk user
+account upon booting.</p>
+<ol type="1">
+<li><p>Open the LightDM configuration file:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/lightdm/lightdm.conf</span></code></pre></div></li>
+<li><p>Locate the <code>[Seat:*]</code> section and set the following
+parameters, replacing <code>kioskuser</code> with your actual
+username:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">autologin-user</span><span class="ot">=</span><span class="st">kioskuser</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">autologin-user-timeout</span><span class="ot">=</span><span class="dv">0</span></span></code></pre></div></li>
+<li><p>Save and close the file.</p></li>
+</ol>
+<h3 id="step-3-modify-the-lxde-autostart-script">Step 3: Modify the LXDE
+Autostart Script</h3>
+<p>LXDE uses an <code>autostart</code> file to launch default components
+like the taskbar (<code>lxpanel</code>) and file manager desktop icons
+(<code>pcmanfm</code>). To create a kiosk, you must disable these
+components and instruct the system to start your target application
+instead.</p>
+<ol type="1">
+<li><p>Create a local autostart directory for your user if it does not
+already exist:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.config/lxsession/LXDE</span></code></pre></div></li>
+<li><p>Copy the global autostart file to your user profile:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /etc/xdg/lxsession/LXDE/autostart ~/.config/lxsession/LXDE/autostart</span></code></pre></div></li>
+<li><p>Open the file for editing:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/lxsession/LXDE/autostart</span></code></pre></div></li>
+<li><p>Comment out or remove the desktop manager and panel lines by
+placing a <code>#</code> in front of them:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#@lxpanel --profile LXDE</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#@pcmanfm --desktop --profile LXDE</span></span></code></pre></div></li>
+<li><p>Add commands to disable screen blanking, hide the cursor, and
+launch your kiosk application:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Disable screen savers and power management</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">@xset</span> s off</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">@xset</span> <span class="at">-dpms</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">@xset</span> s noblank</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Hide the mouse cursor after 1 second of inactivity</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ex">@unclutter</span> <span class="at">-idle</span> 1 <span class="at">-root</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Launch the browser in full kiosk mode</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="ex">@chromium-browser</span> <span class="at">--noerrdialogs</span> <span class="at">--disable-infobars</span> <span class="at">--kiosk</span> https://example.com</span></code></pre></div></li>
+<li><p>Save and exit the editor.</p></li>
+</ol>
+<h3 id="step-4-lock-down-keybindings-in-openbox">Step 4: Lock Down
+Keybindings in Openbox</h3>
+<p>Because LXDE uses Openbox as its window manager, users can
+potentially bypass the kiosk application using keyboard shortcuts like
+<code>Alt + F4</code> or <code>Alt + Tab</code>.</p>
+<ol type="1">
+<li><p>Open the Openbox configuration file:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/openbox/lxde-rc.xml</span></code></pre></div></li>
+<li><p>Locate the <code>&lt;keyboard&gt;</code> section.</p></li>
+<li><p>Remove or comment out key bindings that allow window
+manipulation, terminal access, or closing applications (such as
+<code>A-F4</code>, <code>A-Tab</code>, and <code>C-A-t</code>).</p></li>
+<li><p>Save the file and exit.</p></li>
+</ol>
+<h3 id="step-5-reboot-and-verify">Step 5: Reboot and Verify</h3>
+<p>Reboot the machine to apply all changes:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> reboot</span></code></pre></div>
+<p>Upon boot, the machine will bypass the login screen, initialize the
+Openbox window manager without the taskbar or desktop icons, and
+immediately present the designated application in full-screen kiosk
+mode.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How LXDE Behaves in a systemd User Slice - lxde</title>
+    <meta name="description" content="Running the Lightweight X11 Desktop Environment (LXDE) inside a systemd user slice subjects its traditional, loosely coupled components to modern Linux cgroups control, unified process tracking, and strict resource management. While LXDE was not natively">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-lxde-behaves-in-a-systemd-user-slice">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How LXDE Behaves in a systemd User Slice - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-lxde-behaves-in-a-systemd-user-slice" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Running the Lightweight X11 Desktop Environment (LXDE) inside a systemd user slice subjects its traditional, loosely coupled components to modern Linux cgroups control, unified process tracking, and strict resource management. While LXDE was not natively" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-lxde-behaves-in-a-systemd-user-slice">How LXDE Behaves in a
+systemd User Slice</h1>
+<p>Running the Lightweight X11 Desktop Environment (LXDE) inside a
+systemd user slice subjects its traditional, loosely coupled components
+to modern Linux cgroups control, unified process tracking, and strict
+resource management. While LXDE was not natively designed with systemd
+user targets in mind, encapsulating its session within a user slice
+alters how processes are grouped, monitored, throttled, and terminated,
+directly addressing legacy process-leak issues at the expense of
+requiring manual configuration for granular service supervision.</p>
+<h3 id="cgroup-containment-and-resource-allocation">Cgroup Containment
+and Resource Allocation</h3>
+<p>By default, launching an LXDE session via a traditional display
+manager or <code>startx</code> places the entire environment under the
+general user session scope (<code>session-N.scope</code>). When
+explicitly executed within a dedicated systemd user slice (such as
+<code>app.slice</code> or a custom <code>lxde.slice</code> under
+<code>user@&lt;uid&gt;.service</code>), all child processes spawned by
+the session manager (<code>lxsession</code>) inherit that slice's
+control group parameters.</p>
+<p>This allows system administrators to enforce strict limits on the
+desktop environment:</p>
+<ul>
+<li><strong>Memory Limits:</strong> If <code>MemoryMax</code> or
+<code>MemoryHigh</code> is defined on the slice, memory leaks from
+components like <code>pcmanfm</code> (desktop manager) or
+<code>lxpanel</code> are contained, preventing out-of-memory (OOM)
+conditions from destabilizing the entire OS.</li>
+<li><strong>CPU and I/O Shares:</strong> Systemd throttles the slice
+according to specified weights, ensuring background user workloads do
+not monopolize CPU time or storage bandwidth.</li>
+<li><strong>Task Constraints:</strong> <code>TasksMax</code> prevents
+fork-bombs or rogue shell scripts launched from within LXDE from
+exhausting system-wide process IDs.</li>
+</ul>
+<h3 id="process-tracking-and-session-lifecycle">Process Tracking and
+Session Lifecycle</h3>
+<p>LXDE relies on <code>lxsession</code> to start standalone binaries
+sequentially, including the Openbox window manager, taskbar,
+notification daemons, and polkit agents. In an unmanaged environment,
+background daemons often remain active as orphans if the X server
+crashes or terminates abruptly.</p>
+<p>When confined to a systemd user slice, the lifecycle of these
+processes is bound to the slice's lifecycle. If the slice or containing
+scope is terminated using
+<code>systemctl --user stop &lt;name&gt;</code>, systemd leverages the
+kernel cgroup tree to identify every child, grandchild, and
+double-forked process spawned during the session. It issues a
+<code>SIGTERM</code> followed by a <code>SIGKILL</code> to the entire
+tree, ensuring zero orphaned processes remain in memory after
+logout.</p>
+<h3 id="lack-of-native-systemd-unit-integration">Lack of Native Systemd
+Unit Integration</h3>
+<p>Unlike modern desktop environments such as GNOME or KDE Plasma, LXDE
+has not been rewritten to break its architecture into native
+<code>systemd --user</code> units and targets (e.g.,
+<code>graphical-session.target</code>). As a result, its behavior inside
+a user slice presents specific characteristics:</p>
+<ul>
+<li><strong>Monolithic Containment:</strong> Every component started by
+<code>lxsession</code> resides in the same slice or sub-scope unless an
+application launcher explicitly uses <code>systemd-run</code> to place
+external apps into separate transient scopes. Consequently, an intensive
+application launched from the LXDE application menu competes directly
+for the slice's allocated quotas.</li>
+<li><strong>No Built-in Service Auto-Restart:</strong> Because
+components run as child processes rather than individual systemd user
+services, systemd cannot monitor or automatically restart individual
+failing elements, such as a crashed <code>lxpanel</code>, unless a
+third-party wrapper or custom unit configuration is implemented.</li>
+<li><strong>Compatibility Stability:</strong> Despite the architectural
+gap, running LXDE inside a user slice does not introduce internal IPC or
+X11 communication failures. The underlying D-Bus session and X socket
+operate transparently within the cgroup boundary.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

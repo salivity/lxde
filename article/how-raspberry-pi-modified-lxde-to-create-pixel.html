@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Raspberry Pi Modified LXDE to Create PIXEL - lxde</title>
+    <meta name="description" content="The PIXEL desktop—short for &quot;Pi Improved Xwindows Environment, Lightweight&quot;—was introduced in 2016 as a significant overhaul of the stock LXDE desktop environment used in Raspberry Pi OS. While the Raspberry Pi Foundation retained the underlying speed and">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-raspberry-pi-modified-lxde-to-create-pixel">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Raspberry Pi Modified LXDE to Create PIXEL - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-raspberry-pi-modified-lxde-to-create-pixel" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The PIXEL desktop—short for &quot;Pi Improved Xwindows Environment, Lightweight&quot;—was introduced in 2016 as a significant overhaul of the stock LXDE desktop environment used in Raspberry Pi OS. While the Raspberry Pi Foundation retained the underlying speed and" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-raspberry-pi-modified-lxde-to-create-pixel">How Raspberry Pi
+Modified LXDE to Create PIXEL</h1>
+<p>The PIXEL desktop—short for "Pi Improved Xwindows Environment,
+Lightweight"—was introduced in 2016 as a significant overhaul of the
+stock LXDE desktop environment used in Raspberry Pi OS. While the
+Raspberry Pi Foundation retained the underlying speed and low memory
+footprint of LXDE, they heavily modified its appearance, usability, and
+hardware integration to turn an outdated, bare-bones Linux desktop into
+a modern, accessible interface. This article outlines the specific
+visual redesigns, panel improvements, and system-level tweaks that
+transformed standard LXDE into PIXEL.</p>
+<h3 id="complete-visual-and-aesthetic-redesign">Complete Visual and
+Aesthetic Redesign</h3>
+<p>Standard LXDE is notoriously utilitarian, relying on an aesthetic
+reminiscent of late-1990s operating systems. The Foundation modernized
+the entire visual stack:</p>
+<ul>
+<li><strong>Custom Iconography:</strong> Graphic designer Sam Alder
+created a comprehensive, flat-styled icon set specifically for PIXEL,
+replacing the dated, mismatched icons standard in vanilla LXDE.</li>
+<li><strong>Refined Typography:</strong> The default system font was
+switched to Google’s Roboto, paired with improved font rendering for
+crisp text on both low-resolution and modern HDMI displays.</li>
+<li><strong>Cleaner Window Decorations:</strong> The default Openbox
+window manager theme was redesigned with soft, curved corners, subtle
+drop shadows, and minimalist minimize/maximize/close buttons.</li>
+<li><strong>Curated Wallpapers:</strong> Instead of a generic plain
+desktop or default Linux pattern, PIXEL bundled professional,
+high-resolution photography selected specifically to show off display
+capabilities.</li>
+</ul>
+<h3 id="seamless-boot-and-splash-screen">Seamless Boot and Splash
+Screen</h3>
+<p>In upstream LXDE, users are exposed to the standard Linux boot
+sequence: rapid, intimidating streams of kernel diagnostic text followed
+by a rudimentary login box. The Foundation integrated Plymouth into the
+boot process to create a silent boot sequence. This displays a clean
+Raspberry Pi splash screen with a version number before smoothly
+transitioning directly into the PIXEL desktop, hiding console
+diagnostics from average users unless an error occurs.</p>
+<h3 id="overhauled-panel-and-applets">Overhauled Panel and Applets</h3>
+<p>The taskbar, powered by LXPanel, was redesigned for immediate
+usability and modern hardware interactions:</p>
+<ul>
+<li><strong>Consolidated Network and Bluetooth Controls:</strong>
+Upstream LXDE relied on third-party or clumsy applets. The Foundation
+developed unified, native plugins for managing Wi-Fi networks and
+pairing Bluetooth devices directly from the panel.</li>
+<li><strong>Power Management:</strong> A dedicated battery indicator
+applet was added to natively support Raspberry Pi setups running on
+portable power or laptop docks.</li>
+<li><strong>Menu Organization:</strong> The application menu was
+restructured to prioritize educational, programming, and maker tools
+without cluttering standard desktop productivity software.</li>
+</ul>
+<h3 id="hardware-specific-status-indicators">Hardware-Specific Status
+Indicators</h3>
+<p>On low-power hardware, diagnostic feedback is vital. The Foundation
+replaced the cryptic, multi-colored square overlays generated by the GPU
+firmware with custom, visually explicit vector icons drawn over the
+PIXEL desktop. A yellow lightning bolt warns users of low input voltage,
+while a red thermometer icon indicates thermal throttling, making
+troubleshooting intuitive for hobbyists and students.</p>
+<h3 id="custom-configuration-and-software-integration">Custom
+Configuration and Software Integration</h3>
+<p>Rather than forcing users to navigate LXDE’s fragmented preference
+panes and text-based configuration files, PIXEL integrated native,
+streamlined management tools:</p>
+<ul>
+<li><strong>Raspberry Pi Configuration Tool
+(<code>rc_gui</code>):</strong> The Foundation built a unified graphical
+interface exposing core Pi-specific settings—such as screen blanking,
+audio output switching, overscan adjustment, and peripheral interfaces
+(I2C, SPI, GPIO, Camera)—eliminating the need to run
+<code>raspi-config</code> in the terminal.</li>
+<li><strong>Browser and Media Optimization:</strong> PIXEL shipped with
+a customized build of Chromium, patched specifically to support the
+Raspberry Pi’s hardware video decoding capabilities.</li>
+<li><strong>Remote Access Integration:</strong> RealVNC Server and
+Viewer were directly integrated into the environment, offering
+out-of-the-box, lightweight remote desktop capabilities natively
+compatible with the modified LXPanel.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

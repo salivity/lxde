@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Default Window Manager Is Used in LXDE? - lxde</title>
+    <meta name="description" content="The Lightweight X11 Desktop Environment (LXDE) relies on Openbox as its standard default window manager. Built specifically for energy efficiency and low resource consumption, LXDE pairs Openbox with a collection of independent desktop components to provi">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/what-default-window-manager-is-used-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Default Window Manager Is Used in LXDE? - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/what-default-window-manager-is-used-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Lightweight X11 Desktop Environment (LXDE) relies on Openbox as its standard default window manager. Built specifically for energy efficiency and low resource consumption, LXDE pairs Openbox with a collection of independent desktop components to provi" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-default-window-manager-is-used-in-lxde">What Default Window
+Manager Is Used in LXDE?</h1>
+<p>The Lightweight X11 Desktop Environment (LXDE) relies on Openbox as
+its standard default window manager. Built specifically for energy
+efficiency and low resource consumption, LXDE pairs Openbox with a
+collection of independent desktop components to provide a responsive
+graphical user interface on older or low-spec hardware. This article
+explores why Openbox was chosen, how it integrates into the LXDE
+ecosystem, and the key benefits of this pairing.</p>
+<h3 id="the-role-of-openbox-in-lxde">The Role of Openbox in LXDE</h3>
+<p>Openbox is a highly configurable, standards-compliant window manager
+known for its minimalistic footprint. Rather than providing an entire
+desktop suite itself, Openbox focuses strictly on managing client
+windows: decorating frames, managing workspaces, and handling window
+placement, movement, and resizing.</p>
+<p>In a standard LXDE installation, Openbox operates underneath the LXDE
+session manager (<code>lxsession</code>). While other desktop
+environments bundle tightly integrated window managers—such as GNOME
+with Mutter or Xfce with Xfwm—LXDE intentionally chose an existing,
+mature standalone tool to keep development modular and system overhead
+exceptionally low.</p>
+<h3 id="how-openbox-integrates-with-lxde-components">How Openbox
+Integrates with LXDE Components</h3>
+<p>LXDE follows the Unix philosophy of doing one thing well. Because
+Openbox handles only window behavior, other independent modular tools
+fill in the traditional desktop features:</p>
+<ul>
+<li><strong>PCManFM:</strong> Serves as the default file manager while
+also drawing the desktop background and managing desktop icons.</li>
+<li><strong>LXPanel:</strong> Provides the taskbar, system tray,
+application launch menu, and clock.</li>
+<li><strong>LXAppearance:</strong> Offers a graphical interface to
+customize GTK themes, icon packs, and mouse cursors.</li>
+<li><strong>ObConf:</strong> A dedicated configuration tool specifically
+for Openbox, allowing users to alter window borders, titlebar button
+placement, focus behavior, and virtual desktop counts.</li>
+</ul>
+<p>When an LXDE session boots, <code>lxsession</code> launches Openbox
+alongside LXPanel and PCManFM, creating a cohesive, conventional desktop
+interface out of individual utilities.</p>
+<h3 id="advantages-of-the-openbox-and-lxde-pairing">Advantages of the
+Openbox and LXDE Pairing</h3>
+<p>The primary advantage of bundling Openbox with LXDE is performance.
+Openbox consumes minimal RAM—often just a few megabytes—and uses
+virtually no idle CPU cycles. This makes the combination ideal for
+legacy computers, single-board computers like the Raspberry Pi (which
+historically based its Raspberry Pi OS desktop, PIXEL, on LXDE), and
+virtual machines with constrained resource allocations.</p>
+<p>Additionally, Openbox provides extensive keyboard shortcut
+configurability via simple XML configuration files located in the user's
+home directory. Power users can navigate, tile, and manipulate windows
+entirely through custom keybindings without needing heavy desktop
+services running in the background.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

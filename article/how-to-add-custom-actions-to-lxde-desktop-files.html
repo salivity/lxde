@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Add Custom Actions to LXDE Desktop Files - lxde</title>
+    <meta name="description" content="Custom desktop actions allow you to extend standard application shortcuts with secondary tasks accessible via right-click context menus in LXDE. By adhering to the FreeDesktop.org Desktop Entry Specification, you can append additional execution commands—s">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-add-custom-actions-to-lxde-desktop-files">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Add Custom Actions to LXDE Desktop Files - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-add-custom-actions-to-lxde-desktop-files" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Custom desktop actions allow you to extend standard application shortcuts with secondary tasks accessible via right-click context menus in LXDE. By adhering to the FreeDesktop.org Desktop Entry Specification, you can append additional execution commands—s" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-add-custom-actions-to-lxde-desktop-files">How to Add
+Custom Actions to LXDE Desktop Files</h1>
+<p>Custom desktop actions allow you to extend standard application
+shortcuts with secondary tasks accessible via right-click context menus
+in LXDE. By adhering to the FreeDesktop.org Desktop Entry Specification,
+you can append additional execution commands—such as opening a private
+browsing window, running an app as an administrator, or targeting
+specific directories—directly inside a single <code>.desktop</code>
+launcher.</p>
+<h3 id="understanding-desktop-actions">Understanding Desktop
+Actions</h3>
+<p>A custom action extends a standard <code>.desktop</code> file by
+specifying an <code>Actions</code> key under the main
+<code>[Desktop Entry]</code> group. Each declared action references a
+corresponding <code>[Desktop Action &lt;ActionId&gt;]</code> section
+defined further down in the file, which contains its own display name,
+execution command, and optional icon.</p>
+<h3 id="step-1-locate-or-copy-the-target-desktop-file">Step 1: Locate or
+Copy the Target <code>.desktop</code> File</h3>
+<p>System-wide launchers reside in
+<code>/usr/share/applications/</code>. To make changes without root
+privileges and prevent package updates from overwriting your edits, copy
+the target file to your local directory:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.local/share/applications</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /usr/share/applications/<span class="op">&lt;</span>application-name<span class="op">&gt;</span>.desktop ~/.local/share/applications/</span></code></pre></div>
+<p>Replace <code>&lt;application-name&gt;</code> with the name of the
+application you wish to modify.</p>
+<h3 id="step-2-declare-the-action-keys">Step 2: Declare the Action
+Keys</h3>
+<p>Open the copied file in a text editor like Leafpad or Nano:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">leafpad</span> ~/.local/share/applications/<span class="op">&lt;</span>application-name<span class="op">&gt;</span>.desktop</span></code></pre></div>
+<p>Inside the <code>[Desktop Entry]</code> block, add the
+<code>Actions</code> parameter. List your custom action identifiers
+separated by semicolons:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Desktop Entry]</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Type</span><span class="ot">=</span><span class="st">Application</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">Name</span><span class="ot">=</span><span class="st">PCManFM</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">Exec</span><span class="ot">=</span><span class="st">pcmanfm %U</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dt">Icon</span><span class="ot">=</span><span class="st">system-file-manager</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="dt">Terminal</span><span class="ot">=</span><span class="kw">false</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="dt">Categories</span><span class="ot">=</span><span class="st">System;FileTools;FileManager;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="dt">Actions</span><span class="ot">=</span><span class="st">OpenRoot;OpenDownloads;</span></span></code></pre></div>
+<h3 id="step-3-define-the-action-sections">Step 3: Define the Action
+Sections</h3>
+<p>Scroll to the bottom of the file and define each action listed in the
+<code>Actions</code> key using
+<code>[Desktop Action &lt;ActionId&gt;]</code> headers.</p>
+<p>Each action block requires at least a <code>Name</code> (the text
+displayed in the context menu) and an <code>Exec</code> (the command to
+run):</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Desktop Action OpenRoot]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Name</span><span class="ot">=</span><span class="st">Open as Root</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">Exec</span><span class="ot">=</span><span class="st">gksudo pcmanfm</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">Icon</span><span class="ot">=</span><span class="st">system-file-manager</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">[Desktop Action OpenDownloads]</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="dt">Name</span><span class="ot">=</span><span class="st">Open Downloads Folder</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="dt">Exec</span><span class="ot">=</span><span class="st">pcmanfm /home/%u/Downloads</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="dt">Icon</span><span class="ot">=</span><span class="st">folder-download</span></span></code></pre></div>
+<h3 id="example-complete-custom-desktop-file">Example: Complete Custom
+<code>.desktop</code> File</h3>
+<p>Here is an example configuring a text editor (Leafpad) to add a
+context option to open files with administrative permissions:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Desktop Entry]</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Version</span><span class="ot">=</span><span class="fl">1.0</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="dt">Name</span><span class="ot">=</span><span class="st">Leafpad</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="dt">Comment</span><span class="ot">=</span><span class="st">Simple text editor</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="dt">Exec</span><span class="ot">=</span><span class="st">leafpad %f</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="dt">Icon</span><span class="ot">=</span><span class="st">leafpad</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="dt">Terminal</span><span class="ot">=</span><span class="kw">false</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="dt">Type</span><span class="ot">=</span><span class="st">Application</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="dt">Categories</span><span class="ot">=</span><span class="st">GTK;Utility;TextEditor;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="dt">MimeType</span><span class="ot">=</span><span class="st">text/plain;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="dt">Actions</span><span class="ot">=</span><span class="st">OpenAsRoot;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="kw">[Desktop Action OpenAsRoot]</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="dt">Name</span><span class="ot">=</span><span class="st">Open as Root</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="dt">Exec</span><span class="ot">=</span><span class="st">pkexec leafpad %f</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="dt">Icon</span><span class="ot">=</span><span class="st">leafpad</span></span></code></pre></div>
+<h3 id="step-4-apply-the-changes">Step 4: Apply the Changes</h3>
+<p>Once saved, notify the desktop environment of the updated
+configuration by updating the local desktop database:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">update-desktop-database</span> ~/.local/share/applications</span></code></pre></div>
+<p>Restart LXDE's panel or file manager if changes do not appear
+immediately:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lxpanelctl</span> restart</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pcmanfm</span> <span class="at">--restart</span></span></code></pre></div>
+<p>When you right-click the shortcut in PCManFM or on the desktop, the
+custom actions will appear directly in the menu.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

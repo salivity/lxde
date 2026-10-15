@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure Mouse Acceleration in LXDE - lxde</title>
+    <meta name="description" content="Configuring mouse acceleration profiles in the Lightweight X11 Desktop Environment (LXDE) allows you to tailor pointer behavior for gaming, precision work, or general navigation. While LXDE provides a basic graphical tool for speed and threshold adjustmen">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/configure-mouse-acceleration-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Configure Mouse Acceleration in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/configure-mouse-acceleration-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Configuring mouse acceleration profiles in the Lightweight X11 Desktop Environment (LXDE) allows you to tailor pointer behavior for gaming, precision work, or general navigation. While LXDE provides a basic graphical tool for speed and threshold adjustmen" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="configure-mouse-acceleration-in-lxde">Configure Mouse
+Acceleration in LXDE</h1>
+<p>Configuring mouse acceleration profiles in the Lightweight X11
+Desktop Environment (LXDE) allows you to tailor pointer behavior for
+gaming, precision work, or general navigation. While LXDE provides a
+basic graphical tool for speed and threshold adjustments, setting
+specific acceleration profiles—such as a "flat" profile to disable
+acceleration entirely, or an "adaptive" profile—requires managing the
+underlying <code>libinput</code> driver through Xorg configuration files
+or session autostart scripts.</p>
+<h3
+id="method-1-permanent-system-wide-configuration-via-xorg-recommended">Method
+1: Permanent System-Wide Configuration via Xorg (Recommended)</h3>
+<p>The most reliable way to enforce an acceleration profile across all
+sessions is to define an Xorg configuration snippet using
+<code>libinput</code>.</p>
+<ol type="1">
+<li><p>Open a terminal and create a new configuration file in
+<code>/etc/X11/xorg.conf.d/</code>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/X11/xorg.conf.d/50-mouse-acceleration.conf</span></code></pre></div></li>
+<li><p>Add the following block to define your desired profile:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode xorg"><code class="sourceCode xorg"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Section</span> <span class="st">&quot;InputClass&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    Identifier<span class="kw"> </span><span class="dt">&quot;My Mouse&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    MatchIsPointer<span class="kw"> </span><span class="dt">&quot;yes&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    Driver<span class="kw"> </span><span class="dt">&quot;libinput&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    Option<span class="kw"> </span><span class="dt">&quot;AccelProfile&quot;</span><span class="kw"> </span><span class="dt">&quot;flat&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    Option<span class="kw"> </span><span class="dt">&quot;AccelSpeed&quot;</span><span class="kw"> </span><span class="dt">&quot;0&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">EndSection</span></span></code></pre></div>
+<ul>
+<li>Set <code>AccelProfile</code> to <code>"flat"</code> (no
+acceleration, consistent 1:1 movement) or <code>"adaptive"</code> (speed
+varies based on physical movement velocity).</li>
+<li>Adjust <code>AccelSpeed</code> with a value between
+<code>-1.0</code> (slowest) and <code>1.0</code> (fastest).
+<code>0</code> represents the default pointer speed.</li>
+</ul></li>
+<li><p>Save the file (in Nano, press <code>Ctrl+O</code>, then
+<code>Enter</code>) and exit (<code>Ctrl+X</code>).</p></li>
+<li><p>Log out and log back in to apply the changes.</p></li>
+</ol>
+<hr />
+<h3 id="method-2-user-level-configuration-via-lxde-autostart">Method 2:
+User-Level Configuration via LXDE Autostart</h3>
+<p>If you do not have root privileges or prefer to apply settings only
+to your specific user profile, you can utilize <code>xinput</code>
+within the LXDE session startup file.</p>
+<h4 id="step-1-identify-the-mouse-name-and-properties">Step 1: Identify
+the Mouse Name and Properties</h4>
+<ol type="1">
+<li><p>Open a terminal and run:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xinput</span> list</span></code></pre></div>
+<p>Locate your pointer device under "Virtual core pointer" and note its
+exact name (e.g., <code>Logitech USB Optical Mouse</code>).</p></li>
+<li><p>Verify available acceleration profiles for the device:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xinput</span> list-props <span class="st">&quot;Your Mouse Device Name&quot;</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;Accel Profile&quot;</span></span></code></pre></div>
+<p>You will see an entry such as
+<code>libinput Accel Profile Enabled (XXX): 1, 0</code>. The two values
+correspond to <code>adaptive</code> and <code>flat</code>. A value of
+<code>0, 1</code> enables the flat profile, while <code>1, 0</code>
+enables the adaptive profile.</p></li>
+</ol>
+<h4 id="step-2-add-commands-to-lxde-autostart">Step 2: Add Commands to
+LXDE Autostart</h4>
+<ol type="1">
+<li><p>Open your user-level LXDE autostart file:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/lxsession/LXDE/autostart</span></code></pre></div>
+<p><em>(If the file does not exist, check
+<code>/etc/xdg/lxsession/LXDE/autostart</code> or create the directory
+structure manually).</em></p></li>
+<li><p>Add the commands at the bottom of the file, preceded by an
+<code>@</code> symbol so the commands automatically restart if
+killed:</p>
+<pre class="text"><code>@xinput set-prop &quot;Your Mouse Device Name&quot; &quot;libinput Accel Profile Enabled&quot; 0, 1
+@xinput set-prop &quot;Your Mouse Device Name&quot; &quot;libinput Accel Speed&quot; 0.0</code></pre>
+<ul>
+<li>Replace <code>"Your Mouse Device Name"</code> with the exact name
+found in <code>xinput list</code>.</li>
+<li>Set <code>0, 1</code> for a flat profile, or <code>1, 0</code> for
+an adaptive profile.</li>
+<li>Adjust the speed property between <code>-1.0</code> and
+<code>1.0</code> as needed.</li>
+</ul></li>
+<li><p>Save and close the file. The profile will now apply automatically
+whenever you log into LXDE.</p></li>
+</ol>
+<hr />
+<h3 id="method-3-basic-adjustments-via-the-gui-lxinput">Method 3: Basic
+Adjustments via the GUI (LXInput)</h3>
+<p>For standard adjustments without profile switching:</p>
+<ol type="1">
+<li>Open the LXDE application menu.</li>
+<li>Navigate to <strong>Preferences</strong> &gt; <strong>Keyboard and
+Mouse</strong>.</li>
+<li>Under the <strong>Mouse</strong> tab, adjust the
+<strong>Acceleration</strong> and <strong>Sensitivity</strong>
+sliders.</li>
+<li>Click <strong>Apply</strong> to test the settings, then click
+<strong>Close</strong>.</li>
+</ol>
+<p><em>Note: The built-in GUI only adjusts acceleration multipliers and
+thresholds; it cannot switch between <code>flat</code> and
+<code>adaptive</code> libinput profiles.</em></p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

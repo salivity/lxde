@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How LXDE Handles Removable Storage Auto-Mounting - lxde</title>
+    <meta name="description" content="The Lightweight X11 Desktop Environment (LXDE) handles the auto-mounting of removable storage through its default file manager, PCManFM, operating alongside system-level storage management services like GVFS and UDisks2. When a user inserts a USB drive, S">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-lxde-handles-removable-storage-auto-mounting">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How LXDE Handles Removable Storage Auto-Mounting - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-lxde-handles-removable-storage-auto-mounting" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Lightweight X11 Desktop Environment (LXDE) handles the auto-mounting of removable storage through its default file manager, PCManFM, operating alongside system-level storage management services like GVFS and UDisks2. When a user inserts a USB drive, S" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-lxde-handles-removable-storage-auto-mounting">How LXDE
+Handles Removable Storage Auto-Mounting</h1>
+<p>The Lightweight X11 Desktop Environment (LXDE) handles the
+auto-mounting of removable storage through its default file manager,
+PCManFM, operating alongside system-level storage management services
+like GVFS and UDisks2. When a user inserts a USB drive, SD card, or
+optical disc, LXDE relies on an event-driven chain from the Linux kernel
+to the desktop shell, automatically mounting partitions to
+user-accessible directories without requiring root privileges.</p>
+<h3 id="the-role-of-pcmanfm">The Role of PCManFM</h3>
+<p>PCManFM serves as both the file manager and the desktop manager in
+LXDE. Instead of requiring a standalone volume management daemon,
+PCManFM runs continuously in the background using daemon mode
+(<code>pcmanfm -d</code>). In this background state, PCManFM actively
+listens for desktop-level volume management events and processes the
+rules governing how external media should be handled.</p>
+<h3 id="the-underlying-architecture-gvfs-and-udisks2">The Underlying
+Architecture: GVFS and UDisks2</h3>
+<p>PCManFM does not mount devices directly via low-level kernel calls.
+Instead, it relies on a modern desktop storage stack:</p>
+<ol type="1">
+<li><strong>Kernel and udev:</strong> When a storage device connects to
+the system, the Linux kernel detects the hardware and emits a
+<code>uevent</code>. The <code>udev</code> device manager handles this
+event, creating the appropriate device nodes under
+<code>/dev</code>.</li>
+<li><strong>UDisks2:</strong> The system daemon <code>udisksd</code>
+detects the new block device signaled by <code>udev</code>. UDisks2
+manages storage operations across the system and exposes a D-Bus
+interface for mounting, unmounting, and querying block devices.</li>
+<li><strong>GVFS (GNOME Virtual File System):</strong> PCManFM interacts
+with UDisks2 through GVFS and GIO libraries. GVFS translates file
+operations and volume events into D-Bus calls recognized by UDisks2,
+allowing non-root desktop environments to execute mounts securely.</li>
+</ol>
+<h3 id="the-auto-mount-workflow">The Auto-Mount Workflow</h3>
+<p>When a removable drive is plugged in:</p>
+<ol type="1">
+<li>UDisks2 creates an object for the block device and broadcasts its
+presence over the system D-Bus.</li>
+<li>The running PCManFM daemon receives the signal via GVFS.</li>
+<li>PCManFM checks its internal preferences to determine whether
+auto-mounting is enabled.</li>
+<li>If enabled, PCManFM requests that UDisks2 mount the volume.</li>
+<li>UDisks2 mounts the filesystem, usually into
+<code>/media/&lt;username&gt;/&lt;label&gt;</code> or
+<code>/run/media/&lt;username&gt;/&lt;label&gt;</code>.</li>
+<li>PCManFM updates the desktop, generates a desktop icon (if
+configured), and optionally opens a new file manager window pointing to
+the mounted directory.</li>
+</ol>
+<h3 id="configuration-and-user-control">Configuration and User
+Control</h3>
+<p>Users can configure auto-mounting behavior directly within
+PCManFM:</p>
+<ul>
+<li>Open PCManFM and navigate to <strong>Edit</strong> &gt;
+<strong>Preferences</strong> &gt; <strong>Volume
+Management</strong>.</li>
+<li><strong>Mount mountable volumes automatically on media
+insertion:</strong> Toggles whether the background daemon triggers the
+UDisks2 mount request.</li>
+<li><strong>Mount removable media automatically when they are
+inserted:</strong> Specifically targets external drives like USB
+keys.</li>
+<li><strong>Open file manager automatically on media insertion:</strong>
+Dictates whether a new window opens immediately upon a successful
+mount.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

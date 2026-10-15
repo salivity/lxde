@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LXDE Transition From GTK2 to GTK3 Explained - lxde</title>
+    <meta name="description" content="The transition of the Lightweight X11 Desktop Environment (LXDE) from GTK2 to GTK3 represents a defining era for the project, driven by the deprecation of legacy toolkits across major Linux distributions. This shift required substantial rewrites of core c">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/lxde-transition-from-gtk-2-to-gtk-3-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LXDE Transition From GTK2 to GTK3 Explained - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/lxde-transition-from-gtk-2-to-gtk-3-explained" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The transition of the Lightweight X11 Desktop Environment (LXDE) from GTK2 to GTK3 represents a defining era for the project, driven by the deprecation of legacy toolkits across major Linux distributions. This shift required substantial rewrites of core c" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="lxde-transition-from-gtk2-to-gtk3-explained">LXDE Transition
+From GTK2 to GTK3 Explained</h1>
+<p>The transition of the Lightweight X11 Desktop Environment (LXDE) from
+GTK2 to GTK3 represents a defining era for the project, driven by the
+deprecation of legacy toolkits across major Linux distributions. This
+shift required substantial rewrites of core components, fundamentally
+altered the desktop's theming engine, increased baseline memory usage,
+and sparked the development of LXQt as an alternative path forward.</p>
+<h3 id="codebase-modernization-and-api-deprecation">Codebase
+Modernization and API Deprecation</h3>
+<p>The primary technical change during the transition was the
+replacement of deprecated GTK2 functions with GTK3 equivalents across
+core modules, including PCManFM (the file manager), LXPanel, and
+LXAppearance. GTK3 eliminated direct access to internal structure
+fields, requiring developers to adopt explicit getter and setter
+methods. Layout widgets like <code>GtkHBox</code> and
+<code>GtkVBox</code> were phased out in favor of <code>GtkGrid</code>
+and modern <code>GtkBox</code> implementations, requiring significant
+structural refactoring in LXDE’s panel and configuration applets to
+maintain proper widget packing and alignment.</p>
+<h3 id="transition-to-css-based-theming">Transition to CSS-Based
+Theming</h3>
+<p>Under GTK2, LXDE relied on lightweight, native C-based theme engines
+(such as Murrine or Clearlooks) and configuration files like
+<code>.gtkrc-2.0</code>. The GTK3 migration introduced a CSS-based
+styling mechanism. While this unified design paradigms, it broke
+compatibility with existing LXDE themes, required
+<code>lxappearance</code> to be rewritten to handle CSS styles, and
+initially disrupted the pixel-perfect borders and minimal padding that
+characterized the traditional LXDE look.</p>
+<h3 id="increased-memory-and-resource-footprint">Increased Memory and
+Resource Footprint</h3>
+<p>One of the most consequential outcomes of moving to GTK3 was an
+increase in system resource consumption. GTK3’s modern rendering
+pipeline, reliance on client-side decorations (CSD), and complex CSS
+engine increased idle RAM and CPU usage. For a desktop environment whose
+core philosophy was ultra-low hardware requirements, this overhead
+compromised LXDE’s ability to run comfortably on extremely constrained,
+older machines.</p>
+<h3 id="fragmentation-and-the-birth-of-lxqt">Fragmentation and the Birth
+of LXQt</h3>
+<p>The challenges and performance overhead encountered during the
+initial GTK3 porting experiments prompted the lead developer of LXDE,
+Hong Jen Yee (PCMan), to explore alternative toolkits. A test port of
+PCManFM to Qt revealed that Qt used fewer system resources than GTK3
+while offering better API stability. This finding led to the
+collaboration with the Razor-qt project and the eventual establishment
+of LXQt. Consequently, while the GTK3 version of LXDE was successfully
+completed to keep the desktop functional in modern package repositories
+like Debian, active feature innovation shifted toward LXQt, leaving LXDE
+in a stable, maintenance-focused state.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

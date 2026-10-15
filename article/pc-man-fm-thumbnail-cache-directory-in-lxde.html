@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCManFM Thumbnail Cache Directory in LXDE - lxde</title>
+    <meta name="description" content="In the LXDE desktop environment, the default file manager PCManFM generates and stores image previews locally to accelerate browsing performance. This article outlines the specific directories where PCManFM manages its thumbnail cache, the desktop standar">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/pc-man-fm-thumbnail-cache-directory-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="PCManFM Thumbnail Cache Directory in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/pc-man-fm-thumbnail-cache-directory-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In the LXDE desktop environment, the default file manager PCManFM generates and stores image previews locally to accelerate browsing performance. This article outlines the specific directories where PCManFM manages its thumbnail cache, the desktop standar" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="pcmanfm-thumbnail-cache-directory-in-lxde">PCManFM Thumbnail
+Cache Directory in LXDE</h1>
+<p>In the LXDE desktop environment, the default file manager PCManFM
+generates and stores image previews locally to accelerate browsing
+performance. This article outlines the specific directories where
+PCManFM manages its thumbnail cache, the desktop standards governing
+these locations, and how to safely clear or manage the cached data.</p>
+<h3 id="the-thumbnail-cache-location">The Thumbnail Cache Location</h3>
+<p>PCManFM adheres to the Freedesktop.org (XDG) Thumbnail Managing
+Standard. Under this standard, thumbnails are stored within the user's
+local cache directory:</p>
+<ul>
+<li><strong>Primary Path:</strong>
+<code>~/.cache/thumbnails/</code></li>
+</ul>
+<p>If the <code>$XDG_CACHE_HOME</code> environment variable is
+explicitly defined, the path resolves to
+<code>$XDG_CACHE_HOME/thumbnails/</code>.</p>
+<h3 id="directory-structure">Directory Structure</h3>
+<p>Inside the <code>~/.cache/thumbnails/</code> directory, PCManFM
+categorizes previews into distinct subdirectories based on resolution
+and generation status:</p>
+<ul>
+<li><strong><code>normal/</code></strong>: Contains standard 128×128
+pixel thumbnails.</li>
+<li><strong><code>large/</code></strong>: Contains higher-resolution
+256×256 pixel thumbnails.</li>
+<li><strong><code>fail/</code></strong>: Logs files for which thumbnail
+creation failed, preventing the system from repeatedly attempting and
+failing to generate previews.</li>
+</ul>
+<h3 id="legacy-directory">Legacy Directory</h3>
+<p>Older versions of PCManFM or legacy LXDE installations may use the
+deprecated standard location:</p>
+<ul>
+<li><strong>Legacy Path:</strong> <code>~/.thumbnails/</code></li>
+</ul>
+<p>Like the modern path, the legacy directory uses <code>normal/</code>,
+<code>large/</code>, and <code>fail/</code> subfolders.</p>
+<h3 id="managing-and-clearing-the-cache">Managing and Clearing the
+Cache</h3>
+<p>Over time, the thumbnail directory can grow substantially as previews
+are retained even after the original files are moved or deleted. To
+reclaim storage space, you can safely remove the contents of the cache
+directory. PCManFM will automatically recreate the folder and regenerate
+thumbnails as needed.</p>
+<p>To clear the cache via the command line, run:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ~/.cache/thumbnails/<span class="pp">*</span></span></code></pre></div></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

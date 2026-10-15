@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safe Background Processes to Stop in Minimal LXDE - lxde</title>
+    <meta name="description" content="Running a minimal LXDE environment is an effective way to maximize system resources on older hardware or resource-constrained single-board computers. While LXDE is inherently lightweight, several default background daemons, autostart applets, and helper s">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/safe-background-processes-to-stop-in-minimal-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Safe Background Processes to Stop in Minimal LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/safe-background-processes-to-stop-in-minimal-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Running a minimal LXDE environment is an effective way to maximize system resources on older hardware or resource-constrained single-board computers. While LXDE is inherently lightweight, several default background daemons, autostart applets, and helper s" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="safe-background-processes-to-stop-in-minimal-lxde">Safe
+Background Processes to Stop in Minimal LXDE</h1>
+<p>Running a minimal LXDE environment is an effective way to maximize
+system resources on older hardware or resource-constrained single-board
+computers. While LXDE is inherently lightweight, several default
+background daemons, autostart applets, and helper services can be safely
+terminated without compromising the window manager or core desktop
+functionality. This guide identifies which non-essential processes you
+can safely terminate or disable to reclaim RAM and CPU cycles.</p>
+<h3 id="essential-processes-to-keep-running">Essential Processes to Keep
+Running</h3>
+<p>Before terminating tasks, ensure you preserve the core components
+required to keep your desktop interactive:</p>
+<ul>
+<li><strong>Xorg</strong>: The display server managing inputs and
+visuals.</li>
+<li><strong>openbox</strong>: The window manager handling window
+borders, movement, and resizing.</li>
+<li><strong>lxsession</strong>: The session manager coordinating login
+and component execution.</li>
+<li><strong>lxpanel</strong>: The taskbar, application menu, and system
+tray (optional, but essential for the standard UI experience).</li>
+<li><strong>pcmanfm --desktop</strong>: The process responsible for
+drawing desktop icons and wallpapers.</li>
+</ul>
+<hr />
+<h3 id="desktop-services-safe-to-terminate">Desktop Services Safe to
+Terminate</h3>
+<p>The following background processes provide desktop enhancements that
+are entirely optional for basic computing tasks:</p>
+<h4 id="1-xscreensaver">1. <code>xscreensaver</code></h4>
+<ul>
+<li><strong>What it does:</strong> Manages screen blanking, animations,
+and desktop locking after inactivity.</li>
+<li><strong>Impact of terminating:</strong> You lose automatic screen
+locking and visual screensavers. Standard DPMS monitor power-saving will
+still function via X11 settings.</li>
+<li><strong>Command:</strong> <code>killall xscreensaver</code></li>
+</ul>
+<h4 id="2-lxpolkit">2. <code>lxpolkit</code></h4>
+<ul>
+<li><strong>What it does:</strong> The PolicyKit authentication agent
+that spawns graphical popups requesting root passwords when running
+administrative tasks.</li>
+<li><strong>Impact of terminating:</strong> GUI elevation prompts will
+fail. You must execute administrative actions using <code>sudo</code>
+inside a terminal instead.</li>
+<li><strong>Command:</strong> <code>killall lxpolkit</code></li>
+</ul>
+<h4
+id="3-desktop-notification-daemons-notification-daemon-or-lxqt-notificationd">3.
+Desktop Notification Daemons (<code>notification-daemon</code> or
+<code>lxqt-notificationd</code>)</h4>
+<ul>
+<li><strong>What it does:</strong> Displays on-screen pop-up bubbles for
+events like low battery, completed downloads, or system events.</li>
+<li><strong>Impact of terminating:</strong> You will not receive visual
+notification banners. Application logs and terminals remain
+unaffected.</li>
+<li><strong>Command:</strong>
+<code>killall notification-daemon</code></li>
+</ul>
+<h4 id="4-clipboard-managers-clipit-parcellite-or-glipper">4. Clipboard
+Managers (<code>clipit</code>, <code>parcellite</code>, or
+<code>glipper</code>)</h4>
+<ul>
+<li><strong>What it does:</strong> Stores a history of copied text and
+maintains clipboard state across closed applications.</li>
+<li><strong>Impact of terminating:</strong> Standard cut, copy, and
+paste will still function, but only between simultaneously open
+applications. Clipboard history is lost.</li>
+<li><strong>Command:</strong> <code>killall clipit</code></li>
+</ul>
+<hr />
+<h3 id="applets-and-system-tray-utilities">Applets and System Tray
+Utilities</h3>
+<p>If your minimal installation auto-loads tray indicators, you can
+safely kill them if their underlying functionality is not needed or is
+managed through the command line:</p>
+<ul>
+<li><strong><code>nm-applet</code> (Network Manager Tray):</strong> Safe
+to kill if your network is configured statically, connects
+automatically, or is controlled via <code>nmcli</code> /
+<code>nmtui</code>.</li>
+<li><strong><code>blueman-applet</code> /
+<code>bluetooth-applet</code>:</strong> Safe to kill if you do not use
+Bluetooth devices or manage pairings through
+<code>bluetoothctl</code>.</li>
+<li><strong><code>volumeicon</code>:</strong> Safe to kill if you adjust
+system audio via hardware keys, <code>alsamixer</code>, or standard
+terminal utilities.</li>
+</ul>
+<hr />
+<h3 id="underlying-virtual-file-system-daemons">Underlying Virtual File
+System Daemons</h3>
+<p>LXDE often spawns GNOME Virtual File System (<code>gvfs</code>)
+background helpers via <code>pcmanfm</code> to support removable media
+automounting, network shares, and the desktop trash bin:</p>
+<ul>
+<li><strong><code>gvfsd-trash</code>:</strong> Manages the visual trash
+bin.</li>
+<li><strong><code>gvfs-udisks2-volume-monitor</code>:</strong> Detects
+and automounts USB drives.</li>
+<li><strong><code>gvfsd-metadata</code>:</strong> Reads file system
+metadata for file previews.</li>
+</ul>
+<p>If you mount external media manually using the <code>mount</code>
+command and do not rely on network file sharing inside PCManFM, you can
+terminate these processes to reduce overhead.</p>
+<hr />
+<h3 id="preventing-terminated-services-from-restarting">Preventing
+Terminated Services from Restarting</h3>
+<p>Terminating processes with <code>killall</code> only stops them for
+the current session. To permanently prevent them from loading on
+boot:</p>
+<ol type="1">
+<li><p>Open the global autostart configuration file:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/xdg/lxsession/LXDE/autostart</span></code></pre></div>
+<p><em>(Or user-specific autostart at
+<code>~/.config/lxsession/LXDE/autostart</code> if
+present).</em></p></li>
+<li><p>Locate lines starting with <code>@</code> (e.g.,
+<code>@xscreensaver -no-splash</code> or
+<code>@lxpolkit</code>).</p></li>
+<li><p>Remove the line or comment it out by placing a <code>#</code> at
+the beginning of the line.</p></li>
+<li><p>Check your user autostart directory for stray desktop
+entries:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ~/.config/autostart/</span></code></pre></div>
+<p>Delete or move any <code>.desktop</code> files corresponding to
+unwanted background tools.</p></li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

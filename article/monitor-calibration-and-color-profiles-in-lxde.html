@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor Calibration and Color Profiles in LXDE - lxde</title>
+    <meta name="description" content="The Lightweight X11 Desktop Environment (LXDE) does not feature native, graphical color management tools, requiring users to rely on external utilities to apply ICC profiles and calibrate displays. Because LXDE prioritizes minimal resource usage, it omits">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/monitor-calibration-and-color-profiles-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Monitor Calibration and Color Profiles in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/monitor-calibration-and-color-profiles-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Lightweight X11 Desktop Environment (LXDE) does not feature native, graphical color management tools, requiring users to rely on external utilities to apply ICC profiles and calibrate displays. Because LXDE prioritizes minimal resource usage, it omits" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="monitor-calibration-and-color-profiles-in-lxde">Monitor
+Calibration and Color Profiles in LXDE</h1>
+<p>The Lightweight X11 Desktop Environment (LXDE) does not feature
+native, graphical color management tools, requiring users to rely on
+external utilities to apply ICC profiles and calibrate displays. Because
+LXDE prioritizes minimal resource usage, it omits built-in daemons for
+color handling found in heavier desktop environments like GNOME or KDE.
+This guide covers how LXDE handles color management through X11, the
+primary tools required to load ICC profiles, and how to automate color
+calibration across system reboots.</p>
+<h2 id="the-architecture-of-color-management-in-lxde">The Architecture
+of Color Management in LXDE</h2>
+<p>Unlike modern desktop environments that automatically detect and load
+International Color Consortium (ICC) profiles through integrated
+settings panels, LXDE acts purely as an interface over the X Window
+System (X11). In this architecture, display calibration relies on
+loading the Video Card Gamma Table (VCGT) into the X server's video
+Look-Up Table (LUT), while color correction across individual
+applications requires setting the <code>_ICC_PROFILE</code> X11 root
+window atom.</p>
+<p>Because LXDE provides neither a LUT-loader nor a color management
+daemon out of the box, monitor calibration must be manually configured
+using external X11-compatible utilities.</p>
+<h2 id="tools-for-loading-color-profiles">Tools for Loading Color
+Profiles</h2>
+<p>Users have several standalone tools available to handle calibration
+and profile management in LXDE:</p>
+<h3 id="1-xcalib">1. xcalib</h3>
+<p><code>xcalib</code> is a lightweight command-line tool designed to
+read ICC profiles and apply calibration curves directly to the X11 video
+LUT. It does not set X11 atoms for profile-aware applications, making it
+best suited for general display calibration (gamma, white point, and
+balance).</p>
+<p>To apply a profile using <code>xcalib</code>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xcalib</span> /path/to/profile.icc</span></code></pre></div>
+<p>To clear the calibration:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xcalib</span> <span class="at">-c</span></span></code></pre></div>
+<h3 id="2-dispwin-argyll-cms">2. dispwin (Argyll CMS)</h3>
+<p><code>dispwin</code> is part of the comprehensive Argyll Color
+Management System. It is more versatile than <code>xcalib</code> because
+it can load calibration curves into the video LUT while simultaneously
+assigning the profile to the <code>_ICC_PROFILE</code> atom, allowing
+color-managed applications (such as GIMP, Darktable, or Firefox) to
+query the profile.</p>
+<p>To load and assign a profile with <code>dispwin</code>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dispwin</span> <span class="at">-I</span> /path/to/profile.icc</span></code></pre></div>
+<h3 id="3-xiccd-and-colord">3. xiccd and colord</h3>
+<p>For a dynamic solution closer to modern desktop environments, users
+can run <code>xiccd</code> alongside the <code>colord</code> system
+daemon. <code>colord</code> manages device color profiles, while
+<code>xiccd</code> acts as a bridge for X11, monitoring connected
+displays, notifying <code>colord</code>, and applying the correct
+profiles to the root window. This combination enables full color
+management without running a heavy desktop environment.</p>
+<h2 id="generating-profiles-displaycal">Generating Profiles:
+DisplayCAL</h2>
+<p>To generate custom calibration profiles in LXDE, hardware
+colorimeters (such as Datacolor Spyder or Calibrite devices) can be used
+alongside the graphical application DisplayCAL. DisplayCAL interfaces
+with Argyll CMS to measure the display, generate an accurate ICC
+profile, and automatically install it into the user's local profile
+directory (<code>~/.local/share/icc/</code>). During setup, DisplayCAL
+can also install a small startup hook to ensure calibration is applied
+upon login.</p>
+<h2 id="persisting-color-profiles-on-startup">Persisting Color Profiles
+on Startup</h2>
+<p>Because LXDE resets display calibration upon logout or reboot,
+calibration commands must be added to the LXDE autostart file to ensure
+persistence.</p>
+<ol type="1">
+<li><p>Open the LXDE session autostart file in a text editor:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/lxsession/LXDE/autostart</span></code></pre></div></li>
+<li><p>Add the command to load the profile at the end of the file. The
+line must begin with an <code>@</code> symbol to ensure the LXDE session
+manager restarts the process if it fails:</p>
+<p>If using <code>xcalib</code>:</p>
+<pre class="text"><code>@xcalib /home/username/.local/share/icc/your_profile.icc</code></pre>
+<p>If using <code>dispwin</code>:</p>
+<pre class="text"><code>@dispwin -I /home/username/.local/share/icc/your_profile.icc</code></pre>
+<p>If using <code>xiccd</code>:</p>
+<pre class="text"><code>@xiccd</code></pre></li>
+<li><p>Save the file and restart the session. The color profile will
+load automatically as soon as the desktop interface
+initializes.</p></li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

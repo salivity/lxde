@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Use XFCE Components in an LXDE Desktop Session - lxde</title>
+    <meta name="description" content="Integrating XFCE utilities into a standard LXDE session allows you to benefit from XFCE’s feature-rich modular tools while preserving LXDE’s ultra-low resource usage. This guide outlines how to selectively install XFCE utilities—such as Thunar, the XFCE P">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/use-xfce-components-in-an-lxde-desktop-session">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Use XFCE Components in an LXDE Desktop Session - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/use-xfce-components-in-an-lxde-desktop-session" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Integrating XFCE utilities into a standard LXDE session allows you to benefit from XFCE’s feature-rich modular tools while preserving LXDE’s ultra-low resource usage. This guide outlines how to selectively install XFCE utilities—such as Thunar, the XFCE P" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="use-xfce-components-in-an-lxde-desktop-session">Use XFCE
+Components in an LXDE Desktop Session</h1>
+<p>Integrating XFCE utilities into a standard LXDE session allows you to
+benefit from XFCE’s feature-rich modular tools while preserving LXDE’s
+ultra-low resource usage. This guide outlines how to selectively install
+XFCE utilities—such as Thunar, the XFCE Power Manager, and
+xfce4-terminal—and configure LXDE's session manager and autostart files
+to adopt them without introducing system conflicts.</p>
+<h2 id="1-install-the-desired-xfce-packages">1. Install the Desired XFCE
+Packages</h2>
+<p>You do not need to install the entire <code>xfce4</code>
+meta-package, which pulls in full desktop environment dependencies.
+Instead, install individual packages. On Debian, Ubuntu, or derivative
+distributions, run:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install thunar xfce4-terminal xfce4-power-manager xfce4-screenshooter xfce4-appfinder</span></code></pre></div>
+<p>Popular modular components to consider include:</p>
+<ul>
+<li><strong>Thunar:</strong> A robust, plugin-friendly alternative to
+PCManFM.</li>
+<li><strong>xfce4-terminal:</strong> A lightweight terminal supporting
+drop-down mode and tabs.</li>
+<li><strong>xfce4-power-manager:</strong> Better battery and sleep
+management than LXDE defaults.</li>
+<li><strong>xfce4-screenshooter:</strong> Offers delayed captures and
+direct clipboard copy.</li>
+</ul>
+<h2 id="2-set-default-applications">2. Set Default Applications</h2>
+<p>LXDE uses the <code>lxsession-default-apps</code> utility and XDG
+MIME configurations to define preferred applications.</p>
+<h3 id="via-gui">Via GUI</h3>
+<ol type="1">
+<li>Open the LXDE application menu and navigate to
+<strong>Preferences</strong> &gt; <strong>Default applications for
+LXSession</strong>.</li>
+<li>Under the <strong>Desktop Entry</strong> tab, update your default
+File Manager to <code>Thunar</code> and your default Terminal to
+<code>xfce4-terminal</code>.</li>
+</ol>
+<h3 id="via-configuration-file">Via Configuration File</h3>
+<p>Alternatively, update your user session configuration directly:</p>
+<ol type="1">
+<li>Open <code>~/.config/lxsession/LXDE/desktop.conf</code> in a text
+editor.</li>
+<li>Update the default applications section:</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Default]</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">file_manager/command</span><span class="ot">=</span><span class="st">thunar</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">terminal_manager/command</span><span class="ot">=</span><span class="st">xfce4-terminal</span></span></code></pre></div>
+<h2 id="3-autostart-xfce-services-in-lxde">3. Autostart XFCE Services in
+LXDE</h2>
+<p>Certain XFCE components, like the power manager or settings daemon,
+must run in the background. LXDE uses an <code>autostart</code> file to
+launch background tasks on login.</p>
+<ol type="1">
+<li><p>Open or create the local autostart file:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/lxsession/LXDE/autostart</span></code></pre></div></li>
+<li><p>If this file is empty, copy the global defaults from
+<code>/etc/xdg/lxsession/LXDE/autostart</code> first, then append the
+XFCE daemons using an <code>@</code> prefix (which ensures LXSession
+restarts the service if it crashes):</p></li>
+</ol>
+<pre class="text"><code>@xfce4-power-manager
+@xfce4-clipman</code></pre>
+<p>Save and exit the file.</p>
+<h2 id="4-replacing-the-lxde-panel-with-xfce-panel-optional">4.
+Replacing the LXDE Panel with XFCE Panel (Optional)</h2>
+<p>If you prefer <code>xfce4-panel</code> over <code>lxpanel</code>:</p>
+<ol type="1">
+<li><p>Install the panel and plugins:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install xfce4-panel</span></code></pre></div></li>
+<li><p>Open <code>~/.config/lxsession/LXDE/autostart</code>.</p></li>
+<li><p>Comment out or delete the <code>@lxpanel --profile LXDE</code>
+line.</p></li>
+<li><p>Add the XFCE panel:</p>
+<pre class="text"><code>@xfce4-panel</code></pre></li>
+</ol>
+<h2 id="5-avoid-desktop-and-window-manager-conflicts">5. Avoid Desktop
+and Window Manager Conflicts</h2>
+<p>Mixing components can lead to overlapping background processes:</p>
+<ul>
+<li><strong>Desktop Icons:</strong> Both PCManFM and XFCE's desktop tool
+(<code>xfdesktop</code>) can draw icons and manage wallpaper. Run only
+one. If you want Thunar purely for file browsing, keep PCManFM managing
+the desktop by leaving <code>@pcmanfm --desktop --profile LXDE</code>
+intact in your autostart file.</li>
+<li><strong>Window Management:</strong> LXDE relies on Openbox
+(<code>@openbox-lxde</code>). Do not replace Openbox with
+<code>xfwm4</code> unless you specifically require XFCE window
+compositing, as Openbox is significantly lighter and integrates natively
+with LXDE shortcut handling.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Disable LXDE Logout Confirmation Prompts - lxde</title>
+    <meta name="description" content="By default, the Lightweight X11 Desktop Environment (LXDE) presents a confirmation dialog whenever a user chooses to exit, log out, or shut down. This guide explains how to bypass and disable these confirmation prompts to enable instant session terminatio">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-disable-lxde-logout-confirmation-prompts">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Disable LXDE Logout Confirmation Prompts - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-disable-lxde-logout-confirmation-prompts" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="By default, the Lightweight X11 Desktop Environment (LXDE) presents a confirmation dialog whenever a user chooses to exit, log out, or shut down. This guide explains how to bypass and disable these confirmation prompts to enable instant session terminatio" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-disable-lxde-logout-confirmation-prompts">How to Disable
+LXDE Logout Confirmation Prompts</h1>
+<p>By default, the Lightweight X11 Desktop Environment (LXDE) presents a
+confirmation dialog whenever a user chooses to exit, log out, or shut
+down. This guide explains how to bypass and disable these confirmation
+prompts to enable instant session termination. By replacing the default
+exit utility (<code>lxsession-logout</code>) with direct commands in
+your panel and desktop configuration files, you can turn off
+confirmation popups and shut down or log out immediately.</p>
+<h2 id="why-confirmation-prompts-occur">Why Confirmation Prompts
+Occur</h2>
+<p>LXDE relies on the <code>lxsession-logout</code> utility to present
+the exit prompt window, which includes buttons for Shutdown, Reboot,
+Suspend, Hibernate, and Logout. To eliminate the confirmation dialog
+completely, you must configure your desktop environment to bypass this
+utility and execute power management commands directly through
+<code>systemd</code> or <code>loginctl</code>.</p>
+<h2 id="method-1-modify-the-lxpanel-exit-button">Method 1: Modify the
+LXPanel Exit Button</h2>
+<p>The main exit icon on the taskbar invokes
+<code>lxsession-logout</code> by default. You can change this behavior
+by editing the panel configuration file.</p>
+<ol type="1">
+<li><p>Open your panel configuration file in a text editor:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/lxpanel/LXDE/panels/panel</span></code></pre></div>
+<p><em>(Note: On Debian-based distributions like Raspberry Pi OS, the
+path may be
+<code>~/.config/lxpanel/LXDE-pi/panels/panel</code>.)</em></p></li>
+<li><p>Find the plugin block responsible for the logout button, which
+looks like this:</p>
+<pre class="text"><code>Plugin {
+    type = launchbar
+    Config {
+        Button {
+            id = lxde-logout.desktop
+        }
+    }
+}</code></pre></li>
+<li><p>Replace <code>lxde-logout.desktop</code> with a custom
+<code>.desktop</code> launcher, or replace the exit button with direct
+commands for the specific action you want.</p></li>
+<li><p>To make a direct desktop launcher that bypasses prompts, create
+<code>~/.local/share/applications/instant-logout.desktop</code>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Desktop Entry]</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Type</span><span class="ot">=</span><span class="st">Application</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">Name</span><span class="ot">=</span><span class="st">Log Out (No Prompt)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">Icon</span><span class="ot">=</span><span class="st">system-log-out</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dt">Exec</span><span class="ot">=</span><span class="st">pkill -u $USER lxsession</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="dt">Terminal</span><span class="ot">=</span><span class="kw">false</span></span></code></pre></div></li>
+<li><p>Restart the panel to apply changes:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lxpanelctl</span> restart</span></code></pre></div></li>
+</ol>
+<h2 id="method-2-configure-instant-keyboard-shortcuts">Method 2:
+Configure Instant Keyboard Shortcuts</h2>
+<p>You can bypass the confirmation prompt entirely by binding key
+combinations directly to power commands in your Openbox settings.</p>
+<ol type="1">
+<li><p>Open the Openbox configuration file:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/openbox/lxde-rc.xml</span></code></pre></div></li>
+<li><p>Locate the <code>&lt;keyboard&gt;</code> section and add custom
+key bindings:</p>
+<p><strong>For Instant Shutdown:</strong></p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">keybind</span> <span class="ot">key=</span><span class="st">&quot;C-A-Delete&quot;</span>&gt;</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;Execute&quot;</span>&gt;</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">command</span>&gt;systemctl poweroff&lt;/<span class="kw">command</span>&gt;</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">action</span>&gt;</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">keybind</span>&gt;</span></code></pre></div>
+<p><strong>For Instant Logout:</strong></p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">keybind</span> <span class="ot">key=</span><span class="st">&quot;W-x&quot;</span>&gt;</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;Execute&quot;</span>&gt;</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">command</span>&gt;openbox --exit&lt;/<span class="kw">command</span>&gt;</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">action</span>&gt;</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">keybind</span>&gt;</span></code></pre></div></li>
+<li><p>Save the file and reload the Openbox configuration:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openbox</span> <span class="at">--reconfigure</span></span></code></pre></div></li>
+</ol>
+<h2 id="method-3-replace-lxsession-logout-globally">Method 3: Replace
+<code>lxsession-logout</code> Globally</h2>
+<p>If you want any application or menu item that calls
+<code>lxsession-logout</code> to shut down or exit immediately without
+displaying a prompt, you can alias or replace the binary with a wrapper
+script.</p>
+<ol type="1">
+<li><p>Create a custom script in
+<code>/usr/local/bin/lxsession-logout</code>:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /usr/local/bin/lxsession-logout</span></code></pre></div></li>
+<li><p>Add the following logic to handle standard power arguments
+directly:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Bypasses the LXDE confirmation window</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> <span class="st">&quot;</span><span class="va">$1</span><span class="st">&quot;</span> <span class="kw">in</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="ss">--shutdown</span><span class="kw">)</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="ex">systemctl</span> poweroff</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">;;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="ss">--reboot</span><span class="kw">)</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="ex">systemctl</span> reboot</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">;;</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="pp">*</span><span class="kw">)</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Default action: instant logout</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        <span class="ex">openbox</span> <span class="at">--exit</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">;;</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="cf">esac</span></span></code></pre></div></li>
+<li><p>Make the script executable:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod +x /usr/local/bin/lxsession-logout</span></code></pre></div></li>
+</ol>
+<p>Because <code>/usr/local/bin</code> precedes <code>/usr/bin</code> in
+standard system paths, LXDE will use your script instead of the default
+interactive prompt, executing the power actions instantly.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

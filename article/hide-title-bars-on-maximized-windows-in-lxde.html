@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hide Title Bars on Maximized Windows in LXDE - lxde</title>
+    <meta name="description" content="This guide explains how to automatically remove window title bars when windows are maximized in the Lightweight X11 Desktop Environment (LXDE). Because LXDE relies on Openbox as its default window manager, achieving this behavior requires configuring Open">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/hide-title-bars-on-maximized-windows-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Hide Title Bars on Maximized Windows in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/hide-title-bars-on-maximized-windows-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide explains how to automatically remove window title bars when windows are maximized in the Lightweight X11 Desktop Environment (LXDE). Because LXDE relies on Openbox as its default window manager, achieving this behavior requires configuring Open" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="hide-title-bars-on-maximized-windows-in-lxde">Hide Title Bars on
+Maximized Windows in LXDE</h1>
+<p>This guide explains how to automatically remove window title bars
+when windows are maximized in the Lightweight X11 Desktop Environment
+(LXDE). Because LXDE relies on Openbox as its default window manager,
+achieving this behavior requires configuring Openbox's configuration
+files, chaining window actions, or using a lightweight background daemon
+to monitor and undecorate maximized windows.</p>
+<h2 id="the-openbox-configuration-file">The Openbox Configuration
+File</h2>
+<p>LXDE delegates all window decoration and behavior to Openbox.
+Configuration changes must be made within the user-specific Openbox
+configuration file located at:</p>
+<p><code>~/.config/openbox/lxde-rc.xml</code></p>
+<p>If this file does not exist, copy the system default into your user
+profile:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /etc/xdg/openbox/lxde-rc.xml ~/.config/openbox/lxde-rc.xml</span></code></pre></div>
+<h2 id="chaining-maximize-and-undecorate-actions">Chaining Maximize and
+Undecorate Actions</h2>
+<p>Standard Openbox does not have a single toggle to hide title bars
+exclusively upon maximization. However, you can configure keybindings
+and mouse bindings inside <code>lxde-rc.xml</code> to execute both the
+<code>Maximize</code> and <code>Undecorate</code> actions
+simultaneously.</p>
+<p>Open <code>~/.config/openbox/lxde-rc.xml</code> in a text editor and
+locate the <code>&lt;keyboard&gt;</code> section. Add a customized
+shortcut:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">keybind</span> <span class="ot">key=</span><span class="st">&quot;W-Up&quot;</span>&gt;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;Maximize&quot;</span>/&gt;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;Undecorate&quot;</span>/&gt;</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">keybind</span>&gt;</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">keybind</span> <span class="ot">key=</span><span class="st">&quot;W-Down&quot;</span>&gt;</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;Unmaximize&quot;</span>/&gt;</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;Decorate&quot;</span>/&gt;</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">keybind</span>&gt;</span></code></pre></div>
+<p>To replicate this behavior via mouse clicks on the window title bar,
+find the <code>&lt;mouse&gt;</code> section, locate
+<code>&lt;context name="Titlebar"&gt;</code>, and replace the
+double-click action with chained toggles:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">mousebind</span> <span class="ot">button=</span><span class="st">&quot;Left&quot;</span> <span class="ot">action=</span><span class="st">&quot;DoubleClick&quot;</span>&gt;</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;ToggleMaximize&quot;</span>/&gt;</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;ToggleDecorations&quot;</span>/&gt;</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">mousebind</span>&gt;</span></code></pre></div>
+<h2 id="automating-dynamic-title-bar-removal-with-devilspie">Automating
+Dynamic Title Bar Removal with Devilspie</h2>
+<p>If you want title bars to hide automatically whenever a window is
+maximized (regardless of how it was maximized), use
+<strong>Devilspie2</strong>, a window-matching utility.</p>
+<ol type="1">
+<li><p>Install Devilspie2:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install devilspie2</span></code></pre></div></li>
+<li><p>Create the configuration directory:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.config/devilspie2</span></code></pre></div></li>
+<li><p>Create a Lua script inside that folder, such as
+<code>~/.config/devilspie2/maximized.lua</code>, containing:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode lua"><code class="sourceCode lua"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>get_window_is_maximized<span class="op">())</span> <span class="cf">then</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    undecorate_window<span class="op">();</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    decorate_window<span class="op">();</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div></li>
+<li><p>Add <code>devilspie2</code> to your LXDE autostart file
+(<code>~/.config/lxsession/LXDE/autostart</code>) by adding:</p>
+<pre class="text"><code>@devilspie2</code></pre></li>
+</ol>
+<h2 id="permanently-disabling-window-borders-in-openbox">Permanently
+Disabling Window Borders in Openbox</h2>
+<p>If your goal is to reclaim screen space across applications
+permanently, you can tell Openbox to hide decorations for all windows by
+default. In <code>~/.config/openbox/lxde-rc.xml</code>, locate the
+<code>&lt;applications&gt;</code> section and add:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">applications</span>&gt;</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">application</span> <span class="ot">class=</span><span class="st">&quot;*&quot;</span>&gt;</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">decor</span>&gt;no&lt;/<span class="kw">decor</span>&gt;</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">application</span>&gt;</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">applications</span>&gt;</span></code></pre></div>
+<h2 id="applying-configuration-changes">Applying Configuration
+Changes</h2>
+<p>After modifying <code>lxde-rc.xml</code>, reload Openbox to apply the
+new rules immediately without logging out:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openbox</span> <span class="at">--reconfigure</span></span></code></pre></div></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

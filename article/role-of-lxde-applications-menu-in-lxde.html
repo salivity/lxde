@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role of lxde-applications.menu in LXDE - lxde</title>
+    <meta name="description" content="The lxde-applications.menu file is the core configuration component responsible for defining the structure, hierarchy, and contents of the main application menu in the Lightweight X11 Desktop Environment (LXDE). Adhering to the freedesktop.org (XDG) Deskt">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/role-of-lxde-applications-menu-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Role of lxde-applications.menu in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/role-of-lxde-applications-menu-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The lxde-applications.menu file is the core configuration component responsible for defining the structure, hierarchy, and contents of the main application menu in the Lightweight X11 Desktop Environment (LXDE). Adhering to the freedesktop.org (XDG) Deskt" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="role-of-lxde-applicationsmenu-in-lxde">Role of
+lxde-applications.menu in LXDE</h1>
+<p>The <code>lxde-applications.menu</code> file is the core
+configuration component responsible for defining the structure,
+hierarchy, and contents of the main application menu in the Lightweight
+X11 Desktop Environment (LXDE). Adhering to the freedesktop.org (XDG)
+Desktop Menu Specification, this XML-based file determines which
+categories appear when a user clicks the desktop panel's menu button and
+governs how installed software packages are filtered and displayed
+within those categories.</p>
+<h3 id="file-location-and-scope">File Location and Scope</h3>
+<p>In a standard LXDE installation, the system-wide version of this file
+is located at <code>/etc/xdg/menus/lxde-applications.menu</code>. It
+acts as the default template for all users on the system. If an
+individual user wishes to modify their menu structure without
+administrative privileges or without affecting other accounts, a
+localized copy can be placed in
+<code>~/.config/menus/lxde-applications.menu</code>, which will override
+the global file.</p>
+<h3 id="integration-with-xdg-standards">Integration with XDG
+Standards</h3>
+<p>Rather than listing individual programs manually,
+<code>lxde-applications.menu</code> defines organizational rules. The
+operating system stores application launchers as <code>.desktop</code>
+files in directories such as <code>/usr/share/applications</code> and
+<code>~/.local/share/applications</code>. Each <code>.desktop</code>
+file contains metadata, including a <code>Categories</code> entry (such
+as <code>AudioVideo</code>, <code>Development</code>, or
+<code>Network</code>).</p>
+<p>The <code>lxde-applications.menu</code> file parses these
+<code>.desktop</code> files and matches their assigned categories
+against the structural rules it defines, dynamically assembling the menu
+every time the desktop session loads or updates.</p>
+<h3 id="structural-role-and-syntax">Structural Role and Syntax</h3>
+<p>Inside the file, XML elements define how the desktop renders
+categories:</p>
+<ul>
+<li><strong><code>&lt;Menu&gt;</code></strong>: Represents a menu branch
+or submenu (e.g., "Accessories" or "Internet").</li>
+<li><strong><code>&lt;Name&gt;</code></strong>: Specifies the internal
+identifier for the menu category.</li>
+<li><strong><code>&lt;Directory&gt;</code></strong>: Points to an
+associated <code>.directory</code> file (located in
+<code>/usr/share/desktop-directories/</code>), which provides the
+localized display name and the icon for that category.</li>
+<li><strong><code>&lt;Include&gt;</code> and
+<code>&lt;Category&gt;</code></strong>: Establish filtering criteria,
+instructing LXDE to place any launcher containing specified category
+flags into that sub-menu.</li>
+<li><strong><code>&lt;Exclude&gt;</code></strong>: Allows system
+administrators to filter out specific utilities or unwanted applications
+from appearing in certain menus.</li>
+</ul>
+<h3 id="customization-and-control">Customization and Control</h3>
+<p>Through <code>lxde-applications.menu</code>, administrators and power
+users can completely restructure the application menu. It enables
+creating custom submenus, merging categories, hiding specific software
+groups, or changing how uncategorized applications are handled.
+Modifying this central routing file is the most efficient way to change
+the entire layout of the LXDE application menu without needing to alter
+individual application launcher files.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

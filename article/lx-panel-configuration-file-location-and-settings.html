@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LXPanel Configuration File Location and Settings - lxde</title>
+    <meta name="description" content="This guide explains which configuration file controls the applets and layout of LXPanel in LXDE environments. You will learn the exact file path for user and system configurations, the structure used to define panel plugins, and how to apply your changes">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/lx-panel-configuration-file-location-and-settings">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LXPanel Configuration File Location and Settings - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/lx-panel-configuration-file-location-and-settings" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide explains which configuration file controls the applets and layout of LXPanel in LXDE environments. You will learn the exact file path for user and system configurations, the structure used to define panel plugins, and how to apply your changes" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="lxpanel-configuration-file-location-and-settings">LXPanel
+Configuration File Location and Settings</h1>
+<p>This guide explains which configuration file controls the applets and
+layout of LXPanel in LXDE environments. You will learn the exact file
+path for user and system configurations, the structure used to define
+panel plugins, and how to apply your changes safely.</p>
+<h2 id="the-lxpanel-configuration-file-location">The LXPanel
+Configuration File Location</h2>
+<p>The primary file that stores the LXPanel layout, applets, and
+appearance is named simply <code>panel</code>. Its location depends on
+whether you are editing settings for an individual user or defining
+system-wide defaults.</p>
+<h3 id="user-configuration-per-user">User Configuration (Per-User)</h3>
+<p>The user-specific configuration file is located at:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">~/.config/lxpanel/</span><span class="op">&lt;</span>profile<span class="op">&gt;</span>/panels/panel</span></code></pre></div>
+<p>In most standard installations, <code>&lt;profile&gt;</code> is set
+to <code>LXDE</code>. Therefore, the default path for standard users
+is:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">~/.config/lxpanel/LXDE/panels/panel</span></span></code></pre></div>
+<p>On specific distributions like Lubuntu or Raspberry Pi OS, the
+profile directory may be named differently (such as <code>Lubuntu</code>
+or <code>LXDE-pi</code>). If the file does not exist in your home
+directory, LXPanel automatically generates it from the system template
+upon your first session change.</p>
+<h3 id="system-wide-default-configuration">System-Wide Default
+Configuration</h3>
+<p>The global template used for all new user accounts is located at:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/etc/xdg/lxpanel/</span><span class="op">&lt;</span>profile<span class="op">&gt;</span>/panels/panel</span></code></pre></div>
+<p>Changes made to this file affect all users who do not have an
+existing <code>panel</code> file in their
+<code>~/.config/lxpanel/</code> directory.</p>
+<h2 id="file-structure-and-plugin-layout">File Structure and Plugin
+Layout</h2>
+<p>The <code>panel</code> file is a plain-text configuration file
+divided into two primary sections:</p>
+<ol type="1">
+<li><strong>Global Configuration (<code>Global</code> block):</strong>
+Defines panel-wide properties, including edge placement (top, bottom,
+left, right), alignment, width, height, transparency, and color
+settings.</li>
+<li><strong>Applet Definitions (<code>Plugin</code> blocks):</strong>
+Defines every applet loaded on the panel, ordered sequentially from left
+to right (or top to bottom).</li>
+</ol>
+<p>Each applet uses the following syntax:</p>
+<pre class="text"><code>Plugin {
+    type = &lt;plugin_name&gt;
+    Config {
+        &lt;key&gt; = &lt;value&gt;
+    }
+}</code></pre>
+<p>Common applet types include:</p>
+<ul>
+<li><code>menu</code>: The application launcher menu.</li>
+<li><code>taskbar</code>: The list of open application windows.</li>
+<li><code>pager</code>: The virtual desktop switcher.</li>
+<li><code>tray</code>: The system tray / notification area.</li>
+<li><code>dclock</code>: The digital clock and calendar.</li>
+<li><code>launchbar</code>: Quick-launch application shortcuts.</li>
+</ul>
+<p>Reordering the <code>Plugin</code> blocks directly alters the
+physical layout and placement of the applets on your panel.</p>
+<h2 id="how-to-apply-changes">How to Apply Changes</h2>
+<p>LXPanel overwrites the configuration file when logging out or
+changing settings through the GUI. To prevent your manual edits from
+being overwritten:</p>
+<ol type="1">
+<li>Close running panels or edit the file outside of an active LXDE
+session.</li>
+<li>If editing during a session, save your changes to the file and
+immediately restart the panel via the terminal:</li>
+</ol>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lxpanelctl</span> restart</span></code></pre></div>
+<p>Alternatively, reload the process completely:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">killall</span> lxpanel <span class="kw">&amp;&amp;</span> <span class="ex">lxpanel</span> <span class="kw">&amp;</span></span></code></pre></div></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

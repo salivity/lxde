@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LXDE Window Manager Fallback Script Explained - lxde</title>
+    <meta name="description" content="This article provides an overview of how the Lightweight X11 Desktop Environment (LXDE) handles window manager failures, identifying the primary initialization script—startlxde—and explaining how it coordinates with the session manager to execute fallback">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/lxde-window-manager-fallback-script-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LXDE Window Manager Fallback Script Explained - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/lxde-window-manager-fallback-script-explained" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of how the Lightweight X11 Desktop Environment (LXDE) handles window manager failures, identifying the primary initialization script—startlxde—and explaining how it coordinates with the session manager to execute fallback" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="lxde-window-manager-fallback-script-explained">LXDE Window
+Manager Fallback Script Explained</h1>
+<p>This article provides an overview of how the Lightweight X11 Desktop
+Environment (LXDE) handles window manager failures, identifying the
+primary initialization script—<code>startlxde</code>—and explaining how
+it coordinates with the session manager to execute fallback behavior if
+Openbox fails to start.</p>
+<p>In an LXDE environment, the shell script that defines and initializes
+the desktop session is <code>/usr/bin/startlxde</code>. When a user logs
+in, this script sets up essential environment variables (such as
+<code>XDG_CONFIG_DIRS</code> and <code>XDG_DATA_DIRS</code>) and
+launches the core session manager, <code>lxsession</code>.</p>
+<p>While <code>startlxde</code> initiates the desktop, it passes the
+responsibility of executing and monitoring the window manager to
+<code>lxsession</code>. By default, <code>lxsession</code> attempts to
+load Openbox using the wrapper command <code>openbox-lxde</code>. This
+default preference is stored in the session configuration file located
+at <code>/etc/xdg/lxsession/LXDE/desktop.conf</code> (or the user
+equivalent in <code>~/.config/lxsession/LXDE/desktop.conf</code>) under
+the <code>window_manager=</code> key.</p>
+<p>If Openbox crashes or fails to launch during initialization, the
+fallback behavior is governed at two levels:</p>
+<ol type="1">
+<li><strong><code>lxsession</code> Fallback Handling:</strong> If the
+configured window manager specified in <code>desktop.conf</code> fails
+to run, <code>lxsession</code> attempts to detect and launch an
+alternative, available window manager present on the system to prevent
+an unresponsive desktop.</li>
+<li><strong>System-Level Fallback
+(<code>x-window-manager</code>):</strong> On many Debian- and
+Ubuntu-based Linux distributions, <code>startlxde</code> and the
+underlying X session rely on the <code>/usr/bin/x-window-manager</code>
+alternative system. If the designated <code>openbox-lxde</code> binary
+cannot be found or executed, the desktop delegates execution to the
+system's registered fallback alternative (such as Compiz, Metacity, or
+Xfwm4).</li>
+</ol>
+<p>To manually redefine or override this fallback behavior,
+administrators can edit the <code>/usr/bin/startlxde</code> script
+directly to introduce conditional checks, or modify
+<code>desktop.conf</code> to declare a backup window manager before the
+session initializes.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

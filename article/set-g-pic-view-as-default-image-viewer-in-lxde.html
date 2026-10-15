@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set GPicView as Default Image Viewer in LXDE - lxde</title>
+    <meta name="description" content="This guide explains how to configure GPicView as the default application for opening all image file formats in the LXDE desktop environment. By updating your system&#39;s MIME associations through the graphical file manager or by directly editing configuratio">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/set-g-pic-view-as-default-image-viewer-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Set GPicView as Default Image Viewer in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/set-g-pic-view-as-default-image-viewer-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide explains how to configure GPicView as the default application for opening all image file formats in the LXDE desktop environment. By updating your system&#39;s MIME associations through the graphical file manager or by directly editing configuratio" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="set-gpicview-as-default-image-viewer-in-lxde">Set GPicView as
+Default Image Viewer in LXDE</h1>
+<p>This guide explains how to configure GPicView as the default
+application for opening all image file formats in the LXDE desktop
+environment. By updating your system's MIME associations through the
+graphical file manager or by directly editing configuration files, you
+can ensure that double-clicking any image—including JPEG, PNG, GIF, BMP,
+and WEBP formats—instantly launches it in GPicView.</p>
+<h3 id="method-1-using-the-pcmanfm-file-manager-gui">Method 1: Using the
+PCManFM File Manager (GUI)</h3>
+<p>The simplest way to associate individual file extensions is directly
+through LXDE's default file manager, PCManFM.</p>
+<ol type="1">
+<li>Open <strong>PCManFM</strong> and navigate to any folder containing
+an image file.</li>
+<li>Right-click the image file and select
+<strong>Properties</strong>.</li>
+<li>Navigate to the <strong>Open With</strong> tab.</li>
+<li>Select <strong>Image Viewer</strong> (GPicView) from the list of
+installed applications.</li>
+<li>Click the <strong>Set as default</strong> button.</li>
+<li>Click <strong>OK</strong> to apply the change.</li>
+</ol>
+<p><em>Note: You must repeat this step for each different image format
+(such as once for a <code>.jpg</code>, once for a <code>.png</code>, and
+once for a <code>.gif</code>) to cover all file types
+individually.</em></p>
+<hr />
+<h3
+id="method-2-configure-all-formats-via-mimeappslist-recommended">Method
+2: Configure All Formats via <code>mimeapps.list</code>
+(Recommended)</h3>
+<p>To set GPicView as the default for all image formats simultaneously
+without configuring each file extension manually, update your user-level
+MIME type associations.</p>
+<ol type="1">
+<li>Open a terminal window in LXDE.</li>
+<li>Open your personal MIME configuration file in a text editor:</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/mimeapps.list</span></code></pre></div>
+<ol start="3" type="1">
+<li>Locate the <code>[Default Applications]</code> section. If this
+section does not exist, add it at the top of the file.</li>
+<li>Add the following entries beneath
+<code>[Default Applications]</code>:</li>
+</ol>
+<pre class="text"><code>image/jpeg=gpicview.desktop
+image/pjpeg=gpicview.desktop
+image/png=gpicview.desktop
+image/gif=gpicview.desktop
+image/bmp=gpicview.desktop
+image/x-bmp=gpicview.desktop
+image/x-MS-bmp=gpicview.desktop
+image/tiff=gpicview.desktop
+image/webp=gpicview.desktop
+image/x-tga=gpicview.desktop
+image/x-portable-bitmap=gpicview.desktop
+image/x-portable-graymap=gpicview.desktop
+image/x-portable-pixmap=gpicview.desktop
+image/svg+xml=gpicview.desktop</code></pre>
+<ol start="5" type="1">
+<li>Press <code>Ctrl + O</code> and <code>Enter</code> to save the
+changes, then press <code>Ctrl + X</code> to exit the editor.</li>
+</ol>
+<hr />
+<h3 id="method-3-using-the-command-line-with-xdg-mime">Method 3: Using
+the Command Line with <code>xdg-mime</code></h3>
+<p>You can also assign GPicView to major image formats in bulk using the
+standard <code>xdg-mime</code> utility from the terminal:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xdg-mime</span> default gpicview.desktop image/jpeg image/png image/gif image/bmp image/webp image/tiff</span></code></pre></div>
+<p>To verify that the change took effect for a specific format, run:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xdg-mime</span> query default image/jpeg</span></code></pre></div>
+<p>The terminal should output <code>gpicview.desktop</code>. GPicView
+will now launch automatically when opening any associated image file in
+LXDE.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

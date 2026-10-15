@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Change Profile Avatar in LXDE - lxde</title>
+    <meta name="description" content="Changing your user profile picture in the Lightweight X11 Desktop Environment (LXDE) personalizes your login greeter and user session. Because LXDE is designed to be minimal and resource-friendly, it lacks a dedicated, heavy user-account control panel. In">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-change-profile-avatar-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Change Profile Avatar in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-change-profile-avatar-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Changing your user profile picture in the Lightweight X11 Desktop Environment (LXDE) personalizes your login greeter and user session. Because LXDE is designed to be minimal and resource-friendly, it lacks a dedicated, heavy user-account control panel. In" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-change-profile-avatar-in-lxde">How to Change Profile
+Avatar in LXDE</h1>
+<p>Changing your user profile picture in the Lightweight X11 Desktop
+Environment (LXDE) personalizes your login greeter and user session.
+Because LXDE is designed to be minimal and resource-friendly, it lacks a
+dedicated, heavy user-account control panel. Instead, you can update
+your avatar by using the classic home-directory image method or through
+the display manager settings available in your system menu.</p>
+<h2 id="method-1-the-standard-face-method">Method 1: The Standard
+<code>~/.face</code> Method</h2>
+<p>The most reliable and universal way to set an avatar in LXDE is by
+placing a hidden image file named <code>.face</code> inside your user's
+home directory. Display managers like LightDM and LXDM read this file
+automatically to display your user picture.</p>
+<ol type="1">
+<li><strong>Prepare your image</strong>: Select an image (PNG or JPG
+format). For optimal quality and alignment on the login screen, crop the
+image into a square with dimensions around 96x96 pixels or 128x128
+pixels.</li>
+<li><strong>Open the File Manager</strong>: Launch PCManFM (the default
+LXDE file manager) from the application menu or taskbar.</li>
+<li><strong>Move to Home</strong>: Ensure you are in your
+<code>/home/username/</code> folder.</li>
+<li><strong>Copy and rename</strong>: Copy your chosen image into this
+directory and rename it exactly to <code>.face</code> (including the
+leading dot).</li>
+<li><strong>Add a backup link</strong>: Some greeters check for
+<code>.face.icon</code>. You can duplicate the file and name the second
+copy <code>.face.icon</code> to ensure full compatibility.</li>
+</ol>
+<p>Alternatively, you can open your terminal and run the following
+command to copy an existing image to the correct location:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /path/to/your/avatar.png ~/.face</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> ~/.face ~/.face.icon</span></code></pre></div>
+<p>Log out of your desktop session to view the updated avatar on your
+login screen.</p>
+<h2 id="method-2-using-display-manager-settings">Method 2: Using Display
+Manager Settings</h2>
+<p>If your LXDE distribution uses the LightDM GTK Greeter, you can
+configure your avatar via the system settings menu:</p>
+<ol type="1">
+<li>Click the <strong>Application Menu</strong> (bottom-left
+corner).</li>
+<li>Navigate to <strong>Preferences</strong> or
+<strong>System</strong>.</li>
+<li>Select <strong>LightDM GTK+ Greeter Settings</strong> (root
+privileges may be required).</li>
+<li>Go to the <strong>Panel</strong> or <strong>User</strong> tab to
+adjust user image display options.</li>
+<li>If a direct "User Image" path option is present, browse and select
+your preferred image file, then click <strong>Save</strong>.</li>
+</ol>
+<h2 id="method-3-using-accountsservice">Method 3: Using
+AccountsService</h2>
+<p>For distributions where modern system services manage user
+metadata:</p>
+<ol type="1">
+<li>Open a terminal.</li>
+<li>Copy your square PNG avatar to the AccountsService directory with
+administrative privileges:</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> cp /path/to/avatar.png /var/lib/AccountsService/icons/<span class="va">$USER</span></span></code></pre></div>
+<ol start="3" type="1">
+<li>Ensure the file has proper read permissions:</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod 644 /var/lib/AccountsService/icons/<span class="va">$USER</span></span></code></pre></div>
+<p>Once complete, reboot or log out to apply the new profile avatar
+across the system.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

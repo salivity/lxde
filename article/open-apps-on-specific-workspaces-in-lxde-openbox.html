@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Apps on Specific Workspaces in LXDE Openbox - lxde</title>
+    <meta name="description" content="This guide explains how to automatically route specific applications to designated workspaces in the Lightweight X11 Desktop Environment (LXDE). Because LXDE relies on Openbox as its default window manager, workspace assignment is managed directly through">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/open-apps-on-specific-workspaces-in-lxde-openbox">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Open Apps on Specific Workspaces in LXDE Openbox - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/open-apps-on-specific-workspaces-in-lxde-openbox" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide explains how to automatically route specific applications to designated workspaces in the Lightweight X11 Desktop Environment (LXDE). Because LXDE relies on Openbox as its default window manager, workspace assignment is managed directly through" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="open-apps-on-specific-workspaces-in-lxde-openbox">Open Apps on
+Specific Workspaces in LXDE Openbox</h1>
+<p>This guide explains how to automatically route specific applications
+to designated workspaces in the Lightweight X11 Desktop Environment
+(LXDE). Because LXDE relies on Openbox as its default window manager,
+workspace assignment is managed directly through Openbox's application
+rules. By obtaining an application's window properties and editing the
+local configuration file, you can ensure programs launch consistently on
+your preferred virtual desktop every time.</p>
+<h3 id="step-1-find-the-applications-window-class">Step 1: Find the
+Application's Window Class</h3>
+<p>To tell Openbox which program to manage, you need its exact window
+class name.</p>
+<ol type="1">
+<li><p>Open your terminal.</p></li>
+<li><p>Run the command:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xprop</span> WM_CLASS</span></code></pre></div></li>
+<li><p>Your cursor will turn into a crosshair. Click anywhere on the
+window of the application you want to assign.</p></li>
+<li><p>The terminal will output two strings, such as:</p>
+<pre class="text"><code>WM_CLASS(STRING) = &quot;navigator&quot;, &quot;Firefox&quot;</code></pre>
+<p>Take note of the second string (in this case, <code>Firefox</code>),
+which is the window class name.</p></li>
+</ol>
+<h3 id="step-2-open-the-lxde-openbox-configuration-file">Step 2: Open
+the LXDE Openbox Configuration File</h3>
+<p>Openbox stores its configuration in your user profile. Open the
+configuration file in your preferred text editor:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/openbox/lxde-rc.xml</span></code></pre></div>
+<p><em>(Note: Depending on your distribution, this file might instead be
+located at <code>~/.config/openbox/rc.xml</code>.)</em></p>
+<h3 id="step-3-add-the-workspace-rule">Step 3: Add the Workspace
+Rule</h3>
+<p>Scroll through the file to locate the
+<code>&lt;applications&gt;</code> tag. If it is empty or does not exist,
+you can create it inside the main <code>&lt;openbox_config&gt;</code>
+block.</p>
+<p>Insert a rule using the application class and your desired workspace
+number:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">applications</span>&gt;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">application</span> <span class="ot">class=</span><span class="st">&quot;Firefox&quot;</span>&gt;</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">desktop</span>&gt;2&lt;/<span class="kw">desktop</span>&gt;</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">application</span>&gt;</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">application</span> <span class="ot">class=</span><span class="st">&quot;Leafpad&quot;</span>&gt;</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">desktop</span>&gt;3&lt;/<span class="kw">desktop</span>&gt;</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">application</span>&gt;</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">applications</span>&gt;</span></code></pre></div>
+<p>In Openbox, desktop numbering begins at <code>1</code>. Setting
+<code>&lt;desktop&gt;2&lt;/desktop&gt;</code> ensures that Firefox
+always opens on the second workspace.</p>
+<h3 id="step-4-reload-the-openbox-configuration">Step 4: Reload the
+Openbox Configuration</h3>
+<p>Save the file and exit the text editor. Apply your new settings
+immediately without logging out by running:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openbox</span> <span class="at">--reconfigure</span></span></code></pre></div>
+<p>Once reconfigured, launching the specified applications will
+automatically place them on their assigned workspaces.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

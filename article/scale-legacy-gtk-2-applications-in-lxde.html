@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scale Legacy GTK2 Applications in LXDE - lxde</title>
+    <meta name="description" content="Running legacy GTK2 applications within the lightweight LXDE desktop environment often results in tiny, unreadable user interfaces on modern high-resolution (HiDPI) monitors because GTK2 lacks native scaling support. While modern toolkits offer built-in f">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/scale-legacy-gtk-2-applications-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Scale Legacy GTK2 Applications in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/scale-legacy-gtk-2-applications-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Running legacy GTK2 applications within the lightweight LXDE desktop environment often results in tiny, unreadable user interfaces on modern high-resolution (HiDPI) monitors because GTK2 lacks native scaling support. While modern toolkits offer built-in f" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="scale-legacy-gtk2-applications-in-lxde">Scale Legacy GTK2
+Applications in LXDE</h1>
+<p>Running legacy GTK2 applications within the lightweight LXDE desktop
+environment often results in tiny, unreadable user interfaces on modern
+high-resolution (HiDPI) monitors because GTK2 lacks native scaling
+support. While modern toolkits offer built-in fractional and integer
+scaling, legacy GTK2 applications require alternative methods to remain
+usable. This guide outlines the most effective workarounds for scaling
+GTK2 software in LXDE, including font DPI adjustments, GTK2 theme and
+icon tweaks, fractional display scaling with xrandr, and containerized
+window scaling via Xpra.</p>
+<h3 id="1-adjust-font-dpi-via-xresources-and-lxappearance">1. Adjust
+Font DPI via Xresources and LXAppearance</h3>
+<p>While GTK2 cannot scale entire interfaces natively, scaling text
+forces many UI elements, like menus and buttons, to expand
+proportionally to fit larger fonts.</p>
+<ol type="1">
+<li><p>Open <code>lxappearance</code> and navigate to the
+<strong>Font</strong> tab to increase the default font size.</p></li>
+<li><p>For system-wide DPI scaling, define the DPI value in your
+<code>~/.Xresources</code> file:</p>
+<pre class="text"><code>Xft.dpi: 192</code></pre>
+<p><em>(Note: 96 is standard DPI; 192 represents a 200%
+scale).</em></p></li>
+<li><p>Apply the changes immediately in your session by running:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xrdb</span> <span class="at">-merge</span> ~/.Xresources</span></code></pre></div></li>
+</ol>
+<h3 id="2-force-larger-icons-and-widget-padding-in-gtkrc-20">2. Force
+Larger Icons and Widget Padding in <code>~/.gtkrc-2.0</code></h3>
+<p>Text scaling alone may leave checkmarks, scrollbars, and toolbars
+disproportionately small. You can directly edit the GTK2 configuration
+file to force larger interface components.</p>
+<p>Add the following directives to <code>~/.gtkrc-2.0</code>:</p>
+<pre class="text"><code># Enforce larger standard icon sizes
+gtk-icon-sizes = &quot;panel-menu=32,32:gtk-button=32,32:gtk-small-toolbar=32,32:gtk-large-toolbar=48,48:gtk-dnd=64,64:gtk-dialog=96,96&quot;
+
+# Increase scrollbar width for easier accessibility
+style &quot;wider-scrollbar&quot; {
+    GtkScrollbar::slider-width = 24
+}
+class &quot;GtkScrollbar&quot; style &quot;wider-scrollbar&quot;</code></pre>
+<p>Pairing these entries with a HiDPI-specific icon pack (like Papirus
+or Tela) ensures icons remain sharp at larger pixel dimensions.</p>
+<h3 id="3-emulate-integer-scaling-with-xrandr">3. Emulate Integer
+Scaling with xrandr</h3>
+<p>If theme tweaks leave the application inconsistent, you can scale the
+entire display server output using <code>xrandr</code>. This approach
+renders the screen at a lower virtual resolution and scales it up to
+your native display.</p>
+<p>To scale a 4K display down to an effective 1080p workspace (2x
+scaling):</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xrandr</span> <span class="at">--output</span> <span class="op">&lt;</span>DISPLAY_NAME<span class="op">&gt;</span> --scale 0.5x0.5</span></code></pre></div>
+<p><em>(Replace <code>&lt;DISPLAY_NAME&gt;</code> with your active
+output, such as <code>eDP-1</code> or <code>HDMI-1</code>, found by
+running <code>xrandr --query</code>).</em></p>
+<p>To revert the display back to its native unscaled state:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xrandr</span> <span class="at">--output</span> <span class="op">&lt;</span>DISPLAY_NAME<span class="op">&gt;</span> --scale 1x1</span></code></pre></div>
+<h3 id="4-isolate-individual-apps-using-run_scaled">4. Isolate
+Individual Apps Using run_scaled</h3>
+<p>To scale only specific GTK2 applications without altering the rest of
+your LXDE desktop, use the third-party utility <code>run_scaled</code>.
+This tool uses an isolated Xpra session to render the target application
+at a lower resolution and scale the window up to your monitor's native
+DPI.</p>
+<ol type="1">
+<li><p>Install <code>xpra</code> and <code>xvfb</code> via your
+distribution’s package manager:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install xpra xvfb</span></code></pre></div></li>
+<li><p>Download and set up <code>run_scaled</code>:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/kaueraal/run_scaled.git</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x run_scaled/run_scaled</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> cp run_scaled/run_scaled /usr/local/bin/</span></code></pre></div></li>
+<li><p>Launch your GTK2 application with integer or fractional
+scaling:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">run_scaled</span> <span class="at">--scale</span><span class="op">=</span>2 gimp</span></code></pre></div></li>
+</ol>
+<p>This method eliminates UI disproportion by scaling both fonts and
+bitmaps together, making legacy software fully functional on dense pixel
+displays.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

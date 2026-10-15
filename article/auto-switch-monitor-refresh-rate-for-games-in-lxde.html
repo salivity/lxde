@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Switch Monitor Refresh Rate for Games in LXDE - lxde</title>
+    <meta name="description" content="Running demanding video games often requires maximizing your monitor&#39;s refresh rate for fluid gameplay, while daily desktop tasks in LXDE may only require a standard 60Hz to reduce power consumption and hardware temperatures. By utilizing a lightweight Ba">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/auto-switch-monitor-refresh-rate-for-games-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Auto Switch Monitor Refresh Rate for Games in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/auto-switch-monitor-refresh-rate-for-games-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Running demanding video games often requires maximizing your monitor&#39;s refresh rate for fluid gameplay, while daily desktop tasks in LXDE may only require a standard 60Hz to reduce power consumption and hardware temperatures. By utilizing a lightweight Ba" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="auto-switch-monitor-refresh-rate-for-games-in-lxde">Auto Switch
+Monitor Refresh Rate for Games in LXDE</h1>
+<p>Running demanding video games often requires maximizing your
+monitor's refresh rate for fluid gameplay, while daily desktop tasks in
+LXDE may only require a standard 60Hz to reduce power consumption and
+hardware temperatures. By utilizing a lightweight Bash wrapper script
+paired with the native <code>xrandr</code> utility, you can
+automatically switch your monitor to its highest refresh rate upon
+launching a game and seamlessly revert to your baseline setting the
+moment you exit.</p>
+<h3 id="step-1-identify-display-names-and-available-refresh-rates">Step
+1: Identify Display Names and Available Refresh Rates</h3>
+<p>Before creating the script, determine the output identifier of your
+monitor and its supported refresh rates. Open a terminal in LXDE and
+run:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xrandr</span></span></code></pre></div>
+<p>Look for the line displaying <code>connected primary</code> or
+<code>connected</code>. Note your display interface (such as
+<code>HDMI-1</code>, <code>DP-1</code>, or <code>eDP-1</code>), the
+target resolution (such as <code>1920x1080</code>), and the supported
+refresh rates (such as <code>60.00</code> and <code>144.00</code>).</p>
+<h3 id="step-2-create-the-automation-wrapper-script">Step 2: Create the
+Automation Wrapper Script</h3>
+<p>Create a shell script that accepts your game's launch command as an
+argument, adjusts the refresh rate, executes the game, and restores the
+display configuration once the process terminates.</p>
+<p>Create the file in your preferred directory:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.local/bin/game-refresh-wrapper.sh</span></code></pre></div>
+<p>Paste the following script:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define your monitor settings</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="va">DISPLAY_OUTPUT</span><span class="op">=</span><span class="st">&quot;DP-1&quot;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="va">RESOLUTION</span><span class="op">=</span><span class="st">&quot;1920x1080&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="va">DESKTOP_RATE</span><span class="op">=</span><span class="st">&quot;60.00&quot;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="va">GAMING_RATE</span><span class="op">=</span><span class="st">&quot;144.00&quot;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify arguments are provided</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="va">$#</span> <span class="ot">-eq</span> 0 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;Usage: </span><span class="va">$0</span><span class="st"> &lt;game-executable or launch command&gt;&quot;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">exit</span> 1</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Switch to the gaming refresh rate</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="ex">xrandr</span> <span class="at">--output</span> <span class="st">&quot;</span><span class="va">$DISPLAY_OUTPUT</span><span class="st">&quot;</span> <span class="at">--mode</span> <span class="st">&quot;</span><span class="va">$RESOLUTION</span><span class="st">&quot;</span> <span class="at">--rate</span> <span class="st">&quot;</span><span class="va">$GAMING_RATE</span><span class="st">&quot;</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the game command and wait for it to exit</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span><span class="va">$@</span><span class="st">&quot;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Revert back to the desktop refresh rate</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="ex">xrandr</span> <span class="at">--output</span> <span class="st">&quot;</span><span class="va">$DISPLAY_OUTPUT</span><span class="st">&quot;</span> <span class="at">--mode</span> <span class="st">&quot;</span><span class="va">$RESOLUTION</span><span class="st">&quot;</span> <span class="at">--rate</span> <span class="st">&quot;</span><span class="va">$DESKTOP_RATE</span><span class="st">&quot;</span></span></code></pre></div>
+<p>Save the file and make it executable:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x ~/.local/bin/game-refresh-wrapper.sh</span></code></pre></div>
+<h3 id="step-3-integrate-with-your-games">Step 3: Integrate with Your
+Games</h3>
+<h4 id="for-steam-games">For Steam Games:</h4>
+<ol type="1">
+<li><p>Open Steam and right-click any game in your library.</p></li>
+<li><p>Select <strong>Properties</strong> &gt;
+<strong>General</strong>.</p></li>
+<li><p>In the <strong>Launch Options</strong> field, enter:</p>
+<pre class="text"><code>~/.local/bin/game-refresh-wrapper.sh %command%</code></pre></li>
+</ol>
+<h4 id="for-lutris-or-heroic-games">For Lutris or Heroic Games:</h4>
+<ol type="1">
+<li>Open the game configuration menu.</li>
+<li>Navigate to <strong>System Options</strong>.</li>
+<li>Under <strong>Wrapper command</strong> (or prefix command), specify
+the full path:
+<code>/home/your_username/.local/bin/game-refresh-wrapper.sh</code>.</li>
+</ol>
+<h4 id="for-standalone-desktop-launchers">For Standalone Desktop
+Launchers:</h4>
+<p>If you launch games via <code>.desktop</code> files in LXDE, edit the
+file in <code>~/.local/share/applications/</code> and prepend the script
+path to the <code>Exec</code> line:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Exec</span><span class="ot">=</span><span class="st">/home/your_username/.local/bin/game-refresh-wrapper.sh /path/to/game-binary</span></span></code></pre></div></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

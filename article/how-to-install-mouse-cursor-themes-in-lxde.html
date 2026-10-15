@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Install Mouse Cursor Themes in LXDE - lxde</title>
+    <meta name="description" content="Customizing the mouse pointer in the Lightweight X11 Desktop Environment (LXDE) allows you to personalize your desktop experience and improve visibility. This guide covers the entire process of installing new cursor themes, from downloading theme files fr">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-install-mouse-cursor-themes-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Install Mouse Cursor Themes in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-install-mouse-cursor-themes-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Customizing the mouse pointer in the Lightweight X11 Desktop Environment (LXDE) allows you to personalize your desktop experience and improve visibility. This guide covers the entire process of installing new cursor themes, from downloading theme files fr" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-install-mouse-cursor-themes-in-lxde">How to Install Mouse
+Cursor Themes in LXDE</h1>
+<p>Customizing the mouse pointer in the Lightweight X11 Desktop
+Environment (LXDE) allows you to personalize your desktop experience and
+improve visibility. This guide covers the entire process of installing
+new cursor themes, from downloading theme files from the web to
+extracting them into the correct system directories and applying them
+using LXDE's built-in customization tool, LXAppearance.</p>
+<h3 id="step-1-download-a-cursor-theme">Step 1: Download a Cursor
+Theme</h3>
+<p>Cursor themes are typically distributed as compressed archives
+(<code>.tar.gz</code>, <code>.tar.xz</code>, or <code>.zip</code>).</p>
+<ol type="1">
+<li>Browse a Linux customization website such as Pling or
+GNOME-Look.</li>
+<li>Navigate to the <strong>Cursors</strong> section.</li>
+<li>Download the archive file for the theme you want to install.</li>
+</ol>
+<h3 id="step-2-extract-and-install-the-cursor-theme">Step 2: Extract and
+Install the Cursor Theme</h3>
+<p>You can install a theme either for your individual user account or
+system-wide for all users.</p>
+<h4 id="option-a-install-for-the-current-user-only-recommended">Option
+A: Install for the Current User Only (Recommended)</h4>
+<ol type="1">
+<li><p>Open your terminal or the PCManFM file manager.</p></li>
+<li><p>Ensure the <code>.icons</code> directory exists in your home
+folder. If it does not, create it:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.icons</span></code></pre></div></li>
+<li><p>Extract the downloaded archive directly into the
+<code>~/.icons/</code> directory. For example, if using the
+terminal:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xf</span> your-theme.tar.gz <span class="at">-C</span> ~/.icons/</span></code></pre></div></li>
+<li><p>Verify that the extracted theme folder directly contains a
+subfolder named <code>cursors</code> (e.g.,
+<code>~/.icons/ThemeName/cursors</code>).</p></li>
+</ol>
+<h4 id="option-b-install-system-wide-requires-root-access">Option B:
+Install System-Wide (Requires Root Access)</h4>
+<ol type="1">
+<li><p>Open a terminal.</p></li>
+<li><p>Extract the archive into the global icons directory:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tar <span class="at">-xf</span> your-theme.tar.gz <span class="at">-C</span> /usr/share/icons/</span></code></pre></div></li>
+</ol>
+<h3 id="step-3-apply-the-cursor-theme-in-lxappearance">Step 3: Apply the
+Cursor Theme in LXAppearance</h3>
+<p>Once the files are in place, apply the theme using the native LXDE
+configuration utility:</p>
+<ol type="1">
+<li>Open the application menu.</li>
+<li>Go to <strong>Preferences</strong> and select <strong>Customize Look
+and Feel</strong> (this launches <code>lxappearance</code>).</li>
+<li>Click on the <strong>Mouse Cursor</strong> tab.</li>
+<li>Select your newly installed cursor theme from the list.</li>
+<li>Choose your preferred cursor size if options are available.</li>
+<li>Click <strong>Apply</strong> and close the window.</li>
+</ol>
+<h3 id="step-4-restart-the-session">Step 4: Restart the Session</h3>
+<p>While the cursor changes immediately inside most application windows,
+the desktop background and certain system components may continue
+displaying the old cursor until the X session refreshes. Log out of LXDE
+and log back in to fully apply the new cursor theme across the entire
+desktop.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

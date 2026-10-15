@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using xdg-desktop-menu with the LXDE Desktop - lxde</title>
+    <meta name="description" content="The xdg-desktop-menu utility is a command-line tool provided by xdg-utils that allows applications to install and uninstall desktop menu items following freedesktop.org standards. In an LXDE (Lightweight X11 Desktop Environment) setup, this tool integrate">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/using-xdg-desktop-menu-with-the-lxde-desktop">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Using xdg-desktop-menu with the LXDE Desktop - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/using-xdg-desktop-menu-with-the-lxde-desktop" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The xdg-desktop-menu utility is a command-line tool provided by xdg-utils that allows applications to install and uninstall desktop menu items following freedesktop.org standards. In an LXDE (Lightweight X11 Desktop Environment) setup, this tool integrate" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="using-xdg-desktop-menu-with-the-lxde-desktop">Using
+xdg-desktop-menu with the LXDE Desktop</h1>
+<p>The <code>xdg-desktop-menu</code> utility is a command-line tool
+provided by <code>xdg-utils</code> that allows applications to install
+and uninstall desktop menu items following freedesktop.org standards. In
+an LXDE (Lightweight X11 Desktop Environment) setup, this tool
+integrates seamlessly because LXDE is built from the ground up to adhere
+directly to the XDG Desktop Entry and Desktop Menu specifications. This
+article explains how the integration works behind the scenes, the
+directories involved, and how LXDE processes changes in real time.</p>
+<h3 id="freedesktoporg-standard-compliance">Freedesktop.org Standard
+Compliance</h3>
+<p>LXDE does not use a proprietary database or custom format for its
+application menu. Instead, its components—primarily <code>lxpanel</code>
+and <code>menu-cache</code>—read the standard XDG menu hierarchy.
+Because <code>xdg-desktop-menu</code> is the reference implementation
+for managing XDG-compliant menu entries, any action performed by the
+utility directly affects LXDE without requiring translation layers or
+desktop-specific hooks.</p>
+<h3 id="file-destinations-and-scope">File Destinations and Scope</h3>
+<p>When you run <code>xdg-desktop-menu install</code>, the command
+determines where to place <code>.desktop</code> and
+<code>.directory</code> files based on the user's execution context:</p>
+<ul>
+<li><strong>System-Wide Installations (Root):</strong> Running the
+command with administrative privileges places <code>.desktop</code>
+files into <code>/usr/share/applications/</code> and directory
+definitions into <code>/etc/xdg/menus/</code>.</li>
+<li><strong>User-Specific Installations (Non-Root):</strong> Running the
+command as an unprivileged user writes <code>.desktop</code> files into
+<code>~/.local/share/applications/</code> and category modifications
+into <code>~/.config/menus/</code>.</li>
+</ul>
+<p>LXDE monitors both locations simultaneously, giving priority to
+user-level configurations if there is a conflict.</p>
+<h3 id="categories-and-menu-routing">Categories and Menu Routing</h3>
+<p>LXDE routes applications to their respective submenus (such as
+Accessories, Internet, or System Tools) using the
+<code>Categories</code> field inside the <code>.desktop</code> file
+installed by <code>xdg-desktop-menu</code>.</p>
+<p>The layout of the LXDE menu is defined by the file
+<code>/etc/xdg/menus/lxde-applications.menu</code>. When
+<code>xdg-desktop-menu</code> registers a desktop file with a standard
+category (e.g., <code>Categories=Network;WebBrowser;</code>), the LXDE
+menu parser matches that category against the inclusion rules defined in
+the <code>.menu</code> file and dynamically assigns the application to
+the "Internet" submenu.</p>
+<h3 id="real-time-updates-via-menu-cache">Real-Time Updates via
+Menu-Cache</h3>
+<p>A core architectural component of LXDE is <code>menu-cache</code>, a
+daemon and library designed to make menu generation fast on
+resource-constrained systems.</p>
+<ol type="1">
+<li><strong>File System Monitoring:</strong> <code>menu-cache</code>
+uses the Linux kernel's <code>inotify</code> mechanism to monitor the
+XDG standard directories for file creation, modification, or
+deletion.</li>
+<li><strong>Detection:</strong> When
+<code>xdg-desktop-menu install</code> or
+<code>xdg-desktop-menu uninstall</code> finishes writing or removing
+files, <code>menu-cache</code> immediately detects the change.</li>
+<li><strong>Cache Regeneration:</strong> The daemon reconstructs the
+menu structure in memory and writes an optimized cache file.</li>
+<li><strong>UI Refresh:</strong> <code>lxpanel</code> listens for
+signals from <code>menu-cache</code> and immediately reloads its UI
+tree. As a result, the application appears or disappears from the LXDE
+application menu instantly, without restarting the panel or logging out
+of the session.</li>
+</ol>
+<h3 id="common-usage-example">Common Usage Example</h3>
+<p>To register an application for the current user in LXDE:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xdg-desktop-menu</span> install <span class="at">--novendor</span> custom-app.desktop</span></code></pre></div>
+<p>To remove the application from the LXDE menu:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xdg-desktop-menu</span> uninstall <span class="at">--novendor</span> custom-app.desktop</span></code></pre></div>
+<p>Because LXDE adheres strictly to freedesktop.org guidelines, no
+additional configuration or manual cache clearing is necessary after
+executing these commands.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

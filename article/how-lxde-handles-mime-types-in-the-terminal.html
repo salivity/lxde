@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How LXDE Handles MIME Types in the Terminal - lxde</title>
+    <meta name="description" content="LXDE (Lightweight X11 Desktop Environment) relies on standard freedesktop.org specifications to resolve and open files according to their MIME types from the command line. When a user opens a file from the terminal using utilities like xdg-open or PCManFM">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-lxde-handles-mime-types-in-the-terminal">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How LXDE Handles MIME Types in the Terminal - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-lxde-handles-mime-types-in-the-terminal" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="LXDE (Lightweight X11 Desktop Environment) relies on standard freedesktop.org specifications to resolve and open files according to their MIME types from the command line. When a user opens a file from the terminal using utilities like xdg-open or PCManFM" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-lxde-handles-mime-types-in-the-terminal">How LXDE Handles
+MIME Types in the Terminal</h1>
+<p>LXDE (Lightweight X11 Desktop Environment) relies on standard
+freedesktop.org specifications to resolve and open files according to
+their MIME types from the command line. When a user opens a file from
+the terminal using utilities like <code>xdg-open</code> or PCManFM
+(LXDE's default file manager), the system identifies the file's format
+via the shared MIME database, consults association configuration files
+to locate the user's preferred application, and launches the associated
+desktop entry. This article explains the underlying mechanism LXDE uses
+to resolve MIME types, the hierarchy of configuration files involved,
+and the commands used to query and modify these associations.</p>
+<h2 id="the-resolution-process">The Resolution Process</h2>
+<p>When a file execution request originates from a terminal inside an
+LXDE session, the resolution workflow follows a four-step pipeline:</p>
+<ol type="1">
+<li><strong>Format Identification:</strong> The system inspects the
+target file using file extensions and "magic numbers" (binary header
+signatures) defined in the system-wide <code>shared-mime-info</code>
+database. This maps the target file to a standardized MIME string (e.g.,
+<code>application/pdf</code> or <code>image/jpeg</code>).</li>
+<li><strong>Association Lookup:</strong> The launching utility queries
+MIME association files to determine which application handles that
+specific MIME string.</li>
+<li><strong>Desktop Entry Matching:</strong> The association maps the
+MIME type to a specific <code>.desktop</code> file (such as
+<code>epdfview.desktop</code> or <code>leafpad.desktop</code>).</li>
+<li><strong>Application Launch:</strong> The command specified in the
+<code>Exec</code> line of the resolved <code>.desktop</code> file is
+executed, passing the target file path as an argument.</li>
+</ol>
+<h2 id="core-terminal-dispatchers">Core Terminal Dispatchers</h2>
+<p>Inside the terminal, LXDE relies primarily on two commands to invoke
+this MIME resolution pipeline:</p>
+<ul>
+<li><strong><code>xdg-open</code></strong>: The standard freedesktop.org
+cross-desktop tool. When run within an LXDE session (detected via the
+<code>XDG_CURRENT_DESKTOP=LXDE</code> environment variable),
+<code>xdg-open</code> reads standard XDG configuration files to delegate
+the file to the appropriate application.</li>
+<li><strong><code>pcmanfm</code></strong>: Because PCManFM manages the
+desktop and file handling in LXDE, running
+<code>pcmanfm /path/to/file</code> from the terminal uses LXDE’s
+internal GLib/GIO implementation to detect the MIME type and launch the
+default software directly.</li>
+</ul>
+<h2 id="configuration-files-and-search-priority">Configuration Files and
+Search Priority</h2>
+<p>LXDE determines which <code>.desktop</code> entry to launch by
+consulting <code>mimeapps.list</code> files across the filesystem. It
+reads these files in a specific order of precedence, where user-level
+settings override system defaults:</p>
+<ol type="1">
+<li><strong>User Overrides:</strong>
+<code>~/.config/mimeapps.list</code> (takes the highest priority for the
+current user)</li>
+<li><strong>User Legacy Deprecated Path:</strong>
+<code>~/.local/share/applications/mimeapps.list</code></li>
+<li><strong>System Overrides:</strong>
+<code>/etc/xdg/mimeapps.list</code></li>
+<li><strong>Distribution Defaults:</strong>
+<code>/usr/share/applications/mimeapps.list</code></li>
+</ol>
+<p>Within <code>mimeapps.list</code>, mappings are organized under
+specific headers:</p>
+<ul>
+<li><code>[Default Applications]</code>: Specifies the fallback
+application for a given MIME type.</li>
+<li><code>[Added Associations]</code>: Lists secondary compatible
+applications, typically used for "Open With" submenus.</li>
+<li><code>[Removed Associations]</code>: Explicitly prevents an
+application from handling a specific type.</li>
+</ul>
+<p>An example entry in <code>~/.config/mimeapps.list</code> looks
+like:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Default Applications]</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">text/plain</span><span class="ot">=</span><span class="st">leafpad.desktop</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">image/png</span><span class="ot">=</span><span class="st">gpicview.desktop</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">application/pdf</span><span class="ot">=</span><span class="st">epdfview.desktop</span></span></code></pre></div>
+<p>The referenced <code>.desktop</code> files reside in either
+<code>~/.local/share/applications/</code> (user-specific) or
+<code>/usr/share/applications/</code> (system-wide).</p>
+<h2 id="querying-and-managing-mime-types-via-the-command-line">Querying
+and Managing MIME Types via the Command Line</h2>
+<p>You can inspect and alter how LXDE handles MIME types directly from
+the shell using the <code>xdg-mime</code> tool:</p>
+<ul>
+<li><p><strong>Determine a file's detected MIME type:</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xdg-mime</span> query filetype document.pdf</span></code></pre></div>
+<p><em>Output:</em> <code>application/pdf</code></p></li>
+<li><p><strong>Identify the current default application for a MIME
+type:</strong></p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xdg-mime</span> query default application/pdf</span></code></pre></div>
+<p><em>Output:</em> <code>epdfview.desktop</code></p></li>
+<li><p><strong>Change the default application association:</strong></p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xdg-mime</span> default qpdfview.desktop application/pdf</span></code></pre></div>
+<p>This command updates the <code>[Default Applications]</code> section
+of <code>~/.config/mimeapps.list</code>, immediately changing the
+behavior for subsequent <code>xdg-open</code> and <code>pcmanfm</code>
+terminal commands.</p></li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

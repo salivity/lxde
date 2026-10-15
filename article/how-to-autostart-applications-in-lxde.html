@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Autostart Applications in LXDE - lxde</title>
+    <meta name="description" content="Configuring applications to launch automatically upon login in the Lightweight X11 Desktop Environment (LXDE) streamlines your workflow and ensures background utilities run immediately. This guide covers the most effective methods to autostart programs in">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-autostart-applications-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Autostart Applications in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-autostart-applications-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Configuring applications to launch automatically upon login in the Lightweight X11 Desktop Environment (LXDE) streamlines your workflow and ensures background utilities run immediately. This guide covers the most effective methods to autostart programs in" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-autostart-applications-in-lxde">How to Autostart
+Applications in LXDE</h1>
+<p>Configuring applications to launch automatically upon login in the
+Lightweight X11 Desktop Environment (LXDE) streamlines your workflow and
+ensures background utilities run immediately. This guide covers the most
+effective methods to autostart programs in an LXDE session, including
+editing user-specific and system-wide session configuration files,
+utilizing standard XDG <code>.desktop</code> files, and managing startup
+programs through the graphical interface.</p>
+<h3 id="method-1-edit-the-lxde-session-autostart-file">Method 1: Edit
+the LXDE Session Autostart File</h3>
+<p>The primary method for launching applications at login in LXDE is
+modifying the session <code>autostart</code> file.</p>
+<ol type="1">
+<li><p>Open your terminal.</p></li>
+<li><p>Check if the user-specific autostart directory exists; if not,
+create it:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.config/lxsession/LXDE</span></code></pre></div>
+<p><em>(Note: On Raspberry Pi OS, replace <code>LXDE</code> with
+<code>LXDE-pi</code>.)</em></p></li>
+<li><p>If you do not already have a user-specific file, copy the global
+configuration file to your user directory:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /etc/xdg/lxsession/LXDE/autostart ~/.config/lxsession/LXDE/autostart</span></code></pre></div></li>
+<li><p>Open the file in a text editor:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/lxsession/LXDE/autostart</span></code></pre></div></li>
+<li><p>Add your command on a new line. Prepending an <code>@</code>
+symbol ensures that LXDE will automatically restart the process if it
+crashes:</p>
+<pre class="text"><code>@lxpanel --profile LXDE
+@pcmanfm --desktop --profile LXDE
+@xscreensaver -no-splash
+@firefox</code></pre></li>
+<li><p>Save and exit the editor (<code>Ctrl+O</code>,
+<code>Enter</code>, then <code>Ctrl+X</code> in nano). The changes will
+take effect on your next login.</p></li>
+</ol>
+<h3 id="method-2-use-xdg-autostart-desktop-entries">Method 2: Use XDG
+Autostart Desktop Entries</h3>
+<p>LXDE complies with the freedesktop.org standard, allowing you to
+trigger applications using <code>.desktop</code> files placed in the
+autostart directory.</p>
+<ol type="1">
+<li><p>Create the autostart directory if it does not already exist:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.config/autostart</span></code></pre></div></li>
+<li><p>To autostart an existing system application, copy its
+<code>.desktop</code> file from
+<code>/usr/share/applications/</code>:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /usr/share/applications/application-name.desktop ~/.config/autostart/</span></code></pre></div></li>
+<li><p>To create a custom launcher from scratch, create a new file
+ending in <code>.desktop</code>:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/autostart/custom-script.desktop</span></code></pre></div></li>
+<li><p>Insert the following entry format:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Desktop Entry]</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Type</span><span class="ot">=</span><span class="st">Application</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="dt">Name</span><span class="ot">=</span><span class="st">My Custom Startup</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="dt">Exec</span><span class="ot">=</span><span class="st">/path/to/your/script.sh</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="dt">Terminal</span><span class="ot">=</span><span class="kw">false</span></span></code></pre></div></li>
+<li><p>Save the file. The program will launch automatically during the
+desktop initialization phase.</p></li>
+</ol>
+<h3 id="method-3-use-the-graphical-configuration-tool">Method 3: Use the
+Graphical Configuration Tool</h3>
+<p>For users who prefer a GUI over text configuration, LXDE includes a
+built-in session manager.</p>
+<ol type="1">
+<li>Open the application menu and navigate to
+<strong>Preferences</strong> &gt; <strong>Default applications for
+LXSession</strong> (or run <code>lxsession-default-apps</code> in a
+terminal).</li>
+<li>Select the <strong>Autostart</strong> tab on the left panel.</li>
+<li>Under the <strong>Manual autostarted applications</strong> section,
+enter the command you want to run into the text field next to the
+<strong>+ Add</strong> button.</li>
+<li>Click <strong>+ Add</strong> to append the application to your
+startup list.</li>
+<li>Close the window to apply your changes.</li>
+</ol>
+<h3 id="system-wide-autostart-all-users">System-Wide Autostart (All
+Users)</h3>
+<p>If you need an application to autostart for every user on the system,
+edit the global configuration file instead of individual user
+profiles:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/xdg/lxsession/LXDE/autostart</span></code></pre></div>
+<p>Add your desired commands with the <code>@</code> prefix, save the
+file, and the specified applications will execute whenever any user logs
+into an LXDE desktop session.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

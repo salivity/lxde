@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure PulseAudio or PipeWire Volume in LXPanel - lxde</title>
+    <meta name="description" content="This guide provides a direct walkthrough for setting up functional volume controls in LXPanel when using PulseAudio or PipeWire sound servers. Because LXPanel defaults to a native ALSA mixer plugin, systems running PulseAudio or PipeWire often experience">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/configure-pulse-audio-or-pipe-wire-volume-in-lx-panel">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Configure PulseAudio or PipeWire Volume in LXPanel - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/configure-pulse-audio-or-pipe-wire-volume-in-lx-panel" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide provides a direct walkthrough for setting up functional volume controls in LXPanel when using PulseAudio or PipeWire sound servers. Because LXPanel defaults to a native ALSA mixer plugin, systems running PulseAudio or PipeWire often experience" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="configure-pulseaudio-or-pipewire-volume-in-lxpanel">Configure
+PulseAudio or PipeWire Volume in LXPanel</h1>
+<p>This guide provides a direct walkthrough for setting up functional
+volume controls in LXPanel when using PulseAudio or PipeWire sound
+servers. Because LXPanel defaults to a native ALSA mixer plugin, systems
+running PulseAudio or PipeWire often experience broken sliders,
+incorrect hardware bindings, or lack of per-application control. Below
+are the steps to replace or reconfigure the panel applet using native
+plugins or system tray tools compatible with both audio servers.</p>
+<h2 id="method-1-using-the-native-pulseaudio-lxpanel-plugin">Method 1:
+Using the Native PulseAudio LXPanel Plugin</h2>
+<p>Recent versions of LXPanel (and variants used in distributions like
+Debian or Raspberry Pi OS) include a dedicated PulseAudio plugin that
+interfaces directly with both PulseAudio and PipeWire via
+<code>pipewire-pulse</code>.</p>
+<ol type="1">
+<li><strong>Remove the ALSA Plugin:</strong>
+<ul>
+<li>Right-click an empty area on LXPanel and select <strong>Add / Remove
+Panel Items</strong>.</li>
+<li>In the <strong>Panel Applets</strong> tab, select <strong>Volume
+Control (ALSA)</strong> or <strong>Volume Control</strong>.</li>
+<li>Click <strong>Remove</strong>.</li>
+</ul></li>
+<li><strong>Add the PulseAudio Applet:</strong>
+<ul>
+<li>In the same configuration window, click <strong>Add</strong>.</li>
+<li>Look for <strong>Volume Control (PulseAudio)</strong> in the list of
+available plugins.</li>
+<li>Select it and click <strong>Add</strong>.</li>
+<li>Use the <strong>Up</strong> and <strong>Down</strong> buttons to
+position the icon to your preferred spot on the panel.</li>
+<li>Click <strong>Close</strong>.</li>
+</ul></li>
+<li><strong>Set the Default Mixer:</strong>
+<ul>
+<li>Right-click the new volume icon and click <strong>Volume Control
+Settings</strong> (or plugin preferences).</li>
+<li>Ensure the external mixer command is set to <code>pavucontrol</code>
+(PulseAudio Volume Control). Install it via your package manager if not
+present (<code>sudo apt install pavucontrol</code> or
+<code>sudo pacman -S pavucontrol</code>).</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="method-2-rerouting-the-default-alsa-applet">Method 2: Rerouting
+the Default ALSA Applet</h2>
+<p>If your distribution does not ship the dedicated PulseAudio LXPanel
+plugin, you can force the default ALSA applet to route commands through
+PulseAudio or PipeWire emulation layers.</p>
+<ol type="1">
+<li><strong>Install Compatibility Packages:</strong>
+<ul>
+<li>For <strong>PulseAudio</strong>: Ensure <code>pulseaudio-alsa</code>
+(or <code>alsa-plugins</code>) is installed.</li>
+<li>For <strong>PipeWire</strong>: Ensure <code>pipewire-pulse</code>
+and <code>pipewire-alsa</code> are installed.</li>
+</ul></li>
+<li><strong>Configure LXPanel's ALSA Plugin:</strong>
+<ul>
+<li><p>Right-click the existing volume icon on the panel and select
+<strong>"Volume Control" Settings</strong>.</p></li>
+<li><p>Change the <strong>Audio Card</strong> dropdown from your
+physical card (e.g., <code>HDA Intel</code>) to <strong>Default</strong>
+or <strong>PulseAudio</strong>.</p></li>
+<li><p>Change the <strong>Audio Channel</strong> or
+<strong>Track</strong> to <strong>Master</strong>.</p></li>
+<li><p>Set the mixer application command to:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pavucontrol</span></span></code></pre></div></li>
+<li><p>Click <strong>OK</strong>.</p></li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="method-3-using-a-system-tray-applet-pasystray">Method 3: Using a
+System Tray Applet (pasystray)</h2>
+<p>If native panel plugins fail to reflect changes made by PipeWire or
+PulseAudio, running <code>pasystray</code> in LXPanel's system tray
+provides full integration, stream-switching, and volume scrolling.</p>
+<ol type="1">
+<li><strong>Install Prerequisites:</strong>
+<ul>
+<li>Install <code>pasystray</code> and <code>pavucontrol</code>:
+<ul>
+<li>On Debian/Ubuntu:
+<code>sudo apt install pasystray pavucontrol</code></li>
+<li>On Arch Linux:
+<code>sudo pacman -S pasystray pavucontrol</code></li>
+<li>On Fedora: <code>sudo dnf install pasystray pavucontrol</code></li>
+</ul></li>
+</ul></li>
+<li><strong>Ensure System Tray is Present in LXPanel:</strong>
+<ul>
+<li>Right-click LXPanel &gt; <strong>Add / Remove Panel
+Items</strong>.</li>
+<li>Confirm that <strong>System Tray</strong> is present in the list. If
+not, click <strong>Add</strong>, select <strong>System Tray</strong>,
+and click <strong>Add</strong>.</li>
+</ul></li>
+<li><strong>Remove Old Volume Plugins:</strong>
+<ul>
+<li>Select any existing <strong>Volume Control</strong> items in the
+<strong>Panel Applets</strong> list and click
+<strong>Remove</strong>.</li>
+</ul></li>
+<li><strong>Add to Desktop Autostart:</strong>
+<ul>
+<li><p>Open your session autostart file (typically
+<code>~/.config/lxsession/LXDE/autostart</code> or
+<code>/etc/xdg/lxsession/LXDE/autostart</code>):</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/lxsession/LXDE/autostart</span></code></pre></div></li>
+<li><p>Add the following line to the end of the file:</p>
+<pre class="text"><code>@pasystray</code></pre></li>
+<li><p>Save and exit.</p></li>
+</ul></li>
+<li><strong>Start the Applet:</strong>
+<ul>
+<li>Run <code>pasystray &amp;</code> in your terminal or log out and log
+back in. The icon will appear inside LXPanel's system tray, allowing
+mouse-wheel volume adjustment and direct access to audio device
+management.</li>
+</ul></li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

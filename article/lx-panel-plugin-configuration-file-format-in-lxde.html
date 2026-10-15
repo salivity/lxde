@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LXPanel Plugin Configuration File Format in LXDE - lxde</title>
+    <meta name="description" content="This article provides an overview of the file format used by LXPanel plugins to store configuration states in the Lightweight X11 Desktop Environment (LXDE). It details the structural syntax of the configuration files, their storage locations on the files">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/lx-panel-plugin-configuration-file-format-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LXPanel Plugin Configuration File Format in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/lx-panel-plugin-configuration-file-format-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of the file format used by LXPanel plugins to store configuration states in the Lightweight X11 Desktop Environment (LXDE). It details the structural syntax of the configuration files, their storage locations on the files" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="lxpanel-plugin-configuration-file-format-in-lxde">LXPanel Plugin
+Configuration File Format in LXDE</h1>
+<p>This article provides an overview of the file format used by LXPanel
+plugins to store configuration states in the Lightweight X11 Desktop
+Environment (LXDE). It details the structural syntax of the
+configuration files, their storage locations on the filesystem, and the
+practical methods for managing and modifying plugin states both manually
+and automatically.</p>
+<h2 id="the-configuration-format">The Configuration Format</h2>
+<p>LXPanel plugins do not use standard formats like JSON, XML, or
+traditional INI files. Instead, LXPanel stores plugin configurations
+using a custom <strong>plain text, bracket-delimited key-value
+format</strong>.</p>
+<p>This format is hierarchical, relying on curly braces
+(<code>{}</code>) to group configuration sections and plugin
+declarations. Within each block, settings are defined through simple
+<code>key = value</code> pairs.</p>
+<p>A standard plugin definition in this format follows this
+structure:</p>
+<pre class="text"><code>Plugin {
+    type = taskbar
+    expand = 1
+    Config {
+        tooltips = 1
+        IconsOnly = 0
+        ShowIconified = 1
+        ShowMapped = 1
+        ShowMinimized = 1
+    }
+}</code></pre>
+<p>In this syntax:</p>
+<ul>
+<li><strong>Plugin</strong>: The top-level block defining an instance of
+an applet.</li>
+<li><strong>type</strong>: A string identifying which plugin library to
+load (e.g., <code>taskbar</code>, <code>menu</code>, <code>pager</code>,
+<code>volume</code>).</li>
+<li><strong>expand</strong>: A general setting controlling panel space
+allocation (boolean represented by <code>0</code> or
+<code>1</code>).</li>
+<li><strong>Config</strong>: A nested sub-block containing
+plugin-specific settings and parameters.</li>
+</ul>
+<h2 id="storage-locations">Storage Locations</h2>
+<p>LXPanel does not maintain separate files for each individual plugin.
+Instead, the state of every plugin active on a panel is serialized into
+a single panel configuration file.</p>
+<ul>
+<li><p><strong>User Configuration:</strong><br />
+<code>~/.config/lxpanel/&lt;profile&gt;/panels/&lt;panel_name&gt;</code><br />
+<em>(For standard LXDE installations, this is typically
+<code>~/.config/lxpanel/LXDE/panels/panel</code>.)</em></p></li>
+<li><p><strong>System Defaults:</strong><br />
+<code>/etc/xdg/lxpanel/&lt;profile&gt;/panels/&lt;panel_name&gt;</code></p></li>
+</ul>
+<p>When a user modifies a plugin's settings via the graphical user
+interface, LXPanel writes the updated values directly into the
+corresponding user configuration file. If a user-specific configuration
+file does not exist, LXPanel falls back to the system default file
+located in <code>/etc/xdg/</code>.</p>
+<h2 id="manual-modification-and-behavior">Manual Modification and
+Behavior</h2>
+<p>Because the configuration uses standard plain text encoding, it can
+be edited with any standard text editor. However, LXPanel keeps its
+running state in memory:</p>
+<ol type="1">
+<li><strong>Overwrites on Exit:</strong> Modifying the file while
+LXPanel is running may cause changes to be overwritten when the panel
+process exits or updates its configuration.</li>
+<li><strong>Applying Changes:</strong> To edit configuration files
+manually, the LXPanel process should be stopped first, or the panel must
+be restarted using the command <code>lxpanelctl restart</code> after
+changes are saved to the file.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

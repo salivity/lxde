@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Replace LXSession with Another Session Manager - lxde</title>
+    <meta name="description" content="Yes, LXSession can be replaced with an alternative session manager or a simple startup script while continuing to use individual LXDE components. Because the Lightweight X11 Desktop Environment (LXDE) adheres strictly to the Unix philosophy of modularity,">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/replace-lx-session-with-another-session-manager">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Replace LXSession with Another Session Manager - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/replace-lx-session-with-another-session-manager" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Yes, LXSession can be replaced with an alternative session manager or a simple startup script while continuing to use individual LXDE components. Because the Lightweight X11 Desktop Environment (LXDE) adheres strictly to the Unix philosophy of modularity," />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="replace-lxsession-with-another-session-manager">Replace
+LXSession with Another Session Manager</h1>
+<p>Yes, LXSession can be replaced with an alternative session manager or
+a simple startup script while continuing to use individual LXDE
+components. Because the Lightweight X11 Desktop Environment (LXDE)
+adheres strictly to the Unix philosophy of modularity, its core
+utilities do not strictly depend on LXSession to function. This article
+outlines how session management works in LXDE, alternative session
+managers you can use, and how to preserve key desktop components like
+LXPanel and PCManFM under a new manager.</p>
+<h2 id="understanding-lxde-modularity">Understanding LXDE
+Modularity</h2>
+<p>LXSession is the standard session manager used in LXDE. Its primary
+responsibilities include:</p>
+<ul>
+<li>Running the window manager (typically Openbox).</li>
+<li>Initializing desktop settings via XSettings.</li>
+<li>Launching a PolicyKit agent (<code>lxpolkit</code>).</li>
+<li>Executing autostart programs defined in system and user
+configurations.</li>
+<li>Running power management utilities.</li>
+</ul>
+<p>The visual and functional parts of LXDE—such as <code>pcmanfm</code>
+(file manager and desktop icon handler) and <code>lxpanel</code>
+(taskbar and system tray)—are standalone X11 applications. They do not
+require <code>lxsession</code> to run; they only require an active X
+server, D-Bus, and a window manager.</p>
+<h2 id="suitable-alternatives-to-lxsession">Suitable Alternatives to
+LXSession</h2>
+<p>Depending on your workflow and system requirements, you can replace
+LXSession with:</p>
+<ul>
+<li><strong>Direct Xinit (<code>~/.xinitrc</code>):</strong> The
+simplest method. A standard shell script manages the lifecycle of your
+session, relying on the window manager to keep the X session alive.</li>
+<li><strong>Openbox Session (<code>openbox-session</code>):</strong>
+Uses Openbox’s native session launcher, executing background utilities
+via <code>~/.config/openbox/autostart</code>.</li>
+<li><strong>Xfce4 Session (<code>xfce4-session</code>):</strong>
+Provides a robust, standards-compliant session manager with integrated
+session saving and power control, while still allowing you to swap out
+default Xfce panels for LXPanel.</li>
+<li><strong>Systemd User Sessions:</strong> Manages graphical components
+as independent <code>systemd --user</code> services, improving crash
+recovery and process tracking.</li>
+</ul>
+<h2 id="how-to-set-up-an-alternative-session">How to Set Up an
+Alternative Session</h2>
+<p>To run an LXDE environment without LXSession, configure your chosen
+manager or startup script to execute the desktop elements manually.</p>
+<h3 id="example-using-xinitrc-or-openbox-autostart">Example: Using
+<code>.xinitrc</code> or Openbox Autostart</h3>
+<p>If you start your desktop via <code>startx</code> or use an
+Openbox-centric session, configure your startup file (such as
+<code>~/.xinitrc</code> or <code>~/.config/openbox/autostart</code>)
+with the following sequence:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Start a Polkit authentication agent (critical for root prompts)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">lxpolkit</span> <span class="kw">&amp;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Start the LXDE panel</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">lxpanel</span> <span class="kw">&amp;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Manage desktop icons and wallpaper with PCManFM</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">pcmanfm</span> <span class="at">--desktop</span> <span class="kw">&amp;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Optional: Notification daemon and power management</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">dunst</span> <span class="kw">&amp;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ex">xfce4-power-manager</span> <span class="kw">&amp;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Start the window manager (omit &#39;&amp;&#39; if in .xinitrc, as it keeps the session open)</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span> openbox</span></code></pre></div>
+<h2 id="caveats-and-missing-features">Caveats and Missing Features</h2>
+<p>Replacing LXSession requires manually addressing specific duties it
+handles automatically:</p>
+<ol type="1">
+<li><strong>PolicyKit Agent:</strong> LXSession starts
+<code>lxpolkit</code> automatically. Under a different session manager,
+ensure an authentication agent (<code>lxpolkit</code>,
+<code>mate-polkit</code>, or <code>polkit-gnome</code>) starts in the
+background to handle administrative authorization dialogs.</li>
+<li><strong>Session Termination and Logout:</strong> The default LXDE
+logout dialog (<code>lxsession-logout</code>) interacts directly with
+LXSession to trigger shutdowns, reboots, and logouts. Without LXSession,
+you will need to map your logout actions to the native commands of your
+new session manager or use system commands like <code>loginctl</code> or
+<code>systemctl</code>.</li>
+<li><strong>XSettings and Theming:</strong> LXSession applies GTK themes
+and font rendering settings via <code>lxsettings-daemon</code>. When
+replacing it, ensure your new session manager includes an XSettings
+daemon (like <code>xsettingsd</code>), or configure your GTK settings
+explicitly in <code>~/.config/gtk-3.0/settings.ini</code> and
+<code>~/.gtkrc-2.0</code>.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Add LXDE Panels to Multiple Monitors - lxde</title>
+    <meta name="description" content="Setting up independent panel instances across multiple monitors in LXDE allows you to access taskbars, system trays, and application launchers on every connected display. While the desktop environment defaults to a single primary panel, LXPanel supports r">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-add-lxde-panels-to-multiple-monitors">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Add LXDE Panels to Multiple Monitors - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-add-lxde-panels-to-multiple-monitors" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Setting up independent panel instances across multiple monitors in LXDE allows you to access taskbars, system trays, and application launchers on every connected display. While the desktop environment defaults to a single primary panel, LXPanel supports r" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-add-lxde-panels-to-multiple-monitors">How to Add LXDE
+Panels to Multiple Monitors</h1>
+<p>Setting up independent panel instances across multiple monitors in
+LXDE allows you to access taskbars, system trays, and application
+launchers on every connected display. While the desktop environment
+defaults to a single primary panel, LXPanel supports running multiple
+panel instances positioned across different monitor outputs. This guide
+outlines how to create and assign separate panels to secondary screens
+using both the graphical interface and manual configuration files.</p>
+<h2 id="method-1-using-the-graphical-interface">Method 1: Using the
+Graphical Interface</h2>
+<ol type="1">
+<li><strong>Create a New Panel</strong>: Right-click on any empty area
+of your existing panel and select <strong>Create New Panel</strong>. A
+blank panel will appear, typically placed at the top or bottom of your
+primary screen.</li>
+<li><strong>Open Panel Settings</strong>: Right-click the newly created
+panel and select <strong>Panel Settings</strong>.</li>
+<li><strong>Assign to a Monitor</strong>:
+<ul>
+<li>Navigate to the <strong>Geometry</strong> tab.</li>
+<li>Locate the <strong>Monitor</strong> setting (often labeled as an
+integer dropdown: <code>0</code>, <code>1</code>, etc.).</li>
+<li>Select the number corresponding to your target display (typically,
+<code>0</code> is the primary screen and <code>1</code> is the secondary
+display).</li>
+</ul></li>
+<li><strong>Adjust Placement</strong>: Set the <strong>Edge</strong>
+(e.g., Bottom, Top), alignment, and width according to your
+preference.</li>
+<li><strong>Add Plugins</strong>: Switch to the <strong>Panel
+Applets</strong> tab to add necessary components, such as a <strong>Task
+Bar (Window List)</strong>, <strong>Application Menu</strong>, or
+<strong>System Tray</strong>.</li>
+</ol>
+<h2 id="method-2-manual-configuration-file">Method 2: Manual
+Configuration File</h2>
+<p>If the graphical interface lacks the monitor selector in your version
+of LXPanel, configure it manually via configuration files.</p>
+<ol type="1">
+<li><p><strong>Navigate to the Panel Directory</strong>: Open a terminal
+and navigate to your user configuration directory:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/.config/lxpanel/LXDE/panels/</span></code></pre></div>
+<p><em>(Note: Replace <code>LXDE</code> with your active profile name if
+customized, such as <code>Lubuntu</code>.)</em></p></li>
+<li><p><strong>Create a New Panel File</strong>: Copy your existing
+panel configuration to a new file:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> panel panel_monitor2</span></code></pre></div></li>
+<li><p><strong>Edit the New Panel Configuration</strong>: Open
+<code>panel_monitor2</code> in a text editor:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> panel_monitor2</span></code></pre></div></li>
+<li><p><strong>Define the Monitor Index</strong>: Find the
+<code>Global</code> section at the top of the file and add or modify the
+<code>monitor</code> key:</p>
+<pre class="text"><code>Global {
+    edge=bottom
+    align=left
+    margin=0
+    widthtype=percent
+    width=100
+    height=24
+    transparent=0
+    setdocktype=1
+    setpartialstrut=1
+    monitor=1
+}</code></pre>
+<p>Set <code>monitor=0</code> for the primary monitor,
+<code>monitor=1</code> for the second monitor, and so on. Save and exit
+the editor.</p></li>
+<li><p><strong>Restart LXPanel</strong>: Apply the changes by restarting
+the panel service:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lxpanelctl</span> restart</span></code></pre></div></li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

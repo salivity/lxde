@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Display Manager Themes for the LXDE Desktop - lxde</title>
+    <meta name="description" content="Finding a display manager theme that matches the lightweight, retro-modern look of the Lightweight X11 Desktop Environment (LXDE) requires focusing on traditional GTK aesthetics. Because LXDE relies on classic styling—characterized by subtle gray tones, c">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/best-display-manager-themes-for-the-lxde-desktop">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Best Display Manager Themes for the LXDE Desktop - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/best-display-manager-themes-for-the-lxde-desktop" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Finding a display manager theme that matches the lightweight, retro-modern look of the Lightweight X11 Desktop Environment (LXDE) requires focusing on traditional GTK aesthetics. Because LXDE relies on classic styling—characterized by subtle gray tones, c" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="best-display-manager-themes-for-the-lxde-desktop">Best Display
+Manager Themes for the LXDE Desktop</h1>
+<p>Finding a display manager theme that matches the lightweight,
+retro-modern look of the Lightweight X11 Desktop Environment (LXDE)
+requires focusing on traditional GTK aesthetics. Because LXDE relies on
+classic styling—characterized by subtle gray tones, clean borders, and
+minimalist controls—the best visual match is LXDM using its default or
+Industrial theme, followed closely by LightDM configured with the GTK
+Greeter and a Clearlooks or Adwaita-based theme.</p>
+<h2 id="the-native-option-lxdm-with-the-industrial-theme">The Native
+Option: LXDM with the Industrial Theme</h2>
+<p>LXDM (Lightweight X11 Display Manager) is the official display
+manager developed directly alongside LXDE. Designed specifically to
+complement the desktop environment, its interface relies on the same
+GTK+ toolkits and design language.</p>
+<ul>
+<li><p><strong>Default / Industrial Theme:</strong> The default theme
+bundled with LXDM (often labeled "Industrial" or "Arch-Industrial" in
+various distributions) matches LXDE perfectly. It features a compact
+login bar at the bottom or center of the screen, subtle gradient
+shading, and standard GTK interface widgets.</p></li>
+<li><p><strong>Why it matches:</strong> It uses the same system fonts,
+cursor configurations, and color palettes as the default openbox-based
+LXDE window borders.</p></li>
+<li><p><strong>Configuration:</strong> You can set the theme in
+<code>/etc/lxdm/lxdm.conf</code> by defining:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[display]</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">theme</span><span class="ot">=</span><span class="st">Industrial</span></span></code></pre></div></li>
+</ul>
+<h2 id="the-flexible-alternative-lightdm-with-gtk-greeter">The Flexible
+Alternative: LightDM with GTK Greeter</h2>
+<p>Many distributions that ship with LXDE prefer using LightDM due to
+its cross-desktop stability. To make LightDM visually seamless with
+LXDE, the <strong>LightDM GTK+ Greeter</strong>
+(<code>lightdm-gtk-greeter</code>) is the correct component to use.</p>
+<ul>
+<li><p><strong>Clearlooks Theme:</strong> Setting the greeter's GTK
+theme to <strong>Clearlooks</strong> replicates the iconic default
+visual style of LXDE. Clearlooks features classic rectangular dialog
+boxes, slight beveled edges, and a pale gray color scheme.</p></li>
+<li><p><strong>Adwaita or Raleigh:</strong> Raleigh provides an
+ultra-minimal, raw GTK2 appearance, while Adwaita delivers a slightly
+modern, flat gray design that blends well with newer LXDE
+installations.</p></li>
+<li><p><strong>Configuration:</strong> Edit
+<code>/etc/lightdm/lightdm-gtk-greeter.conf</code> to align the theme
+and icon elements with LXDE:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[greeter]</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">theme-name </span><span class="ot">=</span><span class="st"> Clearlooks</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">icon-theme-name </span><span class="ot">=</span><span class="st"> NuoveXT2</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">font-name </span><span class="ot">=</span><span class="st"> Sans 10</span></span></code></pre></div></li>
+</ul>
+<h2 id="key-visual-elements-for-a-cohesive-look">Key Visual Elements for
+a Cohesive Look</h2>
+<p>To ensure whichever display manager you choose aligns with your LXDE
+desktop, match these specific design elements:</p>
+<ul>
+<li><strong>Color Palette:</strong> Stick to neutral, cool grays
+(<code>#ECE9D8</code> or <code>#D6D6D6</code>) for panels and window
+frames, paired with a solid dark blue or slate background
+(<code>#4A6984</code>).</li>
+<li><strong>Icon Set:</strong> Pair the display manager with
+<strong>NuoveXT 2</strong>, <strong>Tango</strong>, or
+<strong>GNOME</strong>, which are the standard icon themes deployed
+across traditional LXDE installs.</li>
+<li><strong>Layout Simplicity:</strong> Avoid fullscreen web-based or
+overly animated greeters (such as SDDM or LightDM Webkit). A simple
+horizontal bar or centered modal box best preserves the lightweight,
+functional aesthetic of LXDE.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

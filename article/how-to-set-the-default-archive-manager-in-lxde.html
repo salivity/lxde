@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Set the Default Archive Manager in LXDE - lxde</title>
+    <meta name="description" content="In the LXDE desktop environment, double-clicking a .zip file may launch an unexpected program or prompt you to select an application if a default tool is not assigned. This guide provides a straightforward walkthrough on how to set your preferred archive">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-set-the-default-archive-manager-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Set the Default Archive Manager in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-set-the-default-archive-manager-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In the LXDE desktop environment, double-clicking a .zip file may launch an unexpected program or prompt you to select an application if a default tool is not assigned. This guide provides a straightforward walkthrough on how to set your preferred archive" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-set-the-default-archive-manager-in-lxde">How to Set the
+Default Archive Manager in LXDE</h1>
+<p>In the LXDE desktop environment, double-clicking a <code>.zip</code>
+file may launch an unexpected program or prompt you to select an
+application if a default tool is not assigned. This guide provides a
+straightforward walkthrough on how to set your preferred archive
+utility—such as Xarchiver, Engrampa, or File Roller—as the default
+handler for ZIP archives using PCManFM, the native LXDE file manager, as
+well as through system configuration files.</p>
+<h2 id="method-1-using-the-pcmanfm-file-manager-gui">Method 1: Using the
+PCManFM File Manager (GUI)</h2>
+<p>The easiest way to associate ZIP files with an archive manager is
+directly through the file manager interface:</p>
+<ol type="1">
+<li>Open <strong>PCManFM</strong> and navigate to any directory
+containing a <code>.zip</code> file.</li>
+<li>Right-click the <code>.zip</code> file and select
+<strong>Properties</strong>.</li>
+<li>In the Properties window, find the <strong>Open with:</strong>
+dropdown menu or button.</li>
+<li>If your desired archive tool (e.g., Xarchiver) is listed, select
+it.</li>
+<li>If it is not listed, click <strong>Customized Command Line</strong>
+or browse the installed applications list under
+<strong>Accessories</strong> or <strong>System</strong>.</li>
+<li>Select your preferred archive utility.</li>
+<li>Ensure you check the box that says <strong>Set selected application
+as default action for this file type</strong> (or click <strong>Set as
+default</strong>).</li>
+<li>Click <strong>OK</strong> to save the changes.</li>
+</ol>
+<p>Alternatively, you can right-click the <code>.zip</code> file, hover
+over <strong>Open With...</strong>, select <strong>Choose
+Application</strong>, pick your archive utility, check the box to make
+it default, and confirm.</p>
+<h2 id="method-2-editing-the-mimeappslist-file-manual">Method 2: Editing
+the <code>mimeapps.list</code> File (Manual)</h2>
+<p>If you prefer using the terminal or want to apply the configuration
+directly via text configuration:</p>
+<ol type="1">
+<li><p>Open your terminal.</p></li>
+<li><p>Edit your user MIME associations file using your preferred text
+editor:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/mimeapps.list</span></code></pre></div></li>
+<li><p>Locate the <code>[Default Applications]</code> section. If it
+does not exist, create it.</p></li>
+<li><p>Add the line mapping the standard ZIP MIME types to your archive
+utility's <code>.desktop</code> file. For example:</p>
+<p><strong>For Xarchiver:</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Default Applications]</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">application/zip</span><span class="ot">=</span><span class="st">xarchiver.desktop</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">application/x-zip</span><span class="ot">=</span><span class="st">xarchiver.desktop</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">application/x-zip-compressed</span><span class="ot">=</span><span class="st">xarchiver.desktop</span></span></code></pre></div>
+<p><strong>For File Roller:</strong></p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Default Applications]</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">application/zip</span><span class="ot">=</span><span class="st">org.gnome.FileRoller.desktop</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">application/x-zip</span><span class="ot">=</span><span class="st">org.gnome.FileRoller.desktop</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">application/x-zip-compressed</span><span class="ot">=</span><span class="st">org.gnome.FileRoller.desktop</span></span></code></pre></div>
+<p><strong>For Engrampa:</strong></p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Default Applications]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">application/zip</span><span class="ot">=</span><span class="st">engrampa.desktop</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">application/x-zip</span><span class="ot">=</span><span class="st">engrampa.desktop</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">application/x-zip-compressed</span><span class="ot">=</span><span class="st">engrampa.desktop</span></span></code></pre></div></li>
+<li><p>Save and exit the file (in nano, press <code>Ctrl+O</code>,
+<code>Enter</code>, then <code>Ctrl+X</code>).</p></li>
+</ol>
+<p>Double-clicking any <code>.zip</code> file within PCManFM will now
+immediately open it in the specified archive manager.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

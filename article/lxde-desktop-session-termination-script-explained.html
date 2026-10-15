@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LXDE Desktop Session Termination Script Explained - lxde</title>
+    <meta name="description" content="When logging out of the Lightweight X11 Desktop Environment (LXDE), users often expect a predefined logout script to execute cleanup tasks or save application states. This article explains the exact sequence of events during an LXDE session shutdown, reve">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/lxde-desktop-session-termination-script-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LXDE Desktop Session Termination Script Explained - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/lxde-desktop-session-termination-script-explained" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When logging out of the Lightweight X11 Desktop Environment (LXDE), users often expect a predefined logout script to execute cleanup tasks or save application states. This article explains the exact sequence of events during an LXDE session shutdown, reve" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="lxde-desktop-session-termination-script-explained">LXDE Desktop
+Session Termination Script Explained</h1>
+<p>When logging out of the Lightweight X11 Desktop Environment (LXDE),
+users often expect a predefined logout script to execute cleanup tasks
+or save application states. This article explains the exact sequence of
+events during an LXDE session shutdown, reveals whether LXDE includes a
+native pre-termination script, identifies the system-level scripts
+triggered by display managers upon logout, and demonstrates how to
+execute custom scripts immediately prior to session termination.</p>
+<h2 id="does-lxde-have-a-native-pre-termination-script">Does LXDE Have a
+Native Pre-Termination Script?</h2>
+<p>By default, LXDE does not execute a built-in user shell script (such
+as a hypothetical <code>logout.sh</code> or <code>shutdown</code>)
+immediately prior to session termination.</p>
+<p>While LXDE provides an <code>autostart</code> file located at
+<code>~/.config/lxsession/LXDE/autostart</code> or
+<code>/etc/xdg/lxsession/LXDE/autostart</code> for initialization, it
+lacks an equivalent native configuration file for shutdown events.</p>
+<p>When a user initiates a logout, the following sequence occurs within
+LXDE:</p>
+<ol type="1">
+<li><strong><code>lxsession-logout</code> is called:</strong> This
+binary presents the shutdown, reboot, or logout GUI dialog.</li>
+<li><strong>Signal transmission:</strong> Once confirmed,
+<code>lxsession-logout</code> sends a D-Bus message or a termination
+signal to <code>lxsession</code>.</li>
+<li><strong>Process termination:</strong> <code>lxsession</code>
+terminates all child processes associated with the desktop session (such
+as <code>openbox</code> and <code>lxpanel</code>) and shuts itself
+down.</li>
+</ol>
+<p>Because this termination sequence is handled internally by the
+compiled <code>lxsession</code> binary, no shell script is invoked
+natively at the desktop environment level.</p>
+<h2 id="display-manager-scripts-that-run-on-termination">Display Manager
+Scripts That Run on Termination</h2>
+<p>While LXDE itself does not trigger a shutdown script, the underlying
+Display Manager (DM) controlling the X11 session executes specific
+cleanup scripts as the session closes.</p>
+<p>Depending on the display manager installed on the system, one of the
+following scripts executes immediately prior to or upon session
+termination:</p>
+<ul>
+<li><strong>LightDM:</strong> Runs the script defined by the
+<code>session-cleanup-script</code> directive inside
+<code>/etc/lightdm/lightdm.conf</code>. This script runs as
+<code>root</code> after the desktop session ends.</li>
+<li><strong>GDM (GNOME Display Manager):</strong> Executes
+<code>/etc/gdm/PostSession/Default</code> (or
+<code>/etc/gdm3/PostSession/Default</code> on Debian/Ubuntu systems)
+immediately after the session exits.</li>
+<li><strong>SDDM:</strong> Executes
+<code>/usr/share/sddm/scripts/Xstop</code> or
+<code>/etc/sddm/Xstop</code>.</li>
+<li><strong>XDM / Legacy X11:</strong> Executes
+<code>/etc/X11/xdm/Xreset</code> or <code>/etc/X11/Xreset</code>.</li>
+</ul>
+<p><em>Note: Display manager post-session scripts run with
+<code>root</code> privileges rather than the logged-in user's
+privileges.</em></p>
+<h2 id="how-to-run-a-custom-script-before-lxde-terminates">How to Run a
+Custom Script Before LXDE Terminates</h2>
+<p>If an automated script must run as the standard user immediately
+before LXDE shuts down, use one of the two standard implementations
+below.</p>
+<h3 id="method-1-wrapping-lxsession-logout">Method 1: Wrapping
+<code>lxsession-logout</code></h3>
+<p>Because LXDE invokes <code>/usr/bin/lxsession-logout</code> when
+logging out, replace or wrap this binary with a custom script:</p>
+<ol type="1">
+<li><p>Move the original binary:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mv /usr/bin/lxsession-logout /usr/bin/lxsession-logout.orig</span></code></pre></div></li>
+<li><p>Create a new <code>/usr/bin/lxsession-logout</code> wrapper
+script:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Run your pre-logout commands here</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> <span class="st">&quot;</span><span class="va">$HOME</span><span class="st">/.config/lxsession/LXDE/pre-logout.sh&quot;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">bash</span> <span class="st">&quot;</span><span class="va">$HOME</span><span class="st">/.config/lxsession/LXDE/pre-logout.sh&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass control back to the original logout binary</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span> /usr/bin/lxsession-logout.orig <span class="st">&quot;</span><span class="va">$@</span><span class="st">&quot;</span></span></code></pre></div></li>
+<li><p>Make the wrapper executable:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod +x /usr/bin/lxsession-logout</span></code></pre></div></li>
+</ol>
+<h3 id="method-2-trapping-signals-in-xsession-or-xinitrc">Method 2:
+Trapping Signals in <code>~/.xsession</code> or
+<code>~/.xinitrc</code></h3>
+<p>If launching LXDE via <code>startx</code> or an
+<code>.xsession</code> file, intercept the exit signal using a shell
+trap:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cleanup()</span> <span class="kw">{</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Commands to run prior to termination</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/path/to/cleanup-script.sh</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">trap</span> cleanup EXIT</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span> lxsession <span class="at">-s</span> LXDE <span class="at">-e</span> LXDE</span></code></pre></div>
+<p>When <code>lxsession</code> exits, the <code>cleanup</code> function
+triggers immediately before the shell process terminates the X
+server.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

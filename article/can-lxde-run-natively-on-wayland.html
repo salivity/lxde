@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can LXDE Run Natively on Wayland? - lxde</title>
+    <meta name="description" content="The Lightweight X11 Desktop Environment (LXDE) cannot run natively on top of the Wayland display server protocol. Because LXDE was designed strictly around the X Window System architecture and relies on obsolete toolkits, it lacks the technical framework">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/can-lxde-run-natively-on-wayland">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Can LXDE Run Natively on Wayland? - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/can-lxde-run-natively-on-wayland" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Lightweight X11 Desktop Environment (LXDE) cannot run natively on top of the Wayland display server protocol. Because LXDE was designed strictly around the X Window System architecture and relies on obsolete toolkits, it lacks the technical framework" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="can-lxde-run-natively-on-wayland">Can LXDE Run Natively on
+Wayland?</h1>
+<p>The Lightweight X11 Desktop Environment (LXDE) cannot run natively on
+top of the Wayland display server protocol. Because LXDE was designed
+strictly around the X Window System architecture and relies on obsolete
+toolkits, it lacks the technical framework required to operate directly
+as a Wayland session. Users looking for a lightweight, modern equivalent
+must instead look toward its successor, LXQt, or lightweight Wayland
+compositors.</p>
+<h2 id="architectural-barriers-to-wayland-support">Architectural
+Barriers to Wayland Support</h2>
+<p>LXDE's inability to run natively on Wayland stems from three core
+technical factors:</p>
+<ul>
+<li><strong>Reliance on GTK 2:</strong> LXDE is fundamentally built
+using GTK 2. Wayland support was only introduced in GTK 3 and refined in
+GTK 4. Because GTK 2 has no Wayland backend and reached end-of-life
+years ago, applications built on it cannot communicate natively with a
+Wayland compositor.</li>
+<li><strong>The Openbox Window Manager:</strong> LXDE uses Openbox as
+its default window manager. Openbox is strictly an X11 window manager.
+In Wayland, the display server and the compositor are merged into a
+single entity. Openbox cannot act as a Wayland compositor, meaning the
+core window management component of LXDE cannot run in a native Wayland
+environment.</li>
+<li><strong>Direct X11 Calls:</strong> Core desktop components,
+including <code>lxpanel</code>, <code>lxsession</code>, and
+<code>pcmanfm</code>, make direct calls to X11 protocols (Xlib). These
+utilities depend on specific X11 concepts—such as global coordinate
+systems, root windows, and system trays—that are deliberately
+unsupported or implemented differently under Wayland for security
+reasons.</li>
+</ul>
+<h2 id="running-lxde-via-xwayland">Running LXDE via XWayland</h2>
+<p>While individual GTK 2 and X11 applications can run inside a Wayland
+session using the XWayland compatibility layer, running the entire LXDE
+desktop environment this way is neither native nor practical.</p>
+<p>XWayland is designed to run isolated client windows within an
+existing Wayland compositor, not to manage root windows, screen layouts,
+or desktop panels. Attempting to launch an entire traditional X11
+desktop environment inside XWayland causes conflicts between the
+underlying Wayland compositor and the X11 window manager, leading to
+session instability and defeating the performance and security benefits
+of Wayland.</p>
+<h2 id="modern-alternatives-to-lxde-on-wayland">Modern Alternatives to
+LXDE on Wayland</h2>
+<p>Because active development of LXDE has largely ceased, native Wayland
+support will not be added to the project. Users seeking a similar
+lightweight experience on Wayland have other options:</p>
+<ul>
+<li><strong>LXQt:</strong> The official successor to LXDE, created by
+merging LXDE with Razor-qt. Built on the modern Qt toolkit, LXQt
+features native Wayland support and can be paired with lightweight
+Wayland compositors like Labwc or Wayfire.</li>
+<li><strong>Labwc:</strong> A Wayland window-stacking compositor
+inspired by Openbox. It uses wlroots and provides an Openbox-like
+configuration system, making it the closest direct modern alternative
+for Openbox and LXDE users transitioning to Wayland.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

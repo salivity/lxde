@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Replace LXPanel with XFCE Panel in LXDE - lxde</title>
+    <meta name="description" content="The XFCE panel can successfully run inside an LXDE desktop session as a complete replacement for the default LXPanel. Because both desktop environments are built around modular components and the GTK toolkit, swapping out the panel allows you to take adva">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-replace-lx-panel-with-xfce-panel-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Replace LXPanel with XFCE Panel in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-replace-lx-panel-with-xfce-panel-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The XFCE panel can successfully run inside an LXDE desktop session as a complete replacement for the default LXPanel. Because both desktop environments are built around modular components and the GTK toolkit, swapping out the panel allows you to take adva" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-replace-lxpanel-with-xfce-panel-in-lxde">How to Replace
+LXPanel with XFCE Panel in LXDE</h1>
+<p>The XFCE panel can successfully run inside an LXDE desktop session as
+a complete replacement for the default LXPanel. Because both desktop
+environments are built around modular components and the GTK toolkit,
+swapping out the panel allows you to take advantage of XFCE’s superior
+customization, theming, and extensive plugin library while maintaining
+LXDE's minimal memory footprint.</p>
+<h3 id="step-1-install-the-xfce-panel">Step 1: Install the XFCE
+Panel</h3>
+<p>First, install the panel package and its standard plugins from your
+distribution's package repositories.</p>
+<p>On Debian, Ubuntu, or Raspberry Pi OS:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install xfce4-panel xfce4-goodies</span></code></pre></div>
+<p>On Fedora:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dnf install xfce4-panel xfce4-panel-plugins</span></code></pre></div>
+<p>On Arch Linux:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> pacman <span class="at">-S</span> xfce4-panel xfce4-goodies</span></code></pre></div>
+<h3 id="step-2-test-the-panel-in-real-time">Step 2: Test the Panel in
+Real Time</h3>
+<p>Before modifying configuration files, verify that the panel runs
+properly in your current session. Open a terminal and stop the running
+LXPanel instance:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">killall</span> lxpanel</span></code></pre></div>
+<p>Then, launch the XFCE panel in the background:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xfce4-panel</span> <span class="kw">&amp;</span></span></code></pre></div>
+<p>The XFCE panel will appear on your screen, often asking whether to
+use a default layout or an empty configuration. Choose the default setup
+to verify functionality.</p>
+<h3 id="step-3-make-the-change-permanent">Step 3: Make the Change
+Permanent</h3>
+<p>To prevent LXPanel from launching at login and ensure
+<code>xfce4-panel</code> starts automatically, modify the LXDE autostart
+configuration.</p>
+<ol type="1">
+<li><p>Create a user-specific configuration directory if it does not
+already exist:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.config/lxsession/LXDE/</span></code></pre></div></li>
+<li><p>Copy the system-wide LXDE autostart file to your user
+profile:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /etc/xdg/lxsession/LXDE/autostart ~/.config/lxsession/LXDE/autostart</span></code></pre></div></li>
+<li><p>Open the file in a text editor:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/lxsession/LXDE/autostart</span></code></pre></div></li>
+<li><p>Locate the line that starts the default panel:</p>
+<pre class="text"><code>@lxpanel --profile LXDE</code></pre></li>
+<li><p>Replace that line with:</p>
+<pre class="text"><code>@xfce4-panel</code></pre></li>
+<li><p>Save and exit the editor (press <code>CTRL+O</code>,
+<code>Enter</code>, and then <code>CTRL+X</code> in nano).</p></li>
+</ol>
+<h3 id="considerations">Considerations</h3>
+<ul>
+<li><strong>Key Bindings:</strong> Application shortcut keys defined in
+Openbox (<code>~/.config/openbox/lxde-rc.xml</code>) will continue to
+work normally, but applet-specific shortcuts (like panel menus) should
+now be configured inside the XFCE panel preferences.</li>
+<li><strong>System Tray:</strong> The XFCE notification area (systray)
+automatically captures LXDE background utilities, including network and
+volume applets, without requiring additional configuration.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/lxde'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
