@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can PCManFM Display Directory Sizes Dynamically? - lxde</title>
+    <meta name="description" content="PCManFM does not compute and display recursive directory sizes dynamically in its standard file view, primarily because LXDE is engineered to minimize system resource usage. Instead of showing the cumulative size of a folder&#39;s contents, the file manager d">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/can-pc-man-fm-display-directory-sizes-dynamically">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Can PCManFM Display Directory Sizes Dynamically? - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/can-pc-man-fm-display-directory-sizes-dynamically" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="PCManFM does not compute and display recursive directory sizes dynamically in its standard file view, primarily because LXDE is engineered to minimize system resource usage. Instead of showing the cumulative size of a folder&#39;s contents, the file manager d" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="can-pcmanfm-display-directory-sizes-dynamically">Can PCManFM
+Display Directory Sizes Dynamically?</h1>
+<p>PCManFM does not compute and display recursive directory sizes
+dynamically in its standard file view, primarily because LXDE is
+engineered to minimize system resource usage. Instead of showing the
+cumulative size of a folder's contents, the file manager defaults to
+showing either the number of contained items or the standard filesystem
+block allocation (typically 4 KB on Linux filesystems). Users seeking
+folder size information must rely on manual property queries or
+specialized disk analysis utilities.</p>
+<h3 id="dynamic-directory-sizing-in-pcmanfm">Dynamic Directory Sizing in
+PCManFM</h3>
+<p>Dynamic calculation of directory sizes requires the operating system
+to recursively scan every subdirectory and file inside a folder. For
+deeply nested structures or networked drives, this operation causes
+severe disk I/O bottlenecks and high CPU utilization.</p>
+<p>Because LXDE and PCManFM are specifically designed for low-spec
+hardware and maximum responsiveness, PCManFM omits continuous background
+size calculation in the main detailed list view. There is no hidden
+toggle or configuration flag to enable automatic, on-the-fly total
+directory sizes in the primary file browsing panes.</p>
+<h3 id="viewing-directory-sizes-manually">Viewing Directory Sizes
+Manually</h3>
+<p>While PCManFM does not calculate total sizes automatically across all
+listed folders, you can still check individual directory sizes
+manually:</p>
+<ol type="1">
+<li>Right-click the desired folder in PCManFM.</li>
+<li>Select <strong>Properties</strong> from the context menu (or press
+<strong>Alt + Enter</strong>).</li>
+<li>The Properties dialog will scan the folder recursively and display
+the <strong>Total size of files</strong> alongside the count of files
+and subdirectories.</li>
+</ol>
+<h3 id="alternatives-for-real-time-folder-size-analysis">Alternatives
+for Real-Time Folder Size Analysis</h3>
+<p>If continuous directory size tracking is required for your workflow,
+alternative tools integrated alongside LXDE offer better solutions:</p>
+<ul>
+<li><strong>NCurses Disk Usage (<code>ncdu</code>)</strong>: A fast,
+terminal-based utility that scans directories and presents interactive,
+dynamically computed folder sizes with minimal resource overhead.</li>
+<li><strong>Disk Usage Analyzer (<code>baobab</code>)</strong>: A
+graphical tool available in most Linux distributions that maps and
+calculates directory hierarchies visually.</li>
+<li><strong>Alternative Lightweight File Managers</strong>: File
+managers such as SpaceFM (a fork of PCManFM) offer more granular
+configuration options, though dynamic recursive scanning is still
+typically limited or throttled to prevent performance degradation.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/can-pc-man-fm-display-directory-sizes-dynamically';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

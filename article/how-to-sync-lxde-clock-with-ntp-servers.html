@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Sync LXDE Clock with NTP Servers - lxde</title>
+    <meta name="description" content="This guide provides a straightforward walkthrough for synchronizing the LXDE desktop system clock with internet Network Time Protocol (NTP) servers. Because the Lightweight X11 Desktop Environment (LXDE) relies on the underlying Linux operating system for">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-sync-lxde-clock-with-ntp-servers">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Sync LXDE Clock with NTP Servers - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-sync-lxde-clock-with-ntp-servers" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide provides a straightforward walkthrough for synchronizing the LXDE desktop system clock with internet Network Time Protocol (NTP) servers. Because the Lightweight X11 Desktop Environment (LXDE) relies on the underlying Linux operating system for" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-sync-lxde-clock-with-ntp-servers">How to Sync LXDE Clock
+with NTP Servers</h1>
+<p>This guide provides a straightforward walkthrough for synchronizing
+the LXDE desktop system clock with internet Network Time Protocol (NTP)
+servers. Because the Lightweight X11 Desktop Environment (LXDE) relies
+on the underlying Linux operating system for timekeeping, enabling NTP
+ensures your panel clock remains permanently accurate without requiring
+manual adjustments.</p>
+<h3 id="step-1-enable-synchronization-via-systemd-timesyncd">Step 1:
+Enable Synchronization via systemd-timesyncd</h3>
+<p>Most modern Linux distributions using LXDE (such as Debian, Ubuntu,
+or Raspberry Pi OS) utilize <code>systemd</code> to manage time
+synchronization.</p>
+<p>Open your terminal from the LXDE application menu or by pressing
+<code>Ctrl + Alt + T</code>, then run the following command to enable
+NTP:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> timedatectl set-ntp true</span></code></pre></div>
+<h3 id="step-2-verify-the-synchronization-status">Step 2: Verify the
+Synchronization Status</h3>
+<p>To verify that the system is actively communicating with an NTP
+server, run:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">timedatectl</span> status</span></code></pre></div>
+<p>Check the output for the following lines:</p>
+<ul>
+<li><strong>NTP service:</strong> active (or
+<code>Network time on: yes</code>)</li>
+<li><strong>System clock synchronized:</strong> yes</li>
+</ul>
+<p>If both lines are confirmed, your system time is actively syncing
+with default internet time servers.</p>
+<h3 id="step-3-configure-custom-ntp-servers-optional">Step 3: Configure
+Custom NTP Servers (Optional)</h3>
+<p>If you need to use specific NTP servers (such as local regional pools
+or internal network time servers), edit the <code>timesyncd</code>
+configuration file:</p>
+<ol type="1">
+<li><p>Open the configuration file in a text editor:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/systemd/timesyncd.conf</span></code></pre></div></li>
+<li><p>Locate the <code>[Time]</code> section. Uncomment the
+<code>NTP=</code> line by removing the <code>#</code> and add your
+preferred NTP servers separated by spaces:</p>
+<pre class="text"><code>[Time]
+NTP=pool.ntp.org time.google.com time.cloudflare.com</code></pre></li>
+<li><p>Save the file (<code>Ctrl + O</code>, then <code>Enter</code>)
+and exit the editor (<code>Ctrl + X</code>).</p></li>
+<li><p>Restart the service to apply the changes:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart systemd-timesyncd</span></code></pre></div></li>
+</ol>
+<h3 id="step-4-alternative-method-using-chrony">Step 4: Alternative
+Method Using Chrony</h3>
+<p>If your distribution does not use <code>systemd-timesyncd</code>, you
+can use <code>chrony</code>, a robust NTP client suited for systems with
+intermittent internet connections.</p>
+<ol type="1">
+<li><p>Install chrony:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install chrony</span></code></pre></div></li>
+<li><p>Enable and start the chrony service:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl enable <span class="at">--now</span> chrony</span></code></pre></div></li>
+<li><p>Check the tracking status:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">chronyc</span> tracking</span></code></pre></div></li>
+</ol>
+<h3 id="step-5-adjust-the-lxde-panel-display">Step 5: Adjust the LXDE
+Panel Display</h3>
+<p>Once the underlying system clock is synchronized, verify that the
+LXDE taskbar clock displays the correct local time:</p>
+<ol type="1">
+<li><p>Right-click the digital clock on the LXDE panel.</p></li>
+<li><p>Select <strong>"Digital Clock" Settings</strong>.</p></li>
+<li><p>Ensure your system timezone is correct. If the time is offset by
+hours, set the correct timezone via terminal using:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> timedatectl set-timezone Your_Region/Your_City</span></code></pre></div>
+<p><em>(Example:
+<code>sudo timedatectl set-timezone America/New_York</code>)</em></p></li>
+</ol>
+<p>The LXDE panel will automatically refresh to show the precise
+synchronized network time.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/how-to-sync-lxde-clock-with-ntp-servers';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

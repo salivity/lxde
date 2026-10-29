@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sync LXDE Panel Calendar with External Calendars - lxde</title>
+    <meta name="description" content="The default LXDE panel (lxpanel) features a lightweight digital clock applet with a built-in GTK calendar that lacks native network capabilities or CalDAV support. To sync this panel calendar with external providers like Google Calendar, Nextcloud, or Mic">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/sync-lxde-panel-calendar-with-external-calendars">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sync LXDE Panel Calendar with External Calendars - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/sync-lxde-panel-calendar-with-external-calendars" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The default LXDE panel (lxpanel) features a lightweight digital clock applet with a built-in GTK calendar that lacks native network capabilities or CalDAV support. To sync this panel calendar with external providers like Google Calendar, Nextcloud, or Mic" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="sync-lxde-panel-calendar-with-external-calendars">Sync LXDE
+Panel Calendar with External Calendars</h1>
+<p>The default LXDE panel (<code>lxpanel</code>) features a lightweight
+digital clock applet with a built-in GTK calendar that lacks native
+network capabilities or CalDAV support. To sync this panel calendar with
+external providers like Google Calendar, Nextcloud, or Microsoft
+Outlook, you must configure the digital clock applet to trigger a
+synchronized calendar client—such as <code>khal</code> or a
+browser-based calendar—using background synchronization tools like
+<code>vdirsyncer</code>. This guide details how to configure the sync
+backend and route LXPanel's click action to display your external
+events.</p>
+<h3 id="step-1-install-synchronization-tools">Step 1: Install
+Synchronization Tools</h3>
+<p>Because LXPanel cannot communicate directly with remote CalDAV
+servers, you need a local synchronization utility and a lightweight
+viewer. The standard approach on lightweight Linux distributions uses
+<code>vdirsyncer</code> (to sync CalDAV) and <code>khal</code> (a
+lightweight console calendar):</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install vdirsyncer khal</span></code></pre></div>
+<h3 id="step-2-configure-caldav-synchronization-with-vdirsyncer">Step 2:
+Configure CalDAV Synchronization with vdirsyncer</h3>
+<p>Create the configuration directory and file for
+<code>vdirsyncer</code>:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.config/vdirsyncer</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/vdirsyncer/config</span></code></pre></div>
+<p>Add your calendar configuration (example using a standard CalDAV
+provider):</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[general]</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">status_path </span><span class="ot">=</span><span class="st"> &quot;~/.local/share/vdirsyncer/status&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[pair remote_calendar]</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dt">a </span><span class="ot">=</span><span class="st"> &quot;local_calendar&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="dt">b </span><span class="ot">=</span><span class="st"> &quot;cloud_calendar&quot;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="dt">collections </span><span class="ot">=</span><span class="st"> [&quot;from a&quot;, &quot;from b&quot;]</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">[storage local_calendar]</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="dt">type </span><span class="ot">=</span><span class="st"> &quot;filesystem&quot;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="dt">path </span><span class="ot">=</span><span class="st"> &quot;~/.local/share/calendars/&quot;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="dt">fileext </span><span class="ot">=</span><span class="st"> &quot;.ics&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="kw">[storage cloud_calendar]</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="dt">type </span><span class="ot">=</span><span class="st"> &quot;caldav&quot;</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="dt">url </span><span class="ot">=</span><span class="st"> &quot;https://example.com/remote.php/dav/&quot;</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="dt">username </span><span class="ot">=</span><span class="st"> &quot;your_username&quot;</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="dt">password </span><span class="ot">=</span><span class="st"> &quot;your_password&quot;</span></span></code></pre></div>
+<p>Initialize the storage pair and perform the first sync:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vdirsyncer</span> discover</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vdirsyncer</span> sync</span></code></pre></div>
+<h3 id="step-3-configure-khal-to-read-the-synced-data">Step 3: Configure
+khal to Read the Synced Data</h3>
+<p>Initialize <code>khal</code> configuration to read the local
+<code>.ics</code> files downloaded by <code>vdirsyncer</code>:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.config/khal</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/khal/config</span></code></pre></div>
+<p>Insert the following basic configuration:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[calendars]</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[[my_calendar]</span><span class="dt">]</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="dt">path </span><span class="ot">=</span><span class="st"> ~/.local/share/calendars/*</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="dt">type </span><span class="ot">=</span><span class="st"> discover</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">[locale]</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="dt">timeformat </span><span class="ot">=</span><span class="st"> %H:%M</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="dt">dateformat </span><span class="ot">=</span><span class="st"> %Y-%m-%d</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="dt">longdateformat </span><span class="ot">=</span><span class="st"> %Y-%m-%d</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="dt">datetimeformat </span><span class="ot">=</span><span class="st"> %Y-%m-%d %H:%M</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="dt">longdatetimeformat </span><span class="ot">=</span><span class="st"> %Y-%m-%d %H:%M</span></span></code></pre></div>
+<h3 id="step-4-automate-background-sync">Step 4: Automate Background
+Sync</h3>
+<p>Keep the calendar up to date by creating a user cron job:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">crontab</span> <span class="at">-e</span></span></code></pre></div>
+<p>Add the following line to sync events every 15 minutes:</p>
+<pre class="text"><code>*/15 * * * * /usr/bin/vdirsyncer sync &gt;/dev/null 2&gt;&amp;1</code></pre>
+<h3 id="step-5-configure-the-lxde-panel-clock">Step 5: Configure the
+LXDE Panel Clock</h3>
+<p>Once synchronization is functioning, modify LXPanel so clicking the
+clock displays your synced events instead of the static default
+calendar.</p>
+<ol type="1">
+<li>Right-click the <strong>Digital Clock</strong> on your LXDE
+taskbar.</li>
+<li>Select <strong>"Digital Clock" Settings</strong>.</li>
+<li>Locate the <strong>Action</strong> text box (the command executed
+when the clock is clicked).</li>
+<li>Enter your preferred viewing command:
+<ul>
+<li><p><strong>For an interactive terminal interface:</strong></p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lxterminal</span> <span class="at">-e</span> khal interactive</span></code></pre></div></li>
+<li><p><strong>For a quick pop-up agenda notification:</strong></p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> <span class="at">-c</span> <span class="st">&quot;notify-send &#39;Upcoming Events&#39; </span><span class="dt">\&quot;\$</span><span class="st">(khal list now 7d)</span><span class="dt">\&quot;</span><span class="st">&quot;</span></span></code></pre></div></li>
+<li><p><strong>For launching a web-based provider directly (e.g., Google
+Calendar):</strong></p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">xdg-open</span> https://calendar.google.com</span></code></pre></div></li>
+</ul></li>
+<li>Click <strong>OK</strong> to save the changes.</li>
+</ol>
+<p>When you left-click the time on your LXDE panel, the configured
+command will immediately display your up-to-date, externally
+synchronized events.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/sync-lxde-panel-calendar-with-external-calendars';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Customize the LXDE Right-Click Menu - lxde</title>
+    <meta name="description" content="Customizing the right-click desktop context menu in the Lightweight X11 Desktop Environment (LXDE) allows you to quickly launch favorite applications, execute scripts, and streamline your workflow. By default, the desktop is handled by the PCManFM file ma">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-customize-the-lxde-right-click-menu">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Customize the LXDE Right-Click Menu - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-customize-the-lxde-right-click-menu" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Customizing the right-click desktop context menu in the Lightweight X11 Desktop Environment (LXDE) allows you to quickly launch favorite applications, execute scripts, and streamline your workflow. By default, the desktop is handled by the PCManFM file ma" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-customize-the-lxde-right-click-menu">How to Customize the
+LXDE Right-Click Menu</h1>
+<p>Customizing the right-click desktop context menu in the Lightweight
+X11 Desktop Environment (LXDE) allows you to quickly launch favorite
+applications, execute scripts, and streamline your workflow. By default,
+the desktop is handled by the PCManFM file manager, which provides a
+standard desktop management menu. To fully customize this menu, you must
+enable the underlying Openbox window manager menu and edit its
+configuration files. This guide walks you through enabling the Openbox
+root menu, modifying its XML configuration, and applying the changes
+immediately.</p>
+<h3 id="step-1-enable-the-openbox-menu-on-the-desktop">Step 1: Enable
+the Openbox Menu on the Desktop</h3>
+<p>By default, PCManFM intercepts desktop clicks to show its own layout
+menu. You need to tell PCManFM to allow Openbox to handle desktop
+clicks:</p>
+<ol type="1">
+<li>Open a terminal or the LXDE application menu.</li>
+<li>Launch <strong>Desktop Preferences</strong> (or run
+<code>pcmanfm --desktop-pref</code> in a terminal).</li>
+<li>Navigate to the <strong>Advanced</strong> tab.</li>
+<li>Check the box labeled <strong>"Show menus provided by window
+managers when desktop is clicked"</strong>.</li>
+<li>Click <strong>Close</strong>.</li>
+</ol>
+<p>Now, right-clicking on an empty space on the desktop will display the
+Openbox root menu instead of the standard PCManFM options.</p>
+<h3 id="step-2-locate-or-create-the-menu-configuration-file">Step 2:
+Locate or Create the Menu Configuration File</h3>
+<p>The Openbox menu is defined by an XML file named
+<code>menu.xml</code>. To customize it safely without affecting other
+users, work with a local copy in your home directory:</p>
+<ol type="1">
+<li><p>Open a terminal.</p></li>
+<li><p>Ensure the configuration directory exists:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.config/openbox</span></code></pre></div></li>
+<li><p>Copy the system-wide menu file to your user directory if you do
+not already have one:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /etc/xdg/openbox/menu.xml ~/.config/openbox/menu.xml</span></code></pre></div>
+<p><em>(Note: On some distributions, the base file may be located at
+<code>/etc/xdg/openbox/lxde-rc.xml</code> or
+<code>/etc/xdg/openbox/menu.xml</code>).</em></p></li>
+</ol>
+<h3 id="step-3-edit-the-menuxml-file">Step 3: Edit the
+<code>menu.xml</code> File</h3>
+<p>Open the configuration file in your preferred text editor:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/openbox/menu.xml</span></code></pre></div>
+<p>To add custom application launchers or scripts, insert an
+<code>&lt;item&gt;</code> block inside the
+<code>&lt;menu id="root-menu" label="Openbox 3"&gt;</code> tags.</p>
+<h4 id="example-adding-a-custom-application">Example: Adding a Custom
+Application</h4>
+<p>To add a direct link to launch the Firefox web browser, insert the
+following block:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">item</span> <span class="ot">label=</span><span class="st">&quot;Firefox Web Browser&quot;</span>&gt;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;Execute&quot;</span>&gt;</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">command</span>&gt;firefox&lt;/<span class="kw">command</span>&gt;</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">action</span>&gt;</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">item</span>&gt;</span></code></pre></div>
+<h4 id="example-adding-a-custom-script-or-terminal-command">Example:
+Adding a Custom Script or Terminal Command</h4>
+<p>To add an entry that opens a terminal with a specific command:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">item</span> <span class="ot">label=</span><span class="st">&quot;System Update&quot;</span>&gt;</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;Execute&quot;</span>&gt;</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">command</span>&gt;lxterminal -e &quot;sudo apt update <span class="dv">&amp;amp;&amp;amp;</span> sudo apt upgrade&quot;&lt;/<span class="kw">command</span>&gt;</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">action</span>&gt;</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">item</span>&gt;</span></code></pre></div>
+<h4 id="example-adding-a-submenu">Example: Adding a Submenu</h4>
+<p>To group items together, use the <code>&lt;menu&gt;</code> tag:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">menu</span> <span class="ot">id=</span><span class="st">&quot;custom-tools&quot;</span> <span class="ot">label=</span><span class="st">&quot;Quick Tools&quot;</span>&gt;</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">item</span> <span class="ot">label=</span><span class="st">&quot;File Manager&quot;</span>&gt;</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;Execute&quot;</span>&gt;</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">command</span>&gt;pcmanfm&lt;/<span class="kw">command</span>&gt;</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">action</span>&gt;</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">item</span>&gt;</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">item</span> <span class="ot">label=</span><span class="st">&quot;Text Editor&quot;</span>&gt;</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;Execute&quot;</span>&gt;</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">command</span>&gt;leafpad&lt;/<span class="kw">command</span>&gt;</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">action</span>&gt;</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">item</span>&gt;</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">menu</span>&gt;</span></code></pre></div>
+<p>Save the file and exit the editor (in Nano, press
+<code>Ctrl + O</code>, <code>Enter</code>, then
+<code>Ctrl + X</code>).</p>
+<h3 id="step-4-reload-the-menu">Step 4: Reload the Menu</h3>
+<p>Apply your changes without logging out by running the following
+command in the terminal:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openbox</span> <span class="at">--reconfigure</span></span></code></pre></div>
+<p>Right-click on your desktop, and your newly defined context menu
+items will appear immediately.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/how-to-customize-the-lxde-right-click-menu';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

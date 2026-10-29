@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LXDE Desktop Freezes: Key Log Files to Inspect - lxde</title>
+    <meta name="description" content="When an LXDE desktop freezes completely, the issue typically stems from graphics driver failures, display server crashes, out-of-memory conditions, or kernel-level hardware faults. Because a total system lockup often requires a hard reboot, diagnosing the">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/lxde-desktop-freezes-key-log-files-to-inspect">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LXDE Desktop Freezes: Key Log Files to Inspect - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/lxde-desktop-freezes-key-log-files-to-inspect" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When an LXDE desktop freezes completely, the issue typically stems from graphics driver failures, display server crashes, out-of-memory conditions, or kernel-level hardware faults. Because a total system lockup often requires a hard reboot, diagnosing the" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="lxde-desktop-freezes-key-log-files-to-inspect">LXDE Desktop
+Freezes: Key Log Files to Inspect</h1>
+<p>When an LXDE desktop freezes completely, the issue typically stems
+from graphics driver failures, display server crashes, out-of-memory
+conditions, or kernel-level hardware faults. Because a total system
+lockup often requires a hard reboot, diagnosing the problem depends on
+analyzing persistent logs recorded right before the freeze occurred. The
+following log files and utilities are the most critical to inspect to
+identify the root cause of the crash.</p>
+<h3 id="1-the-xorg-display-server-log">1. The Xorg Display Server
+Log</h3>
+<p>LXDE runs on the X Window System, making the Xorg log the primary
+place to look for graphical crashes and GPU driver failures.</p>
+<ul>
+<li><strong>File Locations:</strong>
+<ul>
+<li><code>/var/log/Xorg.0.log</code> (standard system-wide
+location)</li>
+<li><code>~/.local/share/xorg/Xorg.0.log</code> (if running rootless
+Xorg)</li>
+<li>Check <code>.old</code> versions (e.g., <code>Xorg.0.log.old</code>)
+if you have already rebooted.</li>
+</ul></li>
+<li><strong>What to Look For:</strong> Lines flagged with
+<code>(EE)</code> denote errors, while <code>(WW)</code> denotes
+warnings. Look for GPU resets, segmentation faults in the window manager
+(Openbox), or input driver errors (evdev, libinput) immediately
+preceding the timestamp of the freeze.</li>
+</ul>
+<h3 id="2-systemd-journal-previous-boot">2. Systemd Journal (Previous
+Boot)</h3>
+<p>If your distribution uses <code>systemd</code> (such as Debian,
+Raspberry Pi OS, or Lubuntu), the <code>journalctl</code> utility
+provides a unified view of all system events up to the moment of the
+crash.</p>
+<ul>
+<li><strong>Command:</strong> <code>journalctl -b -1 -e</code></li>
+<li><strong>What to Look For:</strong>
+<ul>
+<li>The <code>-b -1</code> flag targets the previous boot session, and
+<code>-e</code> jumps to the end of the log where the freeze
+occurred.</li>
+<li>Look for <strong>Out of Memory (OOM) Killer</strong> events
+(<code>invoked oom-killer</code>), which freeze desktop sessions when
+RAM and swap are exhausted.</li>
+<li>Search for segmentation faults (<code>segfault</code>) involving
+core LXDE components like <code>lxpanel</code>, <code>pcmanfm</code>, or
+<code>openbox</code>.</li>
+</ul></li>
+</ul>
+<h3 id="3-kernel-logs-and-hardware-events">3. Kernel Logs and Hardware
+Events</h3>
+<p>Kernel panics, hardware timeouts, and device communication drops can
+cause the desktop interface to become completely unresponsive.</p>
+<ul>
+<li><strong>Command:</strong> <code>journalctl -k -b -1</code> or
+inspecting <code>/var/log/dmesg</code></li>
+<li><strong>What to Look For:</strong>
+<ul>
+<li>GPU hang warnings (such as <code>i915</code>, <code>amdgpu</code>,
+or <code>nouveau</code> DRM error messages).</li>
+<li>Storage I/O errors (<code>Buffer I/O error</code> or
+<code>EXT4-fs error</code>), which cause desktop operations to stall
+indefinitely when trying to read or write disk data.</li>
+</ul></li>
+</ul>
+<h3 id="4-user-session-errors">4. User Session Errors</h3>
+<p>Standard output and standard error from desktop session components
+are directed to user-level log files.</p>
+<ul>
+<li><strong>File Location:</strong> <code>~/.xsession-errors</code> or
+<code>~/.xsession-errors.old</code></li>
+<li><strong>What to Look For:</strong> Application crashes, GTK library
+critical errors, or unresponsive scripts tied to the LXDE panel plugins.
+If a third-party app leak or malformed panel widget locked up the UI
+thread, this file will record it.</li>
+</ul>
+<h3 id="5-display-manager-logs">5. Display Manager Logs</h3>
+<p>The display manager is responsible for starting your desktop session.
+A failure here can freeze the screen or drop the session entirely.</p>
+<ul>
+<li><strong>LightDM:</strong>
+<ul>
+<li><code>/var/log/lightdm/lightdm.log</code></li>
+<li><code>/var/log/lightdm/seat0-greeter.log</code></li>
+<li><code>/var/log/lightdm/x-0.log</code></li>
+</ul></li>
+<li><strong>LXDM:</strong>
+<ul>
+<li><code>/var/log/lxdm.log</code></li>
+</ul></li>
+<li><strong>What to Look For:</strong> Session termination errors,
+authentication crashes, or signals indicating the display manager lost
+connection to the X server.</li>
+</ul>
+<h3 id="6-traditional-system-logs">6. Traditional System Logs</h3>
+<p>For systems where persistent systemd journals are not enabled or when
+running non-systemd init systems (such as sysvinit or runit), check the
+standard syslog files.</p>
+<ul>
+<li><strong>File Locations:</strong> <code>/var/log/syslog</code>
+(Debian/Ubuntu-based) or <code>/var/log/messages</code>
+(RHEL/CentOS-based)</li>
+<li><strong>What to Look For:</strong> Cross-reference the exact
+timestamp of the freeze to see what processes, system services, or
+hardware alerts were logged in the seconds leading up to the
+freeze.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/lxde-desktop-freezes-key-log-files-to-inspect';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Run LXDE Entirely in RAM on Live USB - lxde</title>
+    <meta name="description" content="Running the Lightweight X11 Desktop Environment (LXDE) entirely in RAM provides exceptional responsiveness and allows you to safely unplug your live USB drive after booting. This setup is achieved by modifying the live environment&#39;s bootloader configurati">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-run-lxde-entirely-in-ram-on-live-usb">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Run LXDE Entirely in RAM on Live USB - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-run-lxde-entirely-in-ram-on-live-usb" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Running the Lightweight X11 Desktop Environment (LXDE) entirely in RAM provides exceptional responsiveness and allows you to safely unplug your live USB drive after booting. This setup is achieved by modifying the live environment&#39;s bootloader configurati" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-run-lxde-entirely-in-ram-on-live-usb">How to Run LXDE
+Entirely in RAM on Live USB</h1>
+<p>Running the Lightweight X11 Desktop Environment (LXDE) entirely in
+RAM provides exceptional responsiveness and allows you to safely unplug
+your live USB drive after booting. This setup is achieved by modifying
+the live environment's bootloader configuration to pass specific kernel
+parameters that copy the compressed operating system directly into a
+temporary RAM disk (<code>tmpfs</code>) during the initial boot
+sequence.</p>
+<h3 id="the-essential-kernel-parameter">The Essential Kernel
+Parameter</h3>
+<p>The primary configuration required to load the entire OS into memory
+depends on the base distribution of your live USB:</p>
+<ul>
+<li><strong>Debian, Ubuntu, and Lubuntu (Live-boot):</strong> Use the
+<code>toram</code> parameter.</li>
+<li><strong>Arch Linux (Archiso):</strong> Use the
+<code>copytoram=y</code> parameter.</li>
+<li><strong>antiX, Slax, and Porteus:</strong> Use the
+<code>copy2ram</code> or <code>toram</code> parameter depending on the
+init implementation.</li>
+</ul>
+<p>When the Linux kernel boots, the <code>initramfs</code> script
+intercepts this parameter, allocates a <code>tmpfs</code> filesystem in
+system memory, transfers the root <code>squashfs</code> filesystem image
+from the USB drive into that memory space, and mounts it as root. Once
+loaded, the system ceases to read from the USB device.</p>
+<h3 id="modifying-the-bootloader-configuration">Modifying the Bootloader
+Configuration</h3>
+<p>To make this configuration permanent or automatic on your live USB,
+edit the configuration file of the bootloader installed on the media
+(typically GRUB or Syslinux).</p>
+<h4 id="for-grub-bootgrubgrubcfg">For GRUB
+(<code>/boot/grub/grub.cfg</code>):</h4>
+<p>Locate the default menu entry for LXDE and append the parameter to
+the line starting with <code>linux</code>:</p>
+<pre class="text"><code>menuentry &quot;LXDE Live (Run from RAM)&quot; {
+    linux /live/vmlinuz boot=live components quiet splash toram
+    initrd /live/initrd.img
+}</code></pre>
+<h4 id="for-syslinuxisolinux-syslinuxcfg-or-isolinuxcfg">For
+Syslinux/Isolinux (<code>syslinux.cfg</code> or
+<code>isolinux.cfg</code>):</h4>
+<p>Locate the default label and append the parameter to the
+<code>APPEND</code> directive:</p>
+<pre class="text"><code>LABEL lxde-ram
+  MENU LABEL LXDE Live (Run from RAM)
+  KERNEL /live/vmlinuz
+  APPEND initrd=/live/initrd.img boot=live components quiet splash toram</code></pre>
+<p>Alternatively, you can test this on a one-time basis by pressing
+<code>Tab</code> (in Syslinux) or <code>e</code> (in GRUB) at the live
+boot menu, manually typing <code>toram</code> at the end of the kernel
+boot options line, and pressing <code>Enter</code> or <code>F10</code>
+to boot.</p>
+<h3 id="hardware-and-ram-requirements">Hardware and RAM
+Requirements</h3>
+<p>Because the root filesystem image is stored uncompressed or partially
+cached in memory alongside running applications, proper memory sizing is
+essential:</p>
+<ul>
+<li><strong>SquashFS Footprint:</strong> A standard lightweight LXDE
+live image typically ranges from 800 MB to 1.5 GB. The system requires
+enough RAM to store this full image.</li>
+<li><strong>System Overhead:</strong> LXDE itself has an exceptionally
+low footprint, typically consuming only 150 MB to 300 MB of RAM on
+startup.</li>
+<li><strong>Minimum Recommendation:</strong> A machine with at least 2
+GB of physical RAM is recommended. Systems with 4 GB or more will have
+plenty of headroom for modern web browsing and multi-tasking alongside
+the RAM-loaded OS.</li>
+</ul>
+<h3 id="verifying-the-ram-only-execution">Verifying the RAM-Only
+Execution</h3>
+<p>Once the desktop loads, open the terminal and execute:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span> /</span></code></pre></div>
+<p>The output will confirm that the root filesystem <code>/</code> is
+mounted on a <code>tmpfs</code> or <code>overlay</code> device existing
+entirely in memory. At this point, the live USB storage partition can be
+unmounted and safely removed from the computer without freezing the
+operating system.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/how-to-run-lxde-entirely-in-ram-on-live-usb';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

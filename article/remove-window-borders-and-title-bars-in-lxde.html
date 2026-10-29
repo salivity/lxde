@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Window Borders and Title Bars in LXDE - lxde</title>
+    <meta name="description" content="Configuring applications to open without window borders or title bars in the Lightweight X11 Desktop Environment (LXDE) helps maximize screen real estate and is ideal for kiosk modes, media centers, and distraction-free workflows. Because LXDE uses Openbo">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/remove-window-borders-and-title-bars-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Remove Window Borders and Title Bars in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/remove-window-borders-and-title-bars-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Configuring applications to open without window borders or title bars in the Lightweight X11 Desktop Environment (LXDE) helps maximize screen real estate and is ideal for kiosk modes, media centers, and distraction-free workflows. Because LXDE uses Openbo" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="remove-window-borders-and-title-bars-in-lxde">Remove Window
+Borders and Title Bars in LXDE</h1>
+<p>Configuring applications to open without window borders or title bars
+in the Lightweight X11 Desktop Environment (LXDE) helps maximize screen
+real estate and is ideal for kiosk modes, media centers, and
+distraction-free workflows. Because LXDE uses Openbox as its underlying
+window manager, this behavior is managed through the Openbox
+configuration file. By identifying the target application's window class
+and applying an undecorated rule, you can force any specific program to
+launch borderless automatically.</p>
+<h3 id="step-1-identify-the-application-window-class">Step 1: Identify
+the Application Window Class</h3>
+<p>Openbox relies on window attributes to match specific applications to
+configuration rules.</p>
+<ol type="1">
+<li><p>Open your terminal.</p></li>
+<li><p>Launch the application you want to configure.</p></li>
+<li><p>In the terminal, run:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xprop</span> WM_CLASS</span></code></pre></div></li>
+<li><p>Click on the window of the target application.</p></li>
+<li><p>The terminal will return an output similar to:</p>
+<pre class="text"><code>WM_CLASS(STRING) = &quot;navigator&quot;, &quot;Firefox&quot;</code></pre>
+<p>Note the second value (in this example, <code>Firefox</code>). This
+is the application class name required for the configuration.</p></li>
+</ol>
+<h3 id="step-2-open-the-lxde-openbox-configuration-file">Step 2: Open
+the LXDE Openbox Configuration File</h3>
+<p>Open the LXDE window manager configuration file in a text editor of
+your choice:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/openbox/lxde-rc.xml</span></code></pre></div>
+<p><em>(Note: If this file does not exist in your user profile, copy the
+system default using
+<code>cp /etc/xdg/openbox/lxde-rc.xml ~/.config/openbox/</code> and open
+it again.)</em></p>
+<h3 id="step-3-add-the-undecorated-application-rule">Step 3: Add the
+Undecorated Application Rule</h3>
+<p>Scroll down to find the <code>&lt;applications&gt;</code> section.
+Inside the <code>&lt;applications&gt;</code> tags, add a custom
+<code>&lt;application&gt;</code> block defining <code>decor</code> as
+<code>no</code>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">applications</span>&gt;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">&lt;!-- Custom rule for borderless window --&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">application</span> <span class="ot">class=</span><span class="st">&quot;YourApplicationClass&quot;</span>&gt;</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">decor</span>&gt;no&lt;/<span class="kw">decor</span>&gt;</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">application</span>&gt;</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">applications</span>&gt;</span></code></pre></div>
+<p>Replace <code>YourApplicationClass</code> with the exact class name
+identified in Step 1 (e.g., <code>Firefox</code>, <code>Vlc</code>, or
+<code>Chromium-browser</code>).</p>
+<p>Save the file and exit the text editor (in Nano, press
+<code>Ctrl+O</code>, <code>Enter</code>, then <code>Ctrl+X</code>).</p>
+<h3 id="step-4-reload-the-openbox-configuration">Step 4: Reload the
+Openbox Configuration</h3>
+<p>Apply the new rules immediately without logging out by running:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openbox</span> <span class="at">--reconfigure</span></span></code></pre></div>
+<p>Close and relaunch the configured application. It will now open
+without title bars, close buttons, or outer frame borders.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/remove-window-borders-and-title-bars-in-lxde';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

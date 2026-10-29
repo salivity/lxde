@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make LXDE Lightweight and Accessible on Old PCs - lxde</title>
+    <meta name="description" content="This guide explains how to configure and modify the Lightweight X11 Desktop Environment (LXDE) to maximize performance and usability on aging hardware. By adjusting window manager configurations, pruning background autostart processes, selecting resource-">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/make-lxde-lightweight-and-accessible-on-old-p-cs">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Make LXDE Lightweight and Accessible on Old PCs - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/make-lxde-lightweight-and-accessible-on-old-p-cs" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide explains how to configure and modify the Lightweight X11 Desktop Environment (LXDE) to maximize performance and usability on aging hardware. By adjusting window manager configurations, pruning background autostart processes, selecting resource-" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="make-lxde-lightweight-and-accessible-on-old-pcs">Make LXDE
+Lightweight and Accessible on Old PCs</h1>
+<p>This guide explains how to configure and modify the Lightweight X11
+Desktop Environment (LXDE) to maximize performance and usability on
+aging hardware. By adjusting window manager configurations, pruning
+background autostart processes, selecting resource-friendly themes, and
+enabling built-in accessibility features, users can revive obsolete
+computers without sacrificing responsiveness or ease of use.</p>
+<h3 id="streamline-the-openbox-window-manager">Streamline the Openbox
+Window Manager</h3>
+<p>LXDE relies on Openbox as its default window manager. Openbox is
+inherently fast, but further optimizations can free up central
+processing unit (CPU) cycles and memory.</p>
+<ul>
+<li><strong>Disable Compositing:</strong> Ensure standalone compositors
+like Picom or Compton are disabled. Removing drop shadows, transparency,
+and fading effects significantly reduces graphics processing load on
+older video chips.</li>
+<li><strong>Simplify Window Decorations:</strong> Edit
+<code>~/.config/openbox/lxde-rc.xml</code> to remove unnecessary window
+buttons (such as shade or iconify) and switch to a minimalist, flat
+window theme that renders quickly.</li>
+</ul>
+<h3 id="prune-startup-services-and-background-processes">Prune Startup
+Services and Background Processes</h3>
+<p>LXDE launches several background applets by default that may not be
+required on dedicated or low-spec systems.</p>
+<ul>
+<li><strong>Edit Autostart Configurations:</strong> Modify the global
+file at <code>/etc/xdg/lxsession/LXDE/autostart</code> or the user file
+at <code>~/.config/lxsession/LXDE/autostart</code>. Remove entries for
+the screen saver (<code>xscreensaver</code>), clipboard managers, and
+network update checkers if they are not strictly needed.</li>
+<li><strong>Limit Desktop Icons:</strong> In PCManFM (the default file
+manager that manages the desktop surface), disable desktop icons and
+active wallpaper management under Desktop Preferences. Using a solid
+background color reduces RAM usage.</li>
+</ul>
+<h3 id="optimize-panel-applets">Optimize Panel Applets</h3>
+<p>The LXPanel component consumes additional resources with each active
+plugin.</p>
+<ul>
+<li><strong>Remove Heavy Applets:</strong> Right-click the panel, open
+"Panel Settings," and navigate to "Panel Applets." Remove CPU-intensive
+applets such as real-time system monitors, weather widgets, and excess
+application launchers.</li>
+<li><strong>Keep Essential Controls:</strong> Retain only the taskbar,
+system tray, and volume control to keep memory usage minimal.</li>
+</ul>
+<h3 id="configure-accessibility-options">Configure Accessibility
+Options</h3>
+<p>Accessibility modifications allow users with visual or motor
+impairments to navigate older computers comfortably without straining
+the system.</p>
+<ul>
+<li><strong>Font Scaling and DPI Adjustments:</strong> Open the
+"Customize Look and Feel" tool (lxappearance) to increase system-wide
+font sizes. Select clean, legible sans-serif fonts such as DejaVu Sans.
+Adjust the dots-per-inch (DPI) setting under the "Font" tab to scale
+interface text uniformly without using heavy desktop scaling
+filters.</li>
+<li><strong>High-Contrast GTK Themes:</strong> Install and apply
+high-contrast GTK themes and high-visibility icon packs via
+lxappearance. High-contrast themes improve legibility for visually
+impaired users without adding graphical overhead.</li>
+<li><strong>Mouse Pointer Visibility:</strong> Increase the cursor size
+in the pointer preferences tab to track the mouse easily on
+low-resolution displays.</li>
+<li><strong>Screen Reading and Magnification:</strong> Integrate
+lightweight tools like <code>xzoom</code> for screen magnification
+rather than resource-heavy desktop zoom suites, and configure the Orca
+screen reader to run only when needed.</li>
+</ul>
+<h3 id="pair-with-lightweight-applications">Pair with Lightweight
+Applications</h3>
+<p>The modifications to LXDE are most effective when paired with
+software designed for constrained environments. Replace heavier default
+applications with lightweight alternatives, such as using Leafpad or
+Mousepad for text editing, Viewnior for image viewing, and lighter web
+browsers configured with script blockers to prevent modern web pages
+from overwhelming legacy hardware.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/make-lxde-lightweight-and-accessible-on-old-p-cs';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

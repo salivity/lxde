@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trace DBus Calls Between Core LXDE Components - lxde</title>
+    <meta name="description" content="Tracing D-Bus communications between core LXDE components—such as lxsession, lxpanel, and pcmanfm—allows developers and system administrators to debug inter-process communication, monitor desktop events, and identify performance bottlenecks. This guide co">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/trace-d-bus-calls-between-core-lxde-components">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Trace DBus Calls Between Core LXDE Components - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/trace-d-bus-calls-between-core-lxde-components" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Tracing D-Bus communications between core LXDE components—such as lxsession, lxpanel, and pcmanfm—allows developers and system administrators to debug inter-process communication, monitor desktop events, and identify performance bottlenecks. This guide co" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="trace-dbus-calls-between-core-lxde-components">Trace DBus Calls
+Between Core LXDE Components</h1>
+<p>Tracing D-Bus communications between core LXDE components—such as
+<code>lxsession</code>, <code>lxpanel</code>, and
+<code>pcmanfm</code>—allows developers and system administrators to
+debug inter-process communication, monitor desktop events, and identify
+performance bottlenecks. This guide covers how to inspect and capture
+these messages on the session bus using standard command-line utilities
+like <code>dbus-monitor</code> and graphical analysis tools like Bustle
+and D-Feet.</p>
+<h3 id="1-identify-the-target-bus">1. Identify the Target Bus</h3>
+<p>LXDE desktop components communicate primarily over the
+<strong>Session Bus</strong>, which handles user-level desktop
+interactions (such as panel updates, volume changes, or file manager
+IPC). System-level operations (like power management via
+<code>upower</code> or network states via <code>NetworkManager</code>)
+use the <strong>System Bus</strong>. For tracing core LXDE components,
+you will almost exclusively target the session bus.</p>
+<h3 id="2-capture-real-time-traffic-with-dbus-monitor">2. Capture
+Real-Time Traffic with <code>dbus-monitor</code></h3>
+<p>The most direct way to trace messages in the terminal is using
+<code>dbus-monitor</code>.</p>
+<p>To view all activity on the user's session bus in real time, open a
+terminal and run:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dbus-monitor</span> <span class="at">--session</span></span></code></pre></div>
+<p>Because this generates high volumes of traffic, apply match rules to
+narrow the scope to specific LXDE components or interfaces.</p>
+<h4 id="filter-by-interface-or-path">Filter by Interface or Path</h4>
+<p>If you are debugging interactions involving the file manager or
+desktop icons handled by <code>pcmanfm</code>:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dbus-monitor</span> <span class="at">--session</span> <span class="st">&quot;interface=&#39;org.freedesktop.FileManager1&#39;&quot;</span></span></code></pre></div>
+<p>To monitor notifications triggered by or sent to desktop applets:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dbus-monitor</span> <span class="at">--session</span> <span class="st">&quot;interface=&#39;org.freedesktop.Notifications&#39;&quot;</span></span></code></pre></div>
+<p>To capture session management calls (such as logout, reboot, or
+shutdown signals mediated by <code>lxsession</code>):</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dbus-monitor</span> <span class="at">--session</span> <span class="st">&quot;type=&#39;signal&#39;,path=&#39;/org/lxde/SessionManager&#39;&quot;</span></span></code></pre></div>
+<h3 id="3-record-and-visualize-traces-with-bustle">3. Record and
+Visualize Traces with Bustle</h3>
+<p>For complex debugging or performance profiling, <code>bustle</code>
+is a dedicated tool that records D-Bus traffic and generates sequence
+diagrams showing the exact time taken by method calls between
+processes.</p>
+<ol type="1">
+<li><p>Install Bustle via your distribution's package manager:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install bustle</span></code></pre></div></li>
+<li><p>Launch Bustle from your terminal or application menu.</p></li>
+<li><p>Select <strong>Session Bus</strong> and click
+<strong>Record</strong>.</p></li>
+<li><p>Perform the desktop action you want to trace (e.g., launching an
+app from <code>lxpanel</code> or mounting media in
+<code>pcmanfm</code>).</p></li>
+<li><p>Click <strong>Stop</strong>.</p></li>
+</ol>
+<p>Bustle provides a visual timeline showing which process initiated the
+call, which component responded, and the payload transferred.</p>
+<h3 id="4-inspect-registered-services-with-d-feet">4. Inspect Registered
+Services with D-Feet</h3>
+<p>To determine what interfaces, methods, and signals an LXDE component
+exposes before tracing:</p>
+<ol type="1">
+<li><p>Install and launch <code>d-feet</code>:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install d-feet</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">d-feet</span></span></code></pre></div></li>
+<li><p>Navigate to the <strong>Session Bus</strong> tab.</p></li>
+<li><p>Use the search bar to locate specific LXDE services, such as:</p>
+<ul>
+<li><code>org.lxde.SessionManager</code></li>
+<li><code>org.pcmanfm</code></li>
+<li><code>org.freedesktop.Notifications</code></li>
+</ul></li>
+<li><p>Inspect the object paths, methods, and signatures to construct
+precise filtering rules for <code>dbus-monitor</code>.</p></li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/trace-d-bus-calls-between-core-lxde-components';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

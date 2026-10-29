@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure RAM Disk Browser Cache in LXDE - lxde</title>
+    <meta name="description" content="Configuring temporary folders in a RAM disk (tmpfs) within the lightweight LXDE desktop environment boosts browsing performance and significantly minimizes read and write cycles to physical drives. This is especially advantageous for systems running on SD">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/configure-ram-disk-browser-cache-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Configure RAM Disk Browser Cache in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/configure-ram-disk-browser-cache-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Configuring temporary folders in a RAM disk (tmpfs) within the lightweight LXDE desktop environment boosts browsing performance and significantly minimizes read and write cycles to physical drives. This is especially advantageous for systems running on SD" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="configure-ram-disk-browser-cache-in-lxde">Configure RAM Disk
+Browser Cache in LXDE</h1>
+<p>Configuring temporary folders in a RAM disk (<code>tmpfs</code>)
+within the lightweight LXDE desktop environment boosts browsing
+performance and significantly minimizes read and write cycles to
+physical drives. This is especially advantageous for systems running on
+SD cards or older SSDs. This guide demonstrates how to configure a
+system-level RAM disk via the file systems table, set up persistence
+directories in LXDE, and repoint popular web browsers—such as Mozilla
+Firefox and Chromium—to utilize fast in-memory storage.</p>
+<h3 id="1-verify-or-configure-a-ram-disk-tmpfs">1. Verify or Configure a
+RAM Disk (<code>tmpfs</code>)</h3>
+<p>Most modern Linux distributions mount <code>/tmp</code> as a
+<code>tmpfs</code> RAM disk by default. You can check this by
+running:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span> /tmp</span></code></pre></div>
+<p>If <code>/tmp</code> shows a filesystem type of <code>tmpfs</code>,
+the system is already configured. If it does not, you can create a
+dedicated RAM disk entry in your filesystem table.</p>
+<ol type="1">
+<li><p>Open <code>/etc/fstab</code> with root privileges:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/fstab</span></code></pre></div></li>
+<li><p>Add a line to mount a dedicated cache directory in RAM with a
+limited size (e.g., 512 megabytes to prevent memory exhaustion):</p>
+<pre class="text"><code>tmpfs /tmp/ramcache tmpfs defaults,noatime,mode=1777,size=512M 0 0</code></pre></li>
+<li><p>Create the mount point and mount it:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /tmp/ramcache</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mount <span class="at">-a</span></span></code></pre></div></li>
+</ol>
+<h3 id="2-configure-lxde-autostart-for-directory-creation">2. Configure
+LXDE Autostart for Directory Creation</h3>
+<p>Because filesystems residing in RAM are completely wiped on reboot,
+your target browser cache folders must be re-created upon login.</p>
+<ol type="1">
+<li><p>Open the LXDE user autostart configuration:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/lxsession/LXDE/autostart</span></code></pre></div></li>
+<li><p>Add instructions to create the necessary directories for your
+browsers at the start of your session:</p>
+<pre class="text"><code>@mkdir -p /tmp/ramcache/firefox
+@mkdir -p /tmp/ramcache/chromium</code></pre></li>
+<li><p>Save and close the file.</p></li>
+</ol>
+<h3 id="3-redirect-mozilla-firefox-to-the-ram-disk">3. Redirect Mozilla
+Firefox to the RAM Disk</h3>
+<p>Firefox provides a built-in configuration option to relocate its disk
+cache directory.</p>
+<ol type="1">
+<li><p>Launch Firefox and type <code>about:config</code> in the address
+bar.</p></li>
+<li><p>Accept the warning prompt to proceed.</p></li>
+<li><p>In the search bar, look for:</p>
+<pre class="text"><code>browser.cache.disk.parent_directory</code></pre></li>
+<li><p>If this preference exists, edit it. If it does not, select
+<strong>String</strong>, click the <strong>+</strong> (Add) button, and
+name it:</p>
+<pre class="text"><code>browser.cache.disk.parent_directory</code></pre></li>
+<li><p>Set the string value to your RAM disk location:</p>
+<pre class="text"><code>/tmp/ramcache/firefox</code></pre></li>
+<li><p>Restart Firefox. Navigate to <code>about:cache</code> in the
+address bar to confirm the cache storage is actively pointing to the
+<code>/tmp/ramcache/firefox</code> path.</p></li>
+</ol>
+<h3 id="4-redirect-chromium--google-chrome-to-the-ram-disk">4. Redirect
+Chromium / Google Chrome to the RAM Disk</h3>
+<p>Chromium requires a startup flag (<code>--disk-cache-dir</code>) to
+redirect its cache folder.</p>
+<h4 id="option-a-modify-the-application-shortcut">Option A: Modify the
+Application Shortcut</h4>
+<ol type="1">
+<li><p>Copy the system desktop entry to your local applications
+directory:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.local/share/applications</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /usr/share/applications/chromium-browser.desktop ~/.local/share/applications/</span></code></pre></div></li>
+<li><p>Open the file in an editor:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.local/share/applications/chromium-browser.desktop</span></code></pre></div></li>
+<li><p>Find the line starting with <code>Exec=</code> and append the
+cache directory parameter:</p>
+<pre class="text"><code>Exec=chromium-browser --disk-cache-dir=&quot;/tmp/ramcache/chromium&quot; %U</code></pre></li>
+<li><p>Save and exit.</p></li>
+</ol>
+<h4 id="option-b-use-symbolic-links">Option B: Use Symbolic Links</h4>
+<p>Alternatively, you can replace Chromium's default cache path with a
+symlink pointing to your RAM disk:</p>
+<ol type="1">
+<li><p>Close Chromium completely.</p></li>
+<li><p>Remove the existing disk cache directory:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ~/.cache/chromium</span></code></pre></div></li>
+<li><p>Create a symbolic link pointing to the RAM disk:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> /tmp/ramcache/chromium ~/.cache/chromium</span></code></pre></div></li>
+</ol>
+<p>Because LXDE creates <code>/tmp/ramcache/chromium</code> at boot, the
+symbolic link will immediately bind Chromium’s cache directly to system
+RAM without needing launcher modifications.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/configure-ram-disk-browser-cache-in-lxde';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

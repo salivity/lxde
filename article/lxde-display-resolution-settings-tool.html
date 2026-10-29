@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LXDE Display Resolution Settings Tool - lxde</title>
+    <meta name="description" content="This article explains how to manage and configure screen display settings within the Lightweight X11 Desktop Environment (LXDE). It identifies the default graphical interface used to change screen resolution, details its primary features, and provides ste">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/lxde-display-resolution-settings-tool">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LXDE Display Resolution Settings Tool - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/lxde-display-resolution-settings-tool" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how to manage and configure screen display settings within the Lightweight X11 Desktop Environment (LXDE). It identifies the default graphical interface used to change screen resolution, details its primary features, and provides ste" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="lxde-display-resolution-settings-tool">LXDE Display Resolution
+Settings Tool</h1>
+<p>This article explains how to manage and configure screen display
+settings within the Lightweight X11 Desktop Environment (LXDE). It
+identifies the default graphical interface used to change screen
+resolution, details its primary features, and provides step-by-step
+instructions for launching and using the tool.</p>
+<h2 id="the-default-tool-lxrandr">The Default Tool: LXRandR</h2>
+<p>In LXDE, the default graphical tool for configuring display
+resolution is <strong>LXRandR</strong> (Monitor Settings).</p>
+<p>LXRandR acts as a lightweight, user-friendly graphical user interface
+(GUI) front-end for the standard X.Org XRandR extension. It was designed
+specifically to integrate seamlessly with LXDE, offering a minimalist
+way to adjust monitor options without requiring manual terminal commands
+or editing configuration files.</p>
+<h2 id="key-features-of-lxrandr">Key Features of LXRandR</h2>
+<ul>
+<li><strong>Resolution Switching:</strong> Easily select from all
+display resolutions supported by your graphics card and connected
+monitor.</li>
+<li><strong>Multi-Monitor Configuration:</strong> Enable, disable, or
+rearrange external displays and projectors (such as setting an external
+screen to mirror or extend the primary desktop).</li>
+<li><strong>Refresh Rate Adjustments:</strong> Select appropriate
+vertical refresh rates compatible with your screen.</li>
+<li><strong>Low Resource Usage:</strong> True to LXDE's design
+philosophy, the tool loads instantly with minimal memory
+consumption.</li>
+</ul>
+<h2 id="how-to-access-lxrandr">How to Access LXRandR</h2>
+<p>You can open the display settings interface using either the desktop
+menu or the terminal:</p>
+<h3 id="method-1-using-the-application-menu">Method 1: Using the
+Application Menu</h3>
+<ol type="1">
+<li>Click the <strong>LXDE Menu</strong> (typically in the bottom-left
+corner).</li>
+<li>Hover over <strong>Preferences</strong>.</li>
+<li>Click on <strong>Monitor Settings</strong>.</li>
+</ol>
+<h3 id="method-2-using-the-command-line">Method 2: Using the Command
+Line</h3>
+<p>Open your terminal emulator (such as LXTerminal) and type:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lxrandr</span></span></code></pre></div>
+<p>Press <strong>Enter</strong>, and the configuration window will
+appear.</p>
+<h2 id="how-to-change-screen-resolution">How to Change Screen
+Resolution</h2>
+<ol type="1">
+<li>Open <strong>Monitor Settings</strong> using either method
+above.</li>
+<li>Select your active display from the interface if multiple monitors
+are attached.</li>
+<li>Locate the <strong>Resolution</strong> drop-down menu and choose
+your desired pixel dimensions.</li>
+<li>Click <strong>Apply</strong> to test the new resolution.</li>
+<li>If the configuration works properly, confirm the change; if not,
+wait for the timeout to revert automatically to the previous working
+resolution.</li>
+</ol>
+<h2 id="advanced-alternative-arandr">Advanced Alternative: ARandR</h2>
+<p>While LXRandR provides the standard, basic interface for LXDE, users
+requiring more advanced visual layouts—such as precise visual
+positioning of multiple monitors side-by-side or rotated
+orientations—can install and use <strong>ARandR</strong>. ARandR is
+another lightweight XRandR front-end that offers a visual drag-and-drop
+screen layout manager compatible with LXDE systems.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/lxde-display-resolution-settings-tool';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

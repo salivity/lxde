@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Default Web Browser System-Wide in LXDE - lxde</title>
+    <meta name="description" content="Setting a default web browser system-wide in the Lightweight X11 Desktop Environment (LXDE) ensures that all user accounts launch the intended browser when clicking web links and opening HTML files. This guide details the primary configuration files and c">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/set-default-web-browser-system-wide-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Set Default Web Browser System-Wide in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/set-default-web-browser-system-wide-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Setting a default web browser system-wide in the Lightweight X11 Desktop Environment (LXDE) ensures that all user accounts launch the intended browser when clicking web links and opening HTML files. This guide details the primary configuration files and c" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="set-default-web-browser-system-wide-in-lxde">Set Default Web
+Browser System-Wide in LXDE</h1>
+<p>Setting a default web browser system-wide in the Lightweight X11
+Desktop Environment (LXDE) ensures that all user accounts launch the
+intended browser when clicking web links and opening HTML files. This
+guide details the primary configuration files and command-line steps
+required to define a global default browser across an entire LXDE
+installation.</p>
+<h3 id="1-the-lxsession-configuration-file">1. The LXSession
+Configuration File</h3>
+<p>LXDE relies on <code>lxsession</code> to manage core components and
+preferred default applications. To define the default browser for every
+user on the system, edit the global LXSession configuration file:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/xdg/lxsession/LXDE/desktop.conf</span></code></pre></div>
+<p>Inside this file, locate the <code>[Default]</code> or
+<code>[General]</code> section and modify or append the
+<code>browser</code> entry followed by the executable or
+<code>.desktop</code> entry of your desired browser. For example, to
+make Chromium the default:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Default]</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">web_browser</span><span class="ot">=</span><span class="st">chromium-browser</span></span></code></pre></div>
+<p>Save the file and exit the editor. Any user session that inherits the
+system-wide LXDE profile will use this configuration.</p>
+<h3 id="2-system-wide-xdg-mime-associations">2. System-Wide XDG MIME
+Associations</h3>
+<p>Modern desktop environments, including LXDE, use FreeDesktop.org
+(XDG) MIME specifications to determine which application handles
+specific protocols and file formats. Setting default handlers globally
+prevents desktop applications from reverting to fallback browsers.</p>
+<p>Create or edit the global MIME associations file:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/xdg/mimeapps.list</span></code></pre></div>
+<p>Add the target browser's <code>.desktop</code> file under the
+<code>[Default Applications]</code> section for standard web schemes and
+HTML formats. Replace <code>firefox.desktop</code> with the
+<code>.desktop</code> file corresponding to your preferred browser:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Default Applications]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">text/html</span><span class="ot">=</span><span class="st">firefox.desktop</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">x-scheme-handler/http</span><span class="ot">=</span><span class="st">firefox.desktop</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">x-scheme-handler/https</span><span class="ot">=</span><span class="st">firefox.desktop</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">x-scheme-handler/ftp</span><span class="ot">=</span><span class="st">firefox.desktop</span></span></code></pre></div>
+<p>Ensure file permissions allow all users to read this file:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod 644 /etc/xdg/mimeapps.list</span></code></pre></div>
+<h3 id="3-update-alternatives-debian-and-ubuntu-based-systems">3. Update
+Alternatives (Debian and Ubuntu-based Systems)</h3>
+<p>If your LXDE distribution relies on Debian's
+<code>update-alternatives</code> system (such as Raspberry Pi OS or
+Debian LXDE), several scripts and terminal commands bypass desktop
+configuration files to launch <code>x-www-browser</code>.</p>
+<p>Run the following command to update the default graphical
+browser:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--config</span> x-www-browser</span></code></pre></div>
+<p>You will see a list of installed browsers. Enter the selection number
+that corresponds to your preferred web browser and press
+<strong>Enter</strong>.</p>
+<h3 id="verifying-the-configuration">Verifying the Configuration</h3>
+<p>To confirm that the system-wide configuration is active, open a
+terminal in an LXDE user session and test the association using
+<code>xdg-open</code>:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">xdg-open</span> https://www.example.com</span></code></pre></div>
+<p>If configured correctly, the target URL will immediately open in the
+specified system-wide default web browser.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/set-default-web-browser-system-wide-in-lxde';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

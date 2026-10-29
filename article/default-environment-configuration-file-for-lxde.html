@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Default Environment Configuration File for LXDE - lxde</title>
+    <meta name="description" content="This guide identifies the configuration files responsible for defining the default environment and startup parameters in the Lightweight X11 Desktop Environment (LXDE). It covers both the system-wide global configuration files and the user-level overrides">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/default-environment-configuration-file-for-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Default Environment Configuration File for LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/default-environment-configuration-file-for-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide identifies the configuration files responsible for defining the default environment and startup parameters in the Lightweight X11 Desktop Environment (LXDE). It covers both the system-wide global configuration files and the user-level overrides" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="default-environment-configuration-file-for-lxde">Default
+Environment Configuration File for LXDE</h1>
+<p>This guide identifies the configuration files responsible for
+defining the default environment and startup parameters in the
+Lightweight X11 Desktop Environment (LXDE). It covers both the
+system-wide global configuration files and the user-level overrides used
+by the session manager (<code>lxsession</code>) to configure desktop
+components, window management, and launched applications.</p>
+<h3 id="the-primary-configuration-files">The Primary Configuration
+Files</h3>
+<p>In LXDE, session behavior and environment defaults are handled by
+<code>lxsession</code>. The default environment configuration is split
+primarily across two configuration files depending on scope:</p>
+<ol type="1">
+<li><strong><code>desktop.conf</code></strong> – Defines general session
+settings, window manager selection, GTK themes, and environment
+profiles.</li>
+<li><strong><code>autostart</code></strong> – Defines global and user
+applications, daemons, and desktop components (such as
+<code>lxpanel</code> and <code>pcmanfm</code>) launched upon logging
+in.</li>
+</ol>
+<h3 id="system-wide-default-paths">System-Wide Default Paths</h3>
+<p>The system-wide default configuration files applied to all users are
+located in the <code>/etc/xdg/</code> directory hierarchy:</p>
+<ul>
+<li><strong>Session environment settings:</strong><br />
+<code>/etc/xdg/lxsession/LXDE/desktop.conf</code></li>
+<li><strong>Session startup applications:</strong><br />
+<code>/etc/xdg/lxsession/LXDE/autostart</code></li>
+</ul>
+<p><em>Note: On distributions with custom profiles (such as Raspberry Pi
+OS), the directory name <code>LXDE</code> may be replaced with the
+profile name, such as <code>LXDE-pi</code>.</em></p>
+<h3 id="user-specific-overrides">User-Specific Overrides</h3>
+<p>When an individual user modifies their desktop settings, LXDE creates
+local user copies that override the global system defaults. These user
+files are located inside the home directory:</p>
+<ul>
+<li><strong>User session settings:</strong><br />
+<code>~/.config/lxsession/LXDE/desktop.conf</code></li>
+<li><strong>User startup applications:</strong><br />
+<code>~/.config/lxsession/LXDE/autostart</code></li>
+</ul>
+<h3 id="how-lxsession-applies-the-configuration">How LXSession Applies
+the Configuration</h3>
+<p>When a user logs into an LXDE session, the session manager checks the
+user's local directory (<code>~/.config/lxsession/LXDE/</code>) first.
+If the local configuration file exists, LXDE loads it directly. If the
+user-specific file is missing, LXDE falls back to
+<code>/etc/xdg/lxsession/LXDE/</code> to load the system-wide
+defaults.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/default-environment-configuration-file-for-lxde';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

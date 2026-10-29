@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Add Shell Scripts to LXDE Open With Menu - lxde</title>
+    <meta name="description" content="You can easily integrate custom shell scripts into the right-click &quot;Open With&quot; menu in LXDE by creating a standard .desktop entry file. Because LXDE’s default file manager, PCManFM, adheres to Freedesktop.org specifications, any valid desktop entry placed">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-add-shell-scripts-to-lxde-open-with-menu">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Add Shell Scripts to LXDE Open With Menu - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-add-shell-scripts-to-lxde-open-with-menu" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="You can easily integrate custom shell scripts into the right-click &quot;Open With&quot; menu in LXDE by creating a standard .desktop entry file. Because LXDE’s default file manager, PCManFM, adheres to Freedesktop.org specifications, any valid desktop entry placed" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-add-shell-scripts-to-lxde-open-with-menu">How to Add
+Shell Scripts to LXDE Open With Menu</h1>
+<p>You can easily integrate custom shell scripts into the right-click
+"Open With" menu in LXDE by creating a standard <code>.desktop</code>
+entry file. Because LXDE’s default file manager, PCManFM, adheres to
+Freedesktop.org specifications, any valid desktop entry placed in your
+user applications directory will appear as an available program for
+opening files. This guide details how to make your script executable,
+configure the <code>.desktop</code> launcher, and access it directly
+from the right-click context menu.</p>
+<h3 id="step-1-prepare-your-shell-script">Step 1: Prepare Your Shell
+Script</h3>
+<p>Your shell script must be capable of receiving a file path as an
+argument and must have executable permissions.</p>
+<ol type="1">
+<li><p>Create or locate your script. Ensure it handles target files
+using the <code>$1</code> or <code>"$@"</code> variable. For
+example:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: A script to back up a selected file</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="st">&quot;</span><span class="va">$1</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$1</span><span class="st">.bak&quot;</span></span></code></pre></div></li>
+<li><p>Save your script in a reliable directory, such as
+<code>/home/username/bin/myscript.sh</code> or
+<code>/usr/local/bin/myscript.sh</code>.</p></li>
+<li><p>Make the script executable by running:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x /path/to/myscript.sh</span></code></pre></div></li>
+</ol>
+<h3 id="step-2-create-a-custom-desktop-file">Step 2: Create a Custom
+<code>.desktop</code> File</h3>
+<p>PCManFM reads desktop entries to populate the "Open With" list. To
+make your script visible to the system, create an entry in your local
+applications directory.</p>
+<ol type="1">
+<li><p>Create a new <code>.desktop</code> file in
+<code>~/.local/share/applications/</code>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.local/share/applications/my-custom-script.desktop</span></code></pre></div></li>
+<li><p>Add the following configuration:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Desktop Entry]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Type</span><span class="ot">=</span><span class="st">Application</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">Name</span><span class="ot">=</span><span class="st">My Custom Script</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">Exec</span><span class="ot">=</span><span class="st">/path/to/myscript.sh %f</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">Terminal</span><span class="ot">=</span><span class="kw">false</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="dt">Categories</span><span class="ot">=</span><span class="st">Utility;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="dt">NoDisplay</span><span class="ot">=</span><span class="kw">false</span></span></code></pre></div></li>
+</ol>
+<p><strong>Key Parameters Explained:</strong></p>
+<ul>
+<li><strong><code>Name</code></strong>: The label that appears in the
+LXDE right-click menu.</li>
+<li><strong><code>Exec</code></strong>: The absolute path to your script
+followed by <code>%f</code> (passes a single selected file) or
+<code>%F</code> (passes multiple selected files).</li>
+<li><strong><code>Terminal</code></strong>: Set to <code>true</code> if
+your script requires user input in a terminal window, or
+<code>false</code> if it runs silently in the background or uses a
+graphical toolkit like Zenity.</li>
+<li><strong><code>MimeType</code></strong> <em>(Optional)</em>: You can
+add specific MIME types (e.g.,
+<code>MimeType=text/plain;image/png;</code>) if you only want the script
+to appear for certain file formats.</li>
+</ul>
+<h3 id="step-3-access-the-script-via-the-open-with-menu">Step 3: Access
+the Script via the "Open With" Menu</h3>
+<ol type="1">
+<li>Open <strong>PCManFM</strong> and navigate to any file you wish to
+process.</li>
+<li>Right-click the file and hover over <strong>Open With</strong>.</li>
+<li>If your script does not immediately appear in the initial submenu,
+click <strong>Open With...</strong> or <strong>Custom Command
+Line</strong>.</li>
+<li>In the application selection window, navigate to the category
+assigned in your <code>.desktop</code> file (such as
+<strong>Accessories</strong> or <strong>Installed
+Applications</strong>).</li>
+<li>Select <strong>My Custom Script</strong>.</li>
+</ol>
+<p>Once selected, the script will execute against the chosen file, and
+PCManFM will remember the association, making the script visible
+directly within the top-level "Open With" context list for future
+use.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/how-to-add-shell-scripts-to-lxde-open-with-menu';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

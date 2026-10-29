@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Force GTK CSD to Respect Openbox Borders in LXDE - lxde</title>
+    <meta name="description" content="This guide explains how to disable Client-Side Decorations (CSD) in modern GTK applications running under LXDE to restore native Openbox window borders and titlebars. By deploying the gtk3-nocsd package, modifying environment variables, and refining GTK u">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/force-gtk-csd-to-respect-openbox-borders-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Force GTK CSD to Respect Openbox Borders in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/force-gtk-csd-to-respect-openbox-borders-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide explains how to disable Client-Side Decorations (CSD) in modern GTK applications running under LXDE to restore native Openbox window borders and titlebars. By deploying the gtk3-nocsd package, modifying environment variables, and refining GTK u" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="force-gtk-csd-to-respect-openbox-borders-in-lxde">Force GTK CSD
+to Respect Openbox Borders in LXDE</h1>
+<p>This guide explains how to disable Client-Side Decorations (CSD) in
+modern GTK applications running under LXDE to restore native Openbox
+window borders and titlebars. By deploying the <code>gtk3-nocsd</code>
+package, modifying environment variables, and refining GTK user styles,
+you can eliminate broken window styling, remove unwanted drop shadows,
+and enforce visual consistency across your desktop environment.</p>
+<h3 id="understanding-the-problem">Understanding the Problem</h3>
+<p>GTK3 and GTK4 applications default to Client-Side Decorations (CSD),
+meaning the application itself draws its own title bar, control buttons,
+and borders rather than delegating those tasks to the window manager.
+Because LXDE relies on Openbox—which uses Server-Side Decorations
+(SSD)—CSD applications bypass Openbox's theming rules, resulting in
+inconsistent borders, broken snapping behavior, and large drop-shadow
+artifacts.</p>
+<h3 id="step-1-install-gtk3-nocsd">Step 1: Install
+<code>gtk3-nocsd</code></h3>
+<p>The most reliable way to force GTK to use Openbox decorations is
+through <code>gtk3-nocsd</code>, an LD_PRELOAD library that intercepts
+GTK calls and requests server-side window frames.</p>
+<ul>
+<li><p><strong>Debian / Ubuntu / Raspberry Pi OS:</strong></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install gtk3-nocsd</span></code></pre></div></li>
+<li><p><strong>Arch Linux:</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> pacman <span class="at">-S</span> gtk3-nocsd-git</span></code></pre></div></li>
+<li><p><strong>Fedora:</strong></p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dnf install gtk3-nocsd</span></code></pre></div></li>
+</ul>
+<h3 id="step-2-enable-the-environment-variables">Step 2: Enable the
+Environment Variables</h3>
+<p>For <code>gtk3-nocsd</code> to work across your entire session, you
+must export the required environment variables when LXDE starts.</p>
+<ol type="1">
+<li><p>Open your session environment file (or create
+<code>~/.xprofile</code>):</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.xprofile</span></code></pre></div></li>
+<li><p>Add the following lines:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">GTK_CSD</span><span class="op">=</span>0</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">LD_PRELOAD</span><span class="op">=</span>/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0:<span class="va">$LD_PRELOAD</span></span></code></pre></div>
+<p><em>(Note: Verify the path to <code>libgtk3-nocsd.so.0</code> on your
+system using <code>find /usr/lib -name "libgtk3-nocsd.so.0"</code>. On
+32-bit ARM systems like Raspberry Pi OS, the path is typically
+<code>/usr/lib/arm-linux-gnueabihf/libgtk3-nocsd.so.0</code>.)</em></p></li>
+<li><p>Save and close the file.</p></li>
+</ol>
+<h3 id="step-3-remove-gtk-shadow-and-header-artifacts">Step 3: Remove
+GTK Shadow and Header Artifacts</h3>
+<p>Even after forcing SSD, some GTK applications leave behind a subtle
+inner border or residual drop-shadow styling. You can remove these by
+adjusting your user-level GTK 3 styles.</p>
+<ol type="1">
+<li><p>Open or create the GTK CSS configuration:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/gtk-3.0/gtk.css</span></code></pre></div></li>
+<li><p>Add the following rules to strip client-side shadows and force
+compact headers:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>window<span class="fu">.ssd</span> headerbar<span class="fu">.default-decoration</span> {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">padding</span><span class="ch">:</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">min-height</span><span class="ch">:</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>window<span class="fu">.csd</span> decoration {</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">box-shadow</span><span class="ch">:</span> <span class="dv">none</span><span class="op">;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">margin</span><span class="ch">:</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">border</span><span class="ch">:</span> <span class="dv">none</span><span class="op">;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div></li>
+<li><p>Save the file.</p></li>
+</ol>
+<h3 id="step-4-verify-openbox-configuration">Step 4: Verify Openbox
+Configuration</h3>
+<p>Ensure Openbox is set to decorate all windows by default.</p>
+<ol type="1">
+<li><p>Open the Openbox configuration file:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/openbox/lxde-rc.xml</span></code></pre></div></li>
+<li><p>Locate the <code>&lt;applications&gt;</code> section and ensure
+there are no specific rules forcing
+<code>&lt;decor&gt;no&lt;/decor&gt;</code> on GTK applications. If you
+want to explicitly enforce decorations on all windows, ensure the
+fallback behavior allows it:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">applications</span>&gt;</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">application</span> <span class="ot">class=</span><span class="st">&quot;*&quot;</span>&gt;</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">decor</span>&gt;yes&lt;/<span class="kw">decor</span>&gt;</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">application</span>&gt;</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">applications</span>&gt;</span></code></pre></div></li>
+<li><p>Save and apply the Openbox settings:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openbox</span> <span class="at">--reconfigure</span></span></code></pre></div></li>
+</ol>
+<h3 id="step-5-log-out-and-test">Step 5: Log Out and Test</h3>
+<p>Environment variable changes require a new X session to take full
+effect. Log out of LXDE and log back in. Launch a modern GTK application
+(such as GNOME Calculator, File Roller, or Pavucontrol). The application
+will now render inside native Openbox borders and respect your system's
+Openbox window theme.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/force-gtk-csd-to-respect-openbox-borders-in-lxde';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

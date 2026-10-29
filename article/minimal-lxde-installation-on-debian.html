@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal LXDE Installation on Debian - lxde</title>
+    <meta name="description" content="Installing an absolute minimal LXDE environment on Debian creates an exceptionally lightweight, resource-efficient system by bypassing default applications, display managers, and bundled utilities. This guide outlines the core packages necessary to establ">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/minimal-lxde-installation-on-debian">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Minimal LXDE Installation on Debian - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/minimal-lxde-installation-on-debian" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Installing an absolute minimal LXDE environment on Debian creates an exceptionally lightweight, resource-efficient system by bypassing default applications, display managers, and bundled utilities. This guide outlines the core packages necessary to establ" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="minimal-lxde-installation-on-debian">Minimal LXDE Installation
+on Debian</h1>
+<p>Installing an absolute minimal LXDE environment on Debian creates an
+exceptionally lightweight, resource-efficient system by bypassing
+default applications, display managers, and bundled utilities. This
+guide outlines the core packages necessary to establish a bare-bones
+LXDE graphical interface from a base Debian installation, explaining the
+function of each component and providing the exact installation
+commands.</p>
+<h2 id="the-absolute-minimal-package-set">The Absolute Minimal Package
+Set</h2>
+<p>The standard Debian <code>lxde</code> metapackage installs web
+browsers, media players, games, and text editors. To achieve the
+absolute minimum footprint, you must avoid the main metapackage and
+install only the fundamental components:</p>
+<ul>
+<li><strong><code>lxsession</code></strong>: The session manager that
+handles login scripts, polkit integration, and startup
+applications.</li>
+<li><strong><code>lxpanel</code></strong>: The desktop panel providing
+the application menu, taskbar, system tray, and clock.</li>
+<li><strong><code>pcmanfm</code></strong>: The default file manager,
+which also manages the root window (desktop wallpaper and icons).</li>
+<li><strong><code>openbox</code></strong>: The lightweight stacking
+window manager responsible for drawing window borders, titlebars, and
+managing workspaces.</li>
+</ul>
+<p>While not strictly part of LXDE itself, a graphical environment
+requires a display server and a terminal emulator to be functional:</p>
+<ul>
+<li><strong><code>xserver-xorg-core</code></strong>: The essential X11
+display server.</li>
+<li><strong><code>xinit</code></strong>: Provides the
+<code>startx</code> command, allowing you to launch the desktop from the
+terminal without installing a dedicated display manager.</li>
+<li><strong><code>lxterminal</code></strong>: The default, lightweight
+terminal emulator required for command-line access within the graphical
+session.</li>
+</ul>
+<h2 id="installation-methods">Installation Methods</h2>
+<h3
+id="method-1-using-the-core-metapackage-without-recommendations">Method
+1: Using the Core Metapackage Without Recommendations</h3>
+<p>Debian provides a stripped-down metapackage called
+<code>lxde-core</code>. By default, APT installs recommended
+dependencies, which add significant overhead. You can install a minimal,
+functional desktop in one command using the
+<code>--no-install-recommends</code> flag:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">--no-install-recommends</span> lxde-core xserver-xorg-core xinit x11-xserver-utils lxterminal</span></code></pre></div>
+<p>This installs the four LXDE pillars (<code>openbox</code>,
+<code>lxpanel</code>, <code>pcmanfm</code>, <code>lxsession</code>)
+along with basic themes, cursors, and the core display server, while
+omitting extra applications like image viewers, archive managers, and
+text editors.</p>
+<h3 id="method-2-manual-package-by-package-installation">Method 2:
+Manual Package-by-Package Installation</h3>
+<p>If you want absolute control without the metapackage overhead,
+install each component manually:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">--no-install-recommends</span> openbox lxsession lxpanel pcmanfm xserver-xorg-core xserver-xorg-video-all xserver-xorg-input-all xinit lxterminal</span></code></pre></div>
+<h2 id="starting-the-minimal-session">Starting the Minimal Session</h2>
+<p>Since a display manager (such as LightDM) is omitted to save system
+memory, the environment is started directly from the console.</p>
+<ol type="1">
+<li>Create or edit the <code>~/.xinitrc</code> file in your user
+directory:</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;exec startlxde&quot;</span> <span class="op">&gt;</span> ~/.xinitrc</span></code></pre></div>
+<ol start="2" type="1">
+<li>Launch the desktop environment:</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">startx</span></span></code></pre></div>
+<p>This results in an operational LXDE interface consuming less than 150
+MB of RAM upon boot, containing only the desktop shell, window manager,
+file manager, and terminal.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/minimal-lxde-installation-on-debian';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

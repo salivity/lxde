@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Change LXDE Panel Font Independently - lxde</title>
+    <meta name="description" content="You can change the font family of panel labels in LXDE without altering your system-wide theme. While LXDE&#39;s standard customization utility (lxappearance) applies font settings globally to all applications, the desktop panel (lxpanel) can be isolated and">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-change-lxde-panel-font-independently">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Change LXDE Panel Font Independently - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-change-lxde-panel-font-independently" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="You can change the font family of panel labels in LXDE without altering your system-wide theme. While LXDE&#39;s standard customization utility (lxappearance) applies font settings globally to all applications, the desktop panel (lxpanel) can be isolated and" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-change-lxde-panel-font-independently">How to Change LXDE
+Panel Font Independently</h1>
+<p>You can change the font family of panel labels in LXDE without
+altering your system-wide theme. While LXDE's standard customization
+utility (<code>lxappearance</code>) applies font settings globally to
+all applications, the desktop panel (<code>lxpanel</code>) can be
+isolated and customized directly through user-level GTK configuration
+files. This guide demonstrates how to define an independent font family
+and size for the LXDE panel using GTK styling rules.</p>
+<h2 id="identify-your-lxde-gtk-version">Identify Your LXDE GTK
+Version</h2>
+<p>Most traditional LXDE installations run on GTK 2, though newer
+releases or specific distribution ports may use GTK 3. The method you
+use depends on the version running on your system.</p>
+<p>To check your version, run the following command in a terminal:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lxpanel</span> <span class="at">-v</span></span></code></pre></div>
+<hr />
+<h2 id="method-1-for-gtk-2-installations-most-common">Method 1: For GTK
+2 Installations (Most Common)</h2>
+<p>In GTK 2-based LXDE, you can override theme properties by modifying
+your personal <code>~/.gtkrc-2.0</code> file.</p>
+<ol type="1">
+<li><p>Open or create the configuration file in a text editor:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.gtkrc-2.0</span></code></pre></div></li>
+<li><p>Add a custom style rule targeting the panel widget:</p>
+<pre class="text"><code>style &quot;panel-font-override&quot; {
+    font_name = &quot;Noto Sans Bold 10&quot;
+}
+
+widget &quot;*Panel*&quot; style &quot;panel-font-override&quot;
+widget_class &quot;*Panel*&quot; style &quot;panel-font-override&quot;
+widget &quot;*lxpanel*&quot; style &quot;panel-font-override&quot;
+class &quot;*Panel*&quot; style &quot;panel-font-override&quot;</code></pre>
+<p>Replace <code>"Noto Sans Bold 10"</code> with your desired font
+family, weight, and size.</p></li>
+<li><p>Save the file (<code>Ctrl + O</code>, then <code>Enter</code>)
+and exit (<code>Ctrl + X</code>).</p></li>
+<li><p>Restart <code>lxpanel</code> to apply the changes
+immediately:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lxpanelctl</span> restart</span></code></pre></div></li>
+</ol>
+<hr />
+<h2 id="method-2-for-gtk-3-installations">Method 2: For GTK 3
+Installations</h2>
+<p>If your distribution uses a GTK 3 build of LXDE, you must apply the
+override via CSS.</p>
+<ol type="1">
+<li><p>Open or create the GTK 3 custom stylesheet:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/gtk-3.0/gtk.css</span></code></pre></div></li>
+<li><p>Add the CSS selector targeting the panel:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#lxpanel</span> label {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">font-family</span><span class="ch">:</span> <span class="st">&quot;Noto Sans&quot;</span><span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">font-size</span><span class="ch">:</span> <span class="dv">10</span><span class="dt">pt</span><span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">font-weight</span><span class="ch">:</span> <span class="dv">bold</span><span class="op">;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Adjust <code>font-family</code>, <code>font-size</code>, and other
+typography properties to your preference.</p></li>
+<li><p>Save and close the file.</p></li>
+<li><p>Restart the panel:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lxpanelctl</span> restart</span></code></pre></div></li>
+</ol>
+<hr />
+<h2 id="verifying-font-availability">Verifying Font Availability</h2>
+<p>Ensure the font family you choose is installed and properly
+registered on your system. To search for available fonts via the
+terminal, use <code>fc-list</code>:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fc-list</span> : family <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-u</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-i</span> <span class="st">&quot;font-name&quot;</span></span></code></pre></div>
+<p>Use the exact family name displayed by this query in your
+configuration file. If the panel does not render the chosen font after
+restarting, verify that the font name matches the system listing and
+that the configuration file syntax has no typos.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/how-to-change-lxde-panel-font-independently';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

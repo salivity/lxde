@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disable Workspace Switching Animation in LXDE - lxde</title>
+    <meta name="description" content="Disabling workspace switching animations and popups in LXDE allows for instantaneous desktop transitions, reducing visual lag and improving system responsiveness on low-resource machines. Because LXDE relies on Openbox as its default window manager, switc">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/disable-workspace-switching-animation-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Disable Workspace Switching Animation in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/disable-workspace-switching-animation-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Disabling workspace switching animations and popups in LXDE allows for instantaneous desktop transitions, reducing visual lag and improving system responsiveness on low-resource machines. Because LXDE relies on Openbox as its default window manager, switc" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="disable-workspace-switching-animation-in-lxde">Disable Workspace
+Switching Animation in LXDE</h1>
+<p>Disabling workspace switching animations and popups in LXDE allows
+for instantaneous desktop transitions, reducing visual lag and improving
+system responsiveness on low-resource machines. Because LXDE relies on
+Openbox as its default window manager, switching behavior is governed
+either by Openbox's native on-screen display settings or an active
+standalone compositor such as Picom or Compton. This guide outlines how
+to eliminate workspace transition delays using both graphical tools and
+direct configuration file edits.</p>
+<h3 id="method-1-using-openbox-configuration-manager-gui">Method 1:
+Using Openbox Configuration Manager (GUI)</h3>
+<p>The simplest way to remove the workspace switching popup notification
+in LXDE is through the native Openbox settings interface.</p>
+<ol type="1">
+<li>Open the LXDE application menu.</li>
+<li>Navigate to <strong>Preferences</strong> and select <strong>Openbox
+Configuration Manager</strong> (or run <code>obconf</code> in a
+terminal).</li>
+<li>Select the <strong>Desktops</strong> tab on the left sidebar.</li>
+<li>Locate the option labeled <strong>Show on-screen notice when
+switching desktops</strong>.</li>
+<li>Uncheck this option, or reduce the <strong>Time to show the notice
+for</strong> slider to <code>0 ms</code>.</li>
+<li>Click <strong>Close</strong> to save and apply the changes
+immediately.</li>
+</ol>
+<h3 id="method-2-editing-the-lxde-rcxml-file">Method 2: Editing the
+<code>lxde-rc.xml</code> File</h3>
+<p>If you prefer using the command line or are working without a full
+GUI menu, you can edit the Openbox configuration directly.</p>
+<ol type="1">
+<li><p>Open a terminal and open your user configuration file in a text
+editor:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/openbox/lxde-rc.xml</span></code></pre></div></li>
+<li><p>Press <code>Ctrl + W</code> to search for the
+<code>&lt;desktops&gt;</code> tag.</p></li>
+<li><p>Locate the <code>&lt;popupTime&gt;</code> setting within the
+<code>&lt;desktops&gt;</code> block.</p></li>
+<li><p>Change the value to <code>0</code>:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">desktops</span>&gt;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">number</span>&gt;4&lt;/<span class="kw">number</span>&gt;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">firstdesk</span>&gt;1&lt;/<span class="kw">firstdesk</span>&gt;</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">names</span>&gt;</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">name</span>&gt;Desktop 1&lt;/<span class="kw">name</span>&gt;</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">name</span>&gt;Desktop 2&lt;/<span class="kw">name</span>&gt;</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">names</span>&gt;</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">popupTime</span>&gt;0&lt;/<span class="kw">popupTime</span>&gt;</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">desktops</span>&gt;</span></code></pre></div></li>
+<li><p>Save the file (<code>Ctrl + O</code>, then <code>Enter</code>)
+and exit the editor (<code>Ctrl + X</code>).</p></li>
+<li><p>Apply the changes without logging out by running:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openbox</span> <span class="at">--reconfigure</span></span></code></pre></div></li>
+</ol>
+<h3 id="method-3-disabling-compositor-animations-picom--compton">Method
+3: Disabling Compositor Animations (Picom / Compton)</h3>
+<p>Standard Openbox does not render sliding or fading effects. If your
+workspaces slide or fade during a switch, an external compositor is
+active.</p>
+<ol type="1">
+<li><p>Open your compositor configuration file (typically
+<code>~/.config/picom/picom.conf</code>,
+<code>~/.config/picom.conf</code>, or
+<code>~/.config/compton.conf</code>).</p></li>
+<li><p>Search for the fading and animation directives.</p></li>
+<li><p>Set fading to false:</p>
+<pre class="text"><code>fading = false;</code></pre></li>
+<li><p>If your compositor build supports animations, disable them:</p>
+<pre class="text"><code>animations = false;</code></pre></li>
+<li><p>Save the file and restart the compositor or restart your LXDE
+session to apply the changes.</p></li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/disable-workspace-switching-animation-in-lxde';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

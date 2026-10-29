@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LXDE Panel Configuration with LXPanel - lxde</title>
+    <meta name="description" content="LXDE (Lightweight X11 Desktop Environment) manages its desktop taskbars and panels using a lightweight, modular component known as LXPanel. This article explains how LXPanel handles desktop panel configuration through both its graphical user interface (GU">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/lxde-panel-configuration-with-lx-panel">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LXDE Panel Configuration with LXPanel - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/lxde-panel-configuration-with-lx-panel" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="LXDE (Lightweight X11 Desktop Environment) manages its desktop taskbars and panels using a lightweight, modular component known as LXPanel. This article explains how LXPanel handles desktop panel configuration through both its graphical user interface (GU" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="lxde-panel-configuration-with-lxpanel">LXDE Panel Configuration
+with LXPanel</h1>
+<p>LXDE (Lightweight X11 Desktop Environment) manages its desktop
+taskbars and panels using a lightweight, modular component known as
+LXPanel. This article explains how LXPanel handles desktop panel
+configuration through both its graphical user interface (GUI) and its
+backend plain-text configuration files, enabling users to customize
+panel placement, appearance, and bundled applets.</p>
+<h3 id="graphical-configuration">Graphical Configuration</h3>
+<p>The most direct way to configure LXPanel is via the built-in
+graphical interface. Right-clicking an empty space on the panel and
+selecting <strong>"Panel Settings"</strong> opens a dedicated dialogue
+with four primary configuration tabs:</p>
+<ul>
+<li><strong>Geometry:</strong> Controls the panel’s physical placement
+(top, bottom, left, or right edge of the screen), width, height,
+alignment (center, left, right), and whether the panel should
+dynamically shrink to fit its active plugins. It also manages
+multi-monitor assignment.</li>
+<li><strong>Appearance:</strong> Manages visual styling, allowing users
+to choose between system theme defaults, a custom solid color, or a
+background image. It also supports opacity controls for transparency
+effects when running a compositing manager.</li>
+<li><strong>Panel Applets:</strong> Handles the functional elements of
+the panel. Users can add, remove, and reorder modular applets such as
+the Application Menu, Task Bar, System Tray, Digital Clock, CPU Monitor,
+and Pager (workspace switcher). Selecting an applet and clicking "Edit"
+opens applet-specific options.</li>
+<li><strong>Advanced:</strong> Offers behavior controls, such as
+auto-hiding the panel when not in use, reserving screen edge space to
+prevent maximized windows from overlapping the panel, and minimizing
+icon memory usage.</li>
+</ul>
+<p>Users can also create new panels or delete existing ones by
+right-clicking the panel and selecting <strong>"Create New
+Panel"</strong> or <strong>"Delete This Panel"</strong>.</p>
+<h3 id="file-based-configuration">File-Based Configuration</h3>
+<p>Behind the graphical interface, LXPanel stores all settings in
+plain-text configuration files. When LXPanel starts, it reads these
+files to construct the desktop environment.</p>
+<h4 id="file-locations">File Locations</h4>
+<ul>
+<li><strong>User Configurations:</strong> User-specific settings are
+stored at <code>~/.config/lxpanel/&lt;profile&gt;/panels/</code>, where
+<code>&lt;profile&gt;</code> is typically named <code>LXDE</code>. A
+standard panel file is simply named <code>panel</code>.</li>
+<li><strong>System Defaults:</strong> System-wide fallback templates
+reside in <code>/etc/xdg/lxpanel/&lt;profile&gt;/panels/</code> or
+<code>/usr/share/lxpanel/profile/&lt;profile&gt;/panels/</code>. If a
+user has not yet customized their panel, LXPanel copies the default file
+into the user's home configuration directory.</li>
+</ul>
+<h4 id="configuration-file-structure">Configuration File Structure</h4>
+<p>The panel configuration file uses a declarative block format with
+key-value pairs enclosed in braces. It consists of two main parts:</p>
+<ol type="1">
+<li><p><strong>Global Block:</strong> Defines panel-level attributes
+such as position, size, transparency, and edge reservation.</p>
+<pre class="text"><code>Global {
+    edge=bottom
+    allign=left
+    margin=0
+    widthtype=percent
+    width=100
+    height=26
+    transparent=0
+    autohide=0
+}</code></pre></li>
+<li><p><strong>Plugin Blocks:</strong> Defines each applet embedded in
+the panel. Each plugin specifies its type and internal
+configuration.</p>
+<pre class="text"><code>Plugin {
+    type = menu
+    Config {
+        image=/usr/share/lxde/images/lxde-icon.png
+        system {
+        }
+    }
+}
+
+Plugin {
+    type = taskbar
+    expand=1
+    Config {
+        tooltips=1
+        IconsOnly=0
+        ShowIconified=1
+        ShowMapped=1
+        ShowFlatButton=1
+    }
+}</code></pre></li>
+</ol>
+<h3 id="applying-configuration-changes">Applying Configuration
+Changes</h3>
+<p>Changes made through the graphical "Panel Settings" menu take effect
+immediately and are automatically written to the configuration file.</p>
+<p>If the configuration file is edited manually in a text editor,
+LXPanel must be refreshed to load the new settings. You can apply manual
+changes without logging out by running the following command in a
+terminal:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lxpanelctl</span> restart</span></code></pre></div>
+<p>Alternatively, killing and restarting the process directly with
+<code>killall lxpanel &amp;&amp; lxpanel &amp;</code> will achieve the
+same result.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/lxde-panel-configuration-with-lx-panel';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

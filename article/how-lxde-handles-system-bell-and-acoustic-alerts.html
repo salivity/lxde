@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How LXDE Handles System Bell and Acoustic Alerts - lxde</title>
+    <meta name="description" content="LXDE (Lightweight X11 Desktop Environment) processes system bell events and acoustic alerts by relying directly on the underlying X Window System (X11), the Linux kernel, and external sound servers rather than running a heavy, centralized sound daemon. Be">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-lxde-handles-system-bell-and-acoustic-alerts">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How LXDE Handles System Bell and Acoustic Alerts - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-lxde-handles-system-bell-and-acoustic-alerts" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="LXDE (Lightweight X11 Desktop Environment) processes system bell events and acoustic alerts by relying directly on the underlying X Window System (X11), the Linux kernel, and external sound servers rather than running a heavy, centralized sound daemon. Be" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-lxde-handles-system-bell-and-acoustic-alerts">How LXDE
+Handles System Bell and Acoustic Alerts</h1>
+<p>LXDE (Lightweight X11 Desktop Environment) processes system bell
+events and acoustic alerts by relying directly on the underlying X
+Window System (X11), the Linux kernel, and external sound servers rather
+than running a heavy, centralized sound daemon. Because LXDE is designed
+to minimize resource consumption, alert generation flows from
+application triggers through X11 event protocols and is routed either to
+hardware beepers or modern audio subsystems like PulseAudio, PipeWire,
+or ALSA.</p>
+<h3 id="the-x11-bell-protocol-trigger">The X11 Bell Protocol
+Trigger</h3>
+<p>When an application inside LXDE triggers an alert—such as pressing
+backspace on an empty line in a terminal or generating an error
+dialog—it sends an <code>XBell</code> request to the active X server.
+LXDE does not intercept or mutate this message at the desktop
+environment layer.</p>
+<p>Instead, the X server decides how to dispatch the request:</p>
+<ul>
+<li><strong>Hardware Buzzer:</strong> By default, X11 can direct the
+alert to the traditional motherboard speaker via the Linux kernel's
+<code>pcspkr</code> driver.</li>
+<li><strong>XKB Extension:</strong> The X Keyboard Extension (XKB)
+manages properties such as pitch, duration, and volume of the bell.
+These parameters can be modified directly within the session using the
+standard utility
+<code>xset b &lt;volume&gt; &lt;pitch&gt; &lt;duration&gt;</code>.</li>
+</ul>
+<h3 id="interception-via-pulseaudio-and-pipewire">Interception via
+PulseAudio and PipeWire</h3>
+<p>Because motherboard buzzers are often absent or disabled in modern
+hardware, modern Linux distributions running LXDE bridge X11 bell events
+to the sound card.</p>
+<ol type="1">
+<li><strong><code>module-x11-bell</code>:</strong> When using PulseAudio
+or PipeWire's PulseAudio emulation, a specific module named
+<code>module-x11-bell</code> is loaded.</li>
+<li><strong>Sample Playback:</strong> This module registers with the X
+server to intercept the <code>XBell</code> event. When an alert occurs,
+the module intercepts the request and plays an audio sample (such as a
+system alert <code>.wav</code> or <code>.ogg</code> file) through the
+primary audio sink.</li>
+<li><strong>Desktop Theme Integration:</strong> If
+<code>libcanberra</code> or freedesktop sound themes are installed, the
+sound server maps system alert requests to standard event sounds (e.g.,
+<code>bell.ogg</code>).</li>
+</ol>
+<h3 id="application-and-terminal-handling-lxterminal">Application and
+Terminal Handling (LXTerminal)</h3>
+<p>The default terminal emulator in LXDE, LXTerminal, uses the VTE
+widget library to handle terminal control characters. When a program
+outputs the ASCII bell character (<code>\a</code> or <code>0x07</code>),
+LXTerminal processes the code according to user configuration:</p>
+<ul>
+<li><strong>Audible Bell:</strong> LXTerminal passes the bell event down
+to the X11 server via an <code>XBell</code> call.</li>
+<li><strong>Visual Bell:</strong> Instead of producing sound, the
+terminal flashes the terminal window or inverts colors briefly.</li>
+<li><strong>Disabled:</strong> The terminal drops the <code>0x07</code>
+byte, preventing any audio or visual event.</li>
+</ul>
+<h3 id="openbox-and-urgent-window-notifications">Openbox and Urgent
+Window Notifications</h3>
+<p>LXDE utilizes Openbox as its default window manager. Openbox handles
+acoustic alerts from windowing events through the
+<code>_NET_WM_STATE_DEMANDS_ATTENTION</code> specification.</p>
+<p>When a background window requests user intervention, Openbox does not
+synthesize its own audio. Instead, it marks the window as "urgent,"
+causing LXPanel (the taskbar) to flash the corresponding window button.
+Any acoustic alert accompanying this notification must be generated
+directly by the calling application or dispatched via the desktop
+notification daemon (<code>notification-daemon</code> or
+<code>dunst</code>).</p>
+<h3 id="disabling-or-customizing-the-bell-in-lxde">Disabling or
+Customizing the Bell in LXDE</h3>
+<p>Because LXDE lacks a unified sound control panel, configuring bell
+events requires adjusting the underlying subsystems:</p>
+<ul>
+<li><strong>Silencing via X11:</strong> Running <code>xset b off</code>
+in <code>~/.bashrc</code> or an autostart script permanently suppresses
+X11-level acoustic bells for the current session.</li>
+<li><strong>Silencing the Hardware Driver:</strong> Blacklisting the
+kernel module using <code>blacklist pcspkr</code> in
+<code>/etc/modprobe.d/</code> halts all physical hardware beeps.</li>
+<li><strong>Sound Server Level:</strong> Disabling the
+<code>module-x11-bell</code> in PulseAudio or PipeWire configuration
+files prevents system bells from playing over the headphones or
+speakers.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/how-lxde-handles-system-bell-and-acoustic-alerts';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

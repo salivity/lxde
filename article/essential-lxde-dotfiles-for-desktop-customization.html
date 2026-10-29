@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essential LXDE Dotfiles for Desktop Customization - lxde</title>
+    <meta name="description" content="Replicating a customized LXDE (Lightweight X11 Desktop Environment) setup across multiple machines requires tracking specific configuration files that control the window manager, desktop layout, panel applets, and interface themes. By tracking Openbox con">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/essential-lxde-dotfiles-for-desktop-customization">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Essential LXDE Dotfiles for Desktop Customization - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/essential-lxde-dotfiles-for-desktop-customization" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Replicating a customized LXDE (Lightweight X11 Desktop Environment) setup across multiple machines requires tracking specific configuration files that control the window manager, desktop layout, panel applets, and interface themes. By tracking Openbox con" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="essential-lxde-dotfiles-for-desktop-customization">Essential
+LXDE Dotfiles for Desktop Customization</h1>
+<p>Replicating a customized LXDE (Lightweight X11 Desktop Environment)
+setup across multiple machines requires tracking specific configuration
+files that control the window manager, desktop layout, panel applets,
+and interface themes. By tracking Openbox configurations, LXPanel
+setups, PCManFM desktop properties, and session autostart scripts in a
+Git dotfiles repository, you can reliably restore your exact desktop
+workflow, keybindings, and aesthetic preferences on any fresh
+installation.</p>
+<h3 id="openbox-window-manager-configurations">Openbox Window Manager
+Configurations</h3>
+<p>LXDE uses Openbox as its default window manager. These files define
+window decorations, behavior, keyboard shortcuts, and mouse
+bindings:</p>
+<ul>
+<li><code>~/.config/openbox/lxde-rc.xml</code> (or <code>rc.xml</code>):
+Contains all keybindings, mouse actions, window snapping rules, virtual
+desktop counts, and title bar button layouts.</li>
+<li><code>~/.config/openbox/menu.xml</code>: Manages the root context
+menu accessible by right-clicking the desktop background.</li>
+<li><code>~/.config/openbox/autostart</code>: Contains shell commands
+and daemons executed specifically when the Openbox session
+initializes.</li>
+</ul>
+<h3 id="lxpanel-and-taskbar-layout">LXPanel and Taskbar Layout</h3>
+<p>The LXDE taskbar and system tray configuration resides inside the
+panel configuration directory. The exact path depends on your profile
+name, which defaults to <code>LXDE</code>:</p>
+<ul>
+<li><code>~/.config/lxpanel/LXDE/panels/panel</code>: Defines the panel
+position, size, transparency, monitors, and all integrated applets
+(application menu, taskbar, system tray, digital clock, and custom
+application launchers).</li>
+<li><code>~/.config/lxpanel/LXDE/config</code>: Holds global preferences
+for the panel system.</li>
+</ul>
+<h3 id="lxsession-and-autostart">LXSession and Autostart</h3>
+<p>Session-level settings govern which applications launch automatically
+upon login, as well as the default window manager and cursor
+behavior:</p>
+<ul>
+<li><code>~/.config/lxsession/LXDE/autostart</code>: Lists background
+services, system tray utilities (such as network managers and volume
+controls), and custom scripts executed at login.</li>
+<li><code>~/.config/lxsession/LXDE/desktop.conf</code>: Defines
+system-wide defaults for the session, including the active GTK theme,
+icon theme, font rendering, cursor theme, and fallback window
+manager.</li>
+</ul>
+<h3 id="pcmanfm-and-desktop-icons">PCManFM and Desktop Icons</h3>
+<p>PCManFM manages file browsing and renders the desktop background,
+wallpaper, and desktop icons:</p>
+<ul>
+<li><code>~/.config/pcmanfm/LXDE/pcmanfm.conf</code>: Contains file
+manager preferences, view modes (detailed, compact, icon), sorting
+rules, and hidden file visibility.</li>
+<li><code>~/.config/pcmanfm/LXDE/desktop-items-0.conf</code>: Controls
+the wallpaper path, wallpaper display mode (stretched, centered, tiled),
+desktop font color, and individual icon coordinates on the primary
+display. If you use multiple monitors, include subsequent monitor files
+such as <code>desktop-items-1.conf</code>.</li>
+</ul>
+<h3 id="terminal-and-application-appearance">Terminal and Application
+Appearance</h3>
+<p>To ensure applications and utilities blend seamlessly with the LXDE
+environment, include standard GTK and terminal configuration files:</p>
+<ul>
+<li><code>~/.config/lxterminal/lxterminal.conf</code>: Stores color
+schemes, font family, font size, tab behavior, and terminal shortcut
+keys.</li>
+<li><code>~/.gtkrc-2.0</code>: Declares GTK2 themes, icon sets, and
+widget styles.</li>
+<li><code>~/.config/gtk-3.0/settings.ini</code>: Standardizes appearance
+settings for GTK3 applications running inside LXDE.</li>
+<li><code>~/.config/mimeapps.list</code>: Defines default application
+handlers for file types, web links, and media.</li>
+</ul>
+<h3 id="files-to-exclude">Files to Exclude</h3>
+<p>When constructing your repository, do not commit dynamic session
+caches or hardware-dependent files:</p>
+<ul>
+<li>Avoid <code>~/.cache/</code> entirely.</li>
+<li>Exclude volatile runtime files such as
+<code>~/.config/lxsession/LXDE/run.log</code>.</li>
+<li>Do not commit local display server overrides like
+<code>~/.Xauthority</code>.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/essential-lxde-dotfiles-for-desktop-customization';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
