@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enable Compositing in LXDE with Picom - lxde</title>
+    <meta name="description" content="This guide explains how to install, configure, and automatically launch a compositor in the LXDE desktop environment using Picom (the modern, actively maintained fork of Compton) or legacy Compton. Enabling a compositor in LXDE eliminates screen tearing d">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/enable-compositing-in-lxde-with-picom">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Enable Compositing in LXDE with Picom - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/enable-compositing-in-lxde-with-picom" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide explains how to install, configure, and automatically launch a compositor in the LXDE desktop environment using Picom (the modern, actively maintained fork of Compton) or legacy Compton. Enabling a compositor in LXDE eliminates screen tearing d" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="enable-compositing-in-lxde-with-picom">Enable Compositing in
+LXDE with Picom</h1>
+<p>This guide explains how to install, configure, and automatically
+launch a compositor in the LXDE desktop environment using Picom (the
+modern, actively maintained fork of Compton) or legacy Compton. Enabling
+a compositor in LXDE eliminates screen tearing during video playback,
+enables true window transparency, and adds subtle visual effects like
+shadows and fading without sacrificing the lightweight performance of
+your system.</p>
+<h3 id="step-1-install-picom-or-compton">Step 1: Install Picom or
+Compton</h3>
+<p>Picom is recommended over Compton because Compton is no longer
+maintained. Open a terminal and install the compositor using your
+distribution's package manager:</p>
+<ul>
+<li><p><strong>Debian / Ubuntu / Raspberry Pi OS:</strong></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install picom</span></code></pre></div>
+<p><em>(If your repository only has Compton, run
+<code>sudo apt install compton</code>)</em></p></li>
+<li><p><strong>Arch Linux:</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> pacman <span class="at">-S</span> picom</span></code></pre></div></li>
+<li><p><strong>Fedora:</strong></p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dnf install picom</span></code></pre></div></li>
+</ul>
+<h3 id="step-2-create-a-configuration-file">Step 2: Create a
+Configuration File</h3>
+<p>While Picom works out of the box with default values, creating a
+configuration file allows you to enable hardware acceleration and
+tear-free rendering (VSync).</p>
+<ol type="1">
+<li><p>Create the configuration directory:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.config/picom</span></code></pre></div></li>
+<li><p>Open the configuration file in a text editor:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/picom/picom.conf</span></code></pre></div>
+<p><em>(If using Compton, the path is typically
+<code>~/.config/compton.conf</code>)</em></p></li>
+<li><p>Add the following baseline configuration to prevent screen
+tearing and enable smooth rendering:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">backend </span><span class="ot">=</span><span class="st"> &quot;glx&quot;;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dt">vsync </span><span class="ot">=</span><span class="st"> true;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Shadows</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="dt">shadow </span><span class="ot">=</span><span class="st"> true;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="dt">shadow-radius </span><span class="ot">=</span><span class="st"> 7;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="dt">shadow-offset-x </span><span class="ot">=</span><span class="st"> -7;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="dt">shadow-offset-y </span><span class="ot">=</span><span class="st"> -7;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Fading</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="dt">fading </span><span class="ot">=</span><span class="st"> true;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="dt">fade-in-step </span><span class="ot">=</span><span class="st"> 0.03;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="dt">fade-out-step </span><span class="ot">=</span><span class="st"> 0.03;</span></span></code></pre></div></li>
+<li><p>Save and exit the editor (in Nano, press <code>Ctrl+O</code>,
+then <code>Enter</code>, followed by <code>Ctrl+X</code>).</p></li>
+</ol>
+<h3 id="step-3-test-the-compositor">Step 3: Test the Compositor</h3>
+<p>Test the setup before making it permanent by running the daemon in
+the background:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">picom</span> <span class="at">-b</span></span></code></pre></div>
+<p><em>(Use <code>compton -b</code> if running Compton)</em></p>
+<p>If your screen functions normally and windows display shadows or
+transparency, the configuration is working. If your display freezes or
+glitches, your GPU may not support the <code>glx</code> backend. In that
+case, kill the process with <code>killall picom</code> and change
+<code>backend = "glx";</code> to <code>backend = "xrender";</code> in
+your configuration file.</p>
+<h3 id="step-4-configure-autostart-in-lxde">Step 4: Configure Autostart
+in LXDE</h3>
+<p>To ensure the compositor starts every time you log into LXDE:</p>
+<ol type="1">
+<li><p>Open the LXDE user autostart file:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/lxsession/LXDE/autostart</span></code></pre></div>
+<p><em>Note: If this file does not exist, copy the global configuration
+first:</em></p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.config/lxsession/LXDE</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /etc/xdg/lxsession/LXDE/autostart ~/.config/lxsession/LXDE/autostart</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/lxsession/LXDE/autostart</span></code></pre></div></li>
+<li><p>Add the following line to the end of the file:</p>
+<pre class="text"><code>@picom -b</code></pre>
+<p><em>(Or <code>@compton -b</code> if using Compton)</em></p>
+<p>The <code>@</code> prefix instructs the LXDE session manager to
+restart the program automatically if it ever crashes.</p></li>
+<li><p>Save the file and exit.</p></li>
+</ol>
+<h3 id="step-5-apply-changes">Step 5: Apply Changes</h3>
+<p>Log out of your LXDE session and log back in, or restart your
+computer. LXDE will now boot with active desktop compositing.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/enable-compositing-in-lxde-with-picom';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

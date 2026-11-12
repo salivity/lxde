@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installing LXDE Alongside Wayland Compositors - lxde</title>
+    <meta name="description" content="You can install LXDE alongside system services running standard Wayland compositors on the same Linux operating system. Although LXDE natively relies on the traditional X11 display server, Linux package management systems support having both X11-based and">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/installing-lxde-alongside-wayland-compositors">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Installing LXDE Alongside Wayland Compositors - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/installing-lxde-alongside-wayland-compositors" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="You can install LXDE alongside system services running standard Wayland compositors on the same Linux operating system. Although LXDE natively relies on the traditional X11 display server, Linux package management systems support having both X11-based and" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="installing-lxde-alongside-wayland-compositors">Installing LXDE
+Alongside Wayland Compositors</h1>
+<p>You can install LXDE alongside system services running standard
+Wayland compositors on the same Linux operating system. Although LXDE
+natively relies on the traditional X11 display server, Linux package
+management systems support having both X11-based and Wayland-based
+stacks installed concurrently. Depending on your configuration, these
+environments can be selected individually at login or run simultaneously
+across separate virtual terminals (TTYs) without library conflicts.</p>
+<h3 id="compatibility-between-lxde-and-wayland">Compatibility Between
+LXDE and Wayland</h3>
+<p>LXDE (Lightweight X11 Desktop Environment) relies on Openbox and
+legacy X11 display architecture. It lacks native support for the Wayland
+protocol. Modern Wayland compositors, such as Weston, Sway, Cage, or
+Mutter, act as both the display server and the window manager.</p>
+<p>Because standard distributions separate the shared libraries for X11
+(<code>libX11</code>, <code>xserver-xorg</code>) and Wayland
+(<code>libwayland-client</code>, <code>libwayland-server</code>),
+installing LXDE does not overwrite or corrupt existing Wayland
+configurations or systemd service units.</p>
+<h3 id="running-concurrent-sessions">Running Concurrent Sessions</h3>
+<p>You can run an LXDE user desktop and a Wayland-based system service
+at the same time using distinct Linux Virtual Consoles (TTYs):</p>
+<ol type="1">
+<li><strong>Virtual Terminal Separation:</strong> Direct Rendering
+Manager (DRM) and Kernel Mode Setting (KMS) allow different display
+servers to manage distinct virtual terminals. A Wayland kiosk service
+can run on <code>tty1</code>, while an Xorg instance hosting LXDE runs
+on <code>tty7</code>.</li>
+<li><strong>Switching Between Interfaces:</strong> Users can switch
+between the active Wayland service and the LXDE session using standard
+terminal hotkeys (such as <code>Ctrl</code> + <code>Alt</code> +
+<code>F1</code> through <code>F7</code>).</li>
+<li><strong>Multi-Seat Configurations:</strong> If the system is
+equipped with multiple graphics adapters or multi-seat hardware, systemd
+can assign the Wayland service to Seat 1 and the LXDE instance to Seat
+0, enabling simultaneous output to separate physical monitors.</li>
+</ol>
+<h3 id="shared-dependencies-and-system-resources">Shared Dependencies
+and System Resources</h3>
+<p>When running both systems side-by-side, consider the following
+resource and configuration requirements:</p>
+<ul>
+<li><strong>GPU and DRM Contention:</strong> Only one display server can
+hold the DRM master status on a single graphic card's display output at
+a time. The inactive TTY drops DRM master privileges, allowing the
+active session to render to the screen.</li>
+<li><strong>Display Managers:</strong> Standard display managers (such
+as LightDM, GDM, or SDDM) can detect both LXDE (via
+<code>.desktop</code> files in <code>/usr/share/xsessions/</code>) and
+Wayland sessions (in <code>/usr/share/wayland-sessions/</code>),
+allowing interactive switching on boot.</li>
+<li><strong>Xwayland Distinction:</strong> Installing LXDE is distinct
+from running X11 applications inside Wayland via Xwayland. LXDE requires
+a running Xorg server; it cannot currently run as a full shell directly
+inside a Wayland compositor.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/installing-lxde-alongside-wayland-compositors';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

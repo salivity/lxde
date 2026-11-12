@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run LXDE Without a Panel or Taskbar - lxde</title>
+    <meta name="description" content="An LXDE (Lightweight X11 Desktop Environment) session can easily run without any panel or taskbar loaded. Because LXDE is engineered with a modular philosophy, its individual components function independently rather than as an inseparable, monolithic syst">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/run-lxde-without-a-panel-or-taskbar">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Run LXDE Without a Panel or Taskbar - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/run-lxde-without-a-panel-or-taskbar" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="An LXDE (Lightweight X11 Desktop Environment) session can easily run without any panel or taskbar loaded. Because LXDE is engineered with a modular philosophy, its individual components function independently rather than as an inseparable, monolithic syst" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="run-lxde-without-a-panel-or-taskbar">Run LXDE Without a Panel or
+Taskbar</h1>
+<p>An LXDE (Lightweight X11 Desktop Environment) session can easily run
+without any panel or taskbar loaded. Because LXDE is engineered with a
+modular philosophy, its individual components function independently
+rather than as an inseparable, monolithic system. The default panel,
+known as <code>lxpanel</code>, is simply a separate process that can be
+removed from startup scripts, terminated during a live session, or
+replaced with third-party utilities without crashing the underlying
+desktop or window manager.</p>
+<h3 id="the-modular-nature-of-lxde">The Modular Nature of LXDE</h3>
+<p>LXDE relies on several distinct components working together:</p>
+<ul>
+<li><strong>Openbox:</strong> The window manager responsible for drawing
+window borders, managing workspaces, and handling window-related
+keyboard shortcuts.</li>
+<li><strong>PCManFM:</strong> The file manager that also manages desktop
+icons and wallpaper rendering.</li>
+<li><strong>LXPanel:</strong> The desktop panel responsible for the
+taskbar, application menu, system tray, and clock.</li>
+</ul>
+<p>Because Openbox handles window management and PCManFM handles the
+desktop background, <code>lxpanel</code> is not strictly necessary for
+the session to operate. Windows will still open, resize, and close
+normally even if no taskbar is present.</p>
+<h3 id="how-to-disable-the-panel-permanently">How to Disable the Panel
+Permanently</h3>
+<p>To prevent the panel from starting automatically with your LXDE
+session, you must modify the session autostart configuration.</p>
+<ol type="1">
+<li><p>Check for a user-specific configuration file at
+<code>~/.config/lxsession/LXDE/autostart</code>. If it does not exist,
+copy the global configuration from
+<code>/etc/xdg/lxsession/LXDE/autostart</code>.</p></li>
+<li><p>Open the file in a text editor.</p></li>
+<li><p>Locate the line that launches the panel, which typically looks
+like this:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">@lxpanel</span> <span class="at">--profile</span> LXDE</span></code></pre></div></li>
+<li><p>Remove this line, or disable it by placing a <code>#</code> at
+the beginning of the line to comment it out.</p></li>
+<li><p>Save the file and log out. Upon logging back in, the session will
+load Openbox and desktop icons without loading
+<code>lxpanel</code>.</p></li>
+</ol>
+<h3 id="removing-the-panel-temporarily">Removing the Panel
+Temporarily</h3>
+<p>If you are currently inside an active session and want to test how
+the environment functions without the panel, open a terminal or run
+dialog and execute:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">killall</span> lxpanel</span></code></pre></div>
+<p>The taskbar will disappear immediately, leaving the desktop surface
+and any open application windows intact. To restore it during the same
+session, simply run <code>lxpanel &amp;</code> in a terminal.</p>
+<h3 id="practical-considerations">Practical Considerations</h3>
+<p>Running LXDE without a panel is common in lightweight kiosk setups,
+multi-monitor environments, or minimal productivity workflows. However,
+removing the panel removes access to the standard application menu and
+the system tray. To maintain usability without a taskbar:</p>
+<ul>
+<li><strong>Launch Applications via Shortcuts:</strong> Configure
+application launch hotkeys in the Openbox configuration file
+(<code>~/.config/openbox/lxde-rc.xml</code>).</li>
+<li><strong>Use an Application Launcher:</strong> Install lightweight
+keyboard-driven launchers such as <code>rofi</code> or
+<code>dmenu</code> to start software.</li>
+<li><strong>Use the Desktop Menu:</strong> Right-clicking directly on
+the desktop background (if PCManFM desktop management is active or
+disabled to expose Openbox's root menu) can provide an alternate
+application menu.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/run-lxde-without-a-panel-or-taskbar';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

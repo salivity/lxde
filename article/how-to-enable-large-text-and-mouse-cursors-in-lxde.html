@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Enable Large Text and Mouse Cursors in LXDE - lxde</title>
+    <meta name="description" content="This guide provides a straightforward walkthrough for improving accessibility in the Lightweight X11 Desktop Environment (LXDE) by increasing system font sizes and configuring high-visibility mouse cursors. By using the built-in &quot;Customize Look and Feel&quot;">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-enable-large-text-and-mouse-cursors-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Enable Large Text and Mouse Cursors in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-enable-large-text-and-mouse-cursors-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide provides a straightforward walkthrough for improving accessibility in the Lightweight X11 Desktop Environment (LXDE) by increasing system font sizes and configuring high-visibility mouse cursors. By using the built-in &quot;Customize Look and Feel&quot;" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-enable-large-text-and-mouse-cursors-in-lxde">How to
+Enable Large Text and Mouse Cursors in LXDE</h1>
+<p>This guide provides a straightforward walkthrough for improving
+accessibility in the Lightweight X11 Desktop Environment (LXDE) by
+increasing system font sizes and configuring high-visibility mouse
+cursors. By using the built-in "Customize Look and Feel" tool alongside
+standard package repositories, users can scale system text and install
+prominent cursor themes to ensure better readability and ease of
+navigation across the entire desktop.</p>
+<h3 id="increasing-system-font-sizes-large-print">Increasing System Font
+Sizes (Large Print)</h3>
+<p>To apply larger text across standard application windows, menus, and
+system dialogs:</p>
+<ol type="1">
+<li>Open the LXDE Application Menu, navigate to
+<strong>Preferences</strong>, and select <strong>Customize Look and
+Feel</strong> (or run <code>lxappearance</code> in a terminal).</li>
+<li>In the <strong>Widget</strong> tab, locate the <strong>Default
+Font</strong> section and click on the font preview button.</li>
+<li>In the font selection dialog, select your preferred typeface, set
+the style, and increase the size to an accessible level (such as 14, 16,
+or 18 points). Click <strong>OK</strong>.</li>
+<li>Switch to the <strong>Window Border</strong> tab to adjust title bar
+text. Click the font button under <strong>Title Bar</strong> and scale
+it to match your new system font size.</li>
+<li>Click <strong>Apply</strong> at the bottom right to apply the
+changes across GTK-based applications.</li>
+</ol>
+<p>To adjust the font and scale of the taskbar:</p>
+<ol type="1">
+<li>Right-click an empty space on the panel at the bottom of the screen
+and select <strong>Panel Settings</strong>.</li>
+<li>Under the <strong>Geometry</strong> tab, increase the
+<strong>Height</strong> property (e.g., to 36 or 48 pixels) to
+accommodate larger icons and text.</li>
+<li>Under the <strong>Appearance</strong> tab, check <strong>Custom font
+color</strong> if needed for higher contrast, or adjust the size setting
+if exposed by your specific distribution.</li>
+</ol>
+<h3 id="installing-and-enabling-high-visibility-cursors">Installing and
+Enabling High-Visibility Cursors</h3>
+<p>LXDE relies on standard X11 cursor themes. To set a large or
+high-contrast cursor:</p>
+<ol type="1">
+<li><p><strong>Install larger cursor themes</strong> (if not already
+present). On Debian or Ubuntu-based systems, open a terminal and
+run:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install dmz-cursor-theme breeze-cursor-theme</span></code></pre></div></li>
+<li><p>Open <strong>Customize Look and Feel</strong>
+(<code>lxappearance</code>).</p></li>
+<li><p>Click on the <strong>Mouse Cursor</strong> tab.</p></li>
+<li><p>Select a theme designed for visibility (such as
+<strong>DMZ-Black</strong>, <strong>DMZ-White</strong>, or a
+high-contrast theme).</p></li>
+<li><p>At the bottom of the tab, change the <strong>Size</strong>
+setting to a larger value, such as <strong>32</strong>,
+<strong>48</strong>, or the maximum supported size.</p></li>
+<li><p>Click <strong>Apply</strong>.</p></li>
+</ol>
+<h3 id="forcing-cursor-size-globally">Forcing Cursor Size Globally</h3>
+<p>Some applications may not immediately pick up the cursor size set in
+<code>lxappearance</code>. To ensure consistent cursor scaling across
+all X11 windows:</p>
+<ol type="1">
+<li><p>Open or create the <code>~/.Xresources</code> file using a text
+editor:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.Xresources</span></code></pre></div></li>
+<li><p>Add the following line to define the size explicitly (adjust
+<code>48</code> to your preferred scale):</p>
+<pre class="text"><code>Xcursor.size: 48</code></pre></li>
+<li><p>Save the file and apply the settings:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xrdb</span> <span class="at">-merge</span> ~/.Xresources</span></code></pre></div></li>
+</ol>
+<p>Log out of your LXDE session and log back in to fully apply the font
+and cursor changes across all running services and background
+windows.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/how-to-enable-large-text-and-mouse-cursors-in-lxde';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

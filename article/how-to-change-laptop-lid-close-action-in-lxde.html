@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Change Laptop Lid Close Action in LXDE - lxde</title>
+    <meta name="description" content="Because the Lightweight X11 Desktop Environment (LXDE) is designed to be minimal, it does not include a bloated, centralized power manager to control hardware events. Mapping custom actions to your laptop&#39;s lid-close trigger in LXDE is primarily accomplis">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-change-laptop-lid-close-action-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Change Laptop Lid Close Action in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-change-laptop-lid-close-action-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Because the Lightweight X11 Desktop Environment (LXDE) is designed to be minimal, it does not include a bloated, centralized power manager to control hardware events. Mapping custom actions to your laptop&#39;s lid-close trigger in LXDE is primarily accomplis" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-change-laptop-lid-close-action-in-lxde">How to Change
+Laptop Lid Close Action in LXDE</h1>
+<p>Because the Lightweight X11 Desktop Environment (LXDE) is designed to
+be minimal, it does not include a bloated, centralized power manager to
+control hardware events. Mapping custom actions to your laptop's
+lid-close trigger in LXDE is primarily accomplished either by
+configuring <code>acpid</code> to execute arbitrary shell scripts or by
+modifying <code>systemd-logind</code> to handle standard system power
+states like sleep, hibernate, or display shutoff.</p>
+<h2 id="method-1-running-custom-scripts-via-acpi">Method 1: Running
+Custom Scripts via ACPI</h2>
+<p>Using the Advanced Configuration and Power Interface daemon
+(<code>acpid</code>) is the best approach if you want to trigger a
+custom command, lock the screen, or run an arbitrary bash script when
+closing the lid.</p>
+<h3 id="1-install-and-enable-acpid">1. Install and Enable acpid</h3>
+<p>Open your terminal and install the ACPI daemon:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install acpid</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl enable <span class="at">--now</span> acpid</span></code></pre></div>
+<h3 id="2-prevent-systemd-logind-from-overriding-acpi">2. Prevent
+systemd-logind from Overriding ACPI</h3>
+<p>Modern Linux distributions use <code>systemd-logind</code>, which
+captures lid switches by default. To let <code>acpid</code> manage the
+trigger without conflicts:</p>
+<ol type="1">
+<li><p>Open <code>/etc/systemd/logind.conf</code> in a text editor:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/systemd/logind.conf</span></code></pre></div></li>
+<li><p>Locate the <code>HandleLidSwitch</code> line, uncomment it
+(remove <code>#</code>), and set it to <code>ignore</code>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">HandleLidSwitch</span><span class="ot">=</span><span class="st">ignore</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">HandleLidSwitchExternalPower</span><span class="ot">=</span><span class="st">ignore</span></span></code></pre></div></li>
+<li><p>Save the file and restart the systemd service:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart systemd-logind</span></code></pre></div></li>
+</ol>
+<h3 id="3-create-the-custom-lid-event">3. Create the Custom Lid
+Event</h3>
+<p>Create a new rule file in <code>/etc/acpi/events/</code>:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/acpi/events/laptop-lid</span></code></pre></div>
+<p>Add the following contents to catch the lid switch:</p>
+<pre class="text"><code>event=button/lid.*
+action=/etc/acpi/lid-custom.sh %e</code></pre>
+<h3 id="4-write-the-action-script">4. Write the Action Script</h3>
+<p>Create the action handler script:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/acpi/lid-custom.sh</span></code></pre></div>
+<p>Paste your custom logic. For example, to check if the lid is closed
+and execute a command:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># $3 contains the lid state: &quot;close&quot; or &quot;open&quot;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="fu">grep</span> <span class="at">-q</span> <span class="st">&quot;closed&quot;</span> /proc/acpi/button/lid/<span class="pp">*</span>/state<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Your custom command for when the lid closes goes here</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Example: Lock screen using i3lock or turn off display using xrandr</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">logger</span> <span class="st">&quot;Lid closed: running custom action&quot;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/usr/bin/xset</span> dpms force off</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Your custom command for when the lid opens goes here</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">logger</span> <span class="st">&quot;Lid opened: running custom action&quot;</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/usr/bin/xset</span> dpms force on</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div>
+<h3 id="5-set-permissions-and-restart">5. Set Permissions and
+Restart</h3>
+<p>Make your script executable and restart <code>acpid</code>:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod +x /etc/acpi/lid-custom.sh</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart acpid</span></code></pre></div>
+<hr />
+<h2 id="method-2-standard-actions-via-systemd-logind">Method 2: Standard
+Actions via systemd-logind</h2>
+<p>If you only need predefined power actions (such as suspend,
+hibernate, power off, or lock) rather than an arbitrary script,
+configuring <code>systemd-logind</code> directly requires no additional
+packages.</p>
+<ol type="1">
+<li><p>Open the configuration file:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/systemd/logind.conf</span></code></pre></div></li>
+<li><p>Adjust the lid handling parameters under the <code>[Login]</code>
+section:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Login]</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="dt">HandleLidSwitch</span><span class="ot">=</span><span class="st">suspend</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="dt">HandleLidSwitchExternalPower</span><span class="ot">=</span><span class="st">ignore</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="dt">HandleLidSwitchDocked</span><span class="ot">=</span><span class="st">ignore</span></span></code></pre></div>
+<p><em>Available actions:</em> <code>ignore</code>,
+<code>poweroff</code>, <code>reboot</code>, <code>halt</code>,
+<code>suspend</code>, <code>hibernate</code>, <code>hybrid-sleep</code>,
+<code>suspend-then-hibernate</code>, and <code>lock</code>.</p></li>
+<li><p>Apply the changes by restarting the service:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart systemd-logind</span></code></pre></div></li>
+</ol>
+<hr />
+<h2 id="method-3-using-a-graphical-power-manager">Method 3: Using a
+Graphical Power Manager</h2>
+<p>If you prefer managing lid events via a graphical interface within
+LXDE, install the lightweight XFCE Power Manager:</p>
+<ol type="1">
+<li><p>Install the utility:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install xfce4-power-manager</span></code></pre></div></li>
+<li><p>Open <strong>Desktop Session Settings</strong> from the LXDE menu
+(or run <code>lxsession-edit</code>) and ensure <strong>Power
+Manager</strong> (<code>xfce4-power-manager</code>) is checked to launch
+at login.</p></li>
+<li><p>Open <code>xfce4-power-manager-settings</code> from the terminal
+or LXDE preferences.</p></li>
+<li><p>Navigate to the <strong>General</strong> tab to map your
+preferred action under the <strong>Laptop lid</strong> options for both
+battery and plugged-in states.</p></li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/how-to-change-laptop-lid-close-action-in-lxde';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

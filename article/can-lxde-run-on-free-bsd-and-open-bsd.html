@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can LXDE Run on FreeBSD and OpenBSD? - lxde</title>
+    <meta name="description" content="LXDE (Lightweight X11 Desktop Environment) runs reliably on major BSD operating systems, including FreeBSD, OpenBSD, and NetBSD. Because LXDE relies on standard X11 protocols and standard Unix utilities, BSD developers have ported its core components dire">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/can-lxde-run-on-free-bsd-and-open-bsd">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Can LXDE Run on FreeBSD and OpenBSD? - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/can-lxde-run-on-free-bsd-and-open-bsd" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="LXDE (Lightweight X11 Desktop Environment) runs reliably on major BSD operating systems, including FreeBSD, OpenBSD, and NetBSD. Because LXDE relies on standard X11 protocols and standard Unix utilities, BSD developers have ported its core components dire" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="can-lxde-run-on-freebsd-and-openbsd">Can LXDE Run on FreeBSD and
+OpenBSD?</h1>
+<p>LXDE (Lightweight X11 Desktop Environment) runs reliably on major BSD
+operating systems, including FreeBSD, OpenBSD, and NetBSD. Because LXDE
+relies on standard X11 protocols and standard Unix utilities, BSD
+developers have ported its core components directly into their official
+package managers and ports collections. This setup offers a minimal,
+fast, and resource-friendly graphical user interface ideal for older
+hardware, virtual machines, or users who prioritize low system
+overhead.</p>
+<h3 id="running-lxde-on-freebsd">Running LXDE on FreeBSD</h3>
+<p>FreeBSD offers full support for LXDE through its precompiled binary
+package system and the FreeBSD Ports Collection.</p>
+<p>To install LXDE on FreeBSD using binary packages:</p>
+<ol type="1">
+<li><p>Update the local package repository:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> update</span></code></pre></div></li>
+<li><p>Install the complete LXDE desktop meta-package:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install lxde-meta</span></code></pre></div></li>
+</ol>
+<p>Because LXDE relies on D-Bus for inter-process communication, ensure
+that the D-Bus service is enabled at startup. Add the following line to
+<code>/etc/rc.conf</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sysrc</span> dbus_enable=<span class="st">&quot;YES&quot;</span></span></code></pre></div>
+<p>To launch LXDE manually using the <code>startx</code> command, add
+the startup command to your user's <code>~/.xinitrc</code> file:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;exec startlxde&quot;</span> <span class="op">&gt;</span> ~/.xinitrc</span></code></pre></div>
+<p>Alternatively, you can install a display manager such as LightDM or
+SLiM to provide a graphical login screen.</p>
+<h3 id="running-lxde-on-openbsd">Running LXDE on OpenBSD</h3>
+<p>OpenBSD also supports LXDE components within its official ports and
+packages tree. While OpenBSD does not always package LXDE as a single
+unified meta-package, all individual components—such as PCManFM (file
+manager), LXPanel, and Openbox (window manager)—are maintained.</p>
+<p>To install LXDE packages on OpenBSD:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg_add</span> lxde-common lxsession lxpanel pcmanfm openbox</span></code></pre></div>
+<p>OpenBSD uses the Xenocara X11 implementation. To configure your user
+session to launch LXDE, create or edit the <code>~/.xsession</code> file
+in your home directory:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;exec startlxde&quot;</span> <span class="op">&gt;</span> ~/.xsession</span></code></pre></div>
+<p>Ensure the file is executable:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x ~/.xsession</span></code></pre></div>
+<p>If you use OpenBSD's default display manager (<code>xenodm</code>),
+this configuration will automatically launch the LXDE desktop upon
+entering your login credentials.</p>
+<h3 id="why-choose-lxde-for-bsd-systems">Why Choose LXDE for BSD
+Systems?</h3>
+<ul>
+<li><strong>Low Memory Footprint:</strong> LXDE typically consumes less
+than 200 MB of RAM on boot, leaving maximum system resources available
+for applications and services.</li>
+<li><strong>Component Modularity:</strong> Each component of LXDE
+functions independently, allowing you to substitute pieces (such as
+replacing Openbox with another window manager like Fluxbox) without
+breaking the entire environment.</li>
+<li><strong>Compatibility:</strong> Because LXDE is built on GTK+ 2/3
+and traditional X11 specifications, it avoids heavy Linux-specific
+subsystems like systemd, integrating smoothly with BSD init
+systems.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/can-lxde-run-on-free-bsd-and-open-bsd';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

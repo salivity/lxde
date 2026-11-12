@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Toolkit Does LXDE Use as Its Foundation? - lxde</title>
+    <meta name="description" content="The classic Lightweight X11 Desktop Environment (LXDE) relies primarily on the GTK (GIMP Toolkit) framework for its graphical interface components. Designed specifically for low-resource hardware and energy efficiency, LXDE built its core utilities, panel">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/what-toolkit-does-lxde-use-as-its-foundation">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Toolkit Does LXDE Use as Its Foundation? - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/what-toolkit-does-lxde-use-as-its-foundation" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The classic Lightweight X11 Desktop Environment (LXDE) relies primarily on the GTK (GIMP Toolkit) framework for its graphical interface components. Designed specifically for low-resource hardware and energy efficiency, LXDE built its core utilities, panel" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-toolkit-does-lxde-use-as-its-foundation">What Toolkit Does
+LXDE Use as Its Foundation?</h1>
+<p>The classic Lightweight X11 Desktop Environment (LXDE) relies
+primarily on the <strong>GTK (GIMP Toolkit)</strong> framework for its
+graphical interface components. Designed specifically for low-resource
+hardware and energy efficiency, LXDE built its core utilities, panels,
+and file managers around the GTK2 standard. This article examines the
+architectural role of GTK within classic LXDE, how individual modular
+components utilize the toolkit, and why the project's evolution led to
+the Qt-based successor, LXQt.</p>
+<h2 id="the-role-of-gtk-in-classic-lxde">The Role of GTK in Classic
+LXDE</h2>
+<p>LXDE was created to provide a fast, responsive, and functional
+desktop environment that consumes minimal RAM and CPU cycles. To achieve
+this lightweight footprint, the developers chose <strong>GTK2</strong>
+as the underlying widget library.</p>
+<p>GTK provided several architectural advantages for the project:</p>
+<ul>
+<li><strong>Low Memory Footprint:</strong> GTK2 required significantly
+fewer system resources than contemporary alternatives like Qt3/Qt4 or
+heavy desktop stacks like GNOME 3.</li>
+<li><strong>C-Based Architecture:</strong> The core GTK library is
+written in C, aligning with LXDE’s objective of direct, fast execution
+without heavy runtime abstractions.</li>
+<li><strong>Broad Ecosystem Compatibility:</strong> Using GTK allowed
+LXDE applications to integrate cleanly with standard Linux utility
+libraries and themes.</li>
+</ul>
+<h2 id="key-gtk-based-components-of-lxde">Key GTK-Based Components of
+LXDE</h2>
+<p>Unlike integrated desktop environments such as GNOME or KDE Plasma,
+LXDE follows the Unix philosophy of modularity. Each component runs
+independently and relies on GTK for rendering:</p>
+<ul>
+<li><strong>PCManFM:</strong> The default file manager, acting as the
+backbone of the desktop. It uses GTK to display desktop icons, file
+trees, and volume management dialogs.</li>
+<li><strong>LXPanel:</strong> The taskbar and system tray component. GTK
+handles its menus, applets, clock, and panel configuration windows.</li>
+<li><strong>LXAppearance:</strong> A GTK theme switcher that allows
+users to alter widget styles, icon themes, and fonts across all GTK
+applications.</li>
+<li><strong>LXTerminal:</strong> A lightweight VTE-based terminal
+emulator rendered with GTK widgets.</li>
+</ul>
+<h2 id="the-shift-toward-lxqt">The Shift Toward LXQt</h2>
+<p>When the GTK development team moved from GTK2 to GTK3, resource
+consumption increased noticeably. LXDE developers evaluated migrating
+the codebase to GTK3 but discovered that memory usage grew
+substantially, contradicting LXDE's foundational design goals.</p>
+<p>Consequently, experimental ports using <strong>Qt</strong>
+demonstrated superior memory management and performance compared to
+GTK3. This led to the merger between the LXDE-Qt project and the
+Razor-qt team, creating <strong>LXQt</strong>. While LXQt serves as the
+modern Qt-based continuation, the original classic LXDE remains
+available for distributions targeting legacy hardware using stable GTK2
+and selective GTK3 maintenance ports.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/what-toolkit-does-lxde-use-as-its-foundation';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

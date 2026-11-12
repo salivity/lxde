@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Mouse Scroll Speed in LXDE - lxde</title>
+    <meta name="description" content="While the LXDE desktop environment does not provide a native graphical slider to adjust the mouse scroll wheel step behavior, you can easily modify it using a lightweight third-party utility called IMWheel. This guide explains how to install, configure, a">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/change-mouse-scroll-speed-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Change Mouse Scroll Speed in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/change-mouse-scroll-speed-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="While the LXDE desktop environment does not provide a native graphical slider to adjust the mouse scroll wheel step behavior, you can easily modify it using a lightweight third-party utility called IMWheel. This guide explains how to install, configure, a" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="change-mouse-scroll-speed-in-lxde">Change Mouse Scroll Speed in
+LXDE</h1>
+<p>While the LXDE desktop environment does not provide a native
+graphical slider to adjust the mouse scroll wheel step behavior, you can
+easily modify it using a lightweight third-party utility called IMWheel.
+This guide explains how to install, configure, and automate IMWheel to
+increase or decrease your scroll wheel sensitivity across the entire
+LXDE desktop, as well as how to adjust scrolling within specific
+applications.</p>
+<h3 id="understanding-lxdes-native-limitations">Understanding LXDE's
+Native Limitations</h3>
+<p>The default mouse configuration utility in LXDE,
+<code>lxinput</code>, only manages pointer acceleration, threshold, and
+left- or right-handed orientation. It lacks an option to adjust the
+number of lines or steps triggered by a single rotation click of the
+mouse wheel. Consequently, adjusting this behavior requires an external
+tool that intercepts and multiplies scroll events under X11.</p>
+<h3 id="step-1-install-imwheel">Step 1: Install IMWheel</h3>
+<p>IMWheel is a utility designed to tweak mouse wheel events on X11
+display servers. Open your terminal and install it using your
+distribution's package manager:</p>
+<p>On Debian, Ubuntu, or Raspberry Pi OS:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install imwheel</span></code></pre></div>
+<p>On Arch Linux:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> pacman <span class="at">-S</span> imwheel</span></code></pre></div>
+<p>On Fedora:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dnf install imwheel</span></code></pre></div>
+<h3 id="step-2-create-the-configuration-file">Step 2: Create the
+Configuration File</h3>
+<p>Create or edit the IMWheel configuration file located in your user's
+home directory:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.imwheelrc</span></code></pre></div>
+<p>Paste the following configuration:</p>
+<pre class="text"><code>&quot;.*&quot;
+None, Up, Button4, 3
+None, Down, Button5, 3
+Shift_L, Up, Shift_L|Button4, 3
+Shift_L, Down, Shift_L|Button5, 3
+Control_L, Up, Control_L|Button4, 3
+Control_L, Down, Control_L|Button5, 3</code></pre>
+<ul>
+<li><code>".*"</code> targets all running applications.</li>
+<li><code>Button4</code> represents scrolling up, and
+<code>Button5</code> represents scrolling down.</li>
+<li>The number at the end of each line (in this example, <code>3</code>)
+represents the multiplier. A higher number increases the scroll distance
+per step, while <code>1</code> retains the default behavior. Adjust this
+value to your preferred scrolling speed.</li>
+</ul>
+<p>Save and exit the file (in nano, press <code>Ctrl+O</code>,
+<code>Enter</code>, then <code>Ctrl+X</code>).</p>
+<h3 id="step-3-test-the-settings">Step 3: Test the Settings</h3>
+<p>Run IMWheel from your terminal with the following command to test
+your new settings:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">imwheel</span> <span class="at">--kill</span> <span class="at">--buttons</span> <span class="st">&quot;4 5&quot;</span></span></code></pre></div>
+<p>The <code>--kill</code> flag stops any running instances, and
+<code>--buttons "4 5"</code> ensures that IMWheel only alters vertical
+scrolling events, preventing issues with back and forward navigation on
+mice equipped with side buttons. Test the scrolling behavior in your
+file manager and web browser. If the scrolling is too fast or too slow,
+update the multiplier in <code>~/.imwheelrc</code> and re-run the
+command.</p>
+<h3 id="step-4-autostart-imwheel-on-login">Step 4: Autostart IMWheel on
+Login</h3>
+<p>To ensure the new scroll settings apply automatically each time you
+log in to LXDE, add IMWheel to the LXDE autostart configuration:</p>
+<ol type="1">
+<li>Open your session autostart file:</li>
+</ol>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/lxsession/LXDE/autostart</span></code></pre></div>
+<p><em>(If this file does not exist, edit
+<code>/etc/xdg/lxsession/LXDE/autostart</code> instead.)</em></p>
+<ol start="2" type="1">
+<li>Add the following line to the end of the file:</li>
+</ol>
+<pre class="text"><code>@imwheel --kill --buttons &quot;4 5&quot;</code></pre>
+<ol start="3" type="1">
+<li>Save and close the file.</li>
+</ol>
+<h3 id="alternative-application-level-adjustments">Alternative:
+Application-Level Adjustments</h3>
+<p>If you only need to change the scroll step behavior within a web
+browser rather than globally:</p>
+<ul>
+<li><strong>Firefox:</strong> Type <code>about:config</code> in the URL
+bar, accept the warning, search for
+<code>mousewheel.default.delta_multiplier_y</code>, and increase the
+integer value from the default (typically <code>100</code>) to a higher
+number like <code>200</code> or <code>300</code>.</li>
+<li><strong>Chromium / Google Chrome:</strong> Install a dedicated
+scrolling extension from the Chrome Web Store, such as <em>Chromium
+Wheel Smooth Scroller</em>, to adjust step size and smoothing directly
+within the browser.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/change-mouse-scroll-speed-in-lxde';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure LXDE Multi-Seat Computing on One PC - lxde</title>
+    <meta name="description" content="Multi-seat computing enables multiple independent users to share a single physical computer, each with their own monitor, keyboard, mouse, and audio output. Setting up the Lightweight X11 Desktop Environment (LXDE) for multi-seat is an efficient choice fo">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/configure-lxde-multi-seat-computing-on-one-pc">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Configure LXDE Multi-Seat Computing on One PC - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/configure-lxde-multi-seat-computing-on-one-pc" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Multi-seat computing enables multiple independent users to share a single physical computer, each with their own monitor, keyboard, mouse, and audio output. Setting up the Lightweight X11 Desktop Environment (LXDE) for multi-seat is an efficient choice fo" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="configure-lxde-multi-seat-computing-on-one-pc">Configure LXDE
+Multi-Seat Computing on One PC</h1>
+<p>Multi-seat computing enables multiple independent users to share a
+single physical computer, each with their own monitor, keyboard, mouse,
+and audio output. Setting up the Lightweight X11 Desktop Environment
+(LXDE) for multi-seat is an efficient choice for older or lower-spec
+systems due to its minimal resource footprint. This guide details how to
+assign specific hardware devices to distinct seats using
+<code>systemd-logind</code> and configure LightDM to spawn separate LXDE
+desktop sessions for each station.</p>
+<h3 id="1-hardware-requirements-and-preparation">1. Hardware
+Requirements and Preparation</h3>
+<p>Before configuring the software, ensure your host machine has the
+necessary hardware to support multiple stations:</p>
+<ul>
+<li><strong>Primary Seat (seat0):</strong> Built-in or dedicated GPU,
+primary monitor, keyboard, and mouse.</li>
+<li><strong>Secondary Seat (seat1):</strong> A second dedicated GPU (or
+a plug-and-play USB multi-seat adapter/DisplayLink device), a secondary
+monitor, keyboard, and mouse.</li>
+<li><strong>USB Hubs:</strong> Connecting all input and audio devices
+for the secondary seat through a dedicated USB hub simplifies the
+hardware assignment process significantly.</li>
+</ul>
+<h3 id="2-identify-and-assign-devices-with-loginctl">2. Identify and
+Assign Devices with loginctl</h3>
+<p>Modern Linux distributions utilize <code>systemd-logind</code> to
+manage multi-seat configurations dynamically without requiring complex
+manual <code>xorg.conf</code> files.</p>
+<p>Identify the available seats and connected hardware:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">loginctl</span> list-seats</span></code></pre></div>
+<p>By default, all hardware belongs to <code>seat0</code>. To move the
+secondary hardware to a new seat named <code>seat1</code>, identify the
+system paths of the secondary video card and USB hub:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">loginctl</span> list-devices</span></code></pre></div>
+<p>Attach the secondary graphics card to <code>seat1</code>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> loginctl attach seat1 /sys/devices/pci0000:00/.../drm/card1</span></code></pre></div>
+<p>Attach the dedicated USB hub powering the second station's keyboard,
+mouse, and audio devices:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> loginctl attach seat1 /sys/devices/pci0000:00/.../usbX/X-X</span></code></pre></div>
+<p>Verify that the devices have successfully migrated to the new
+seat:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">loginctl</span> seat-status seat1</span></code></pre></div>
+<p>Once attached, <code>systemd</code> writes udev rules automatically
+to persist these hardware assignments across system reboots.</p>
+<h3 id="3-configure-the-lightdm-display-manager">3. Configure the
+LightDM Display Manager</h3>
+<p>LXDE typically relies on LightDM to manage user logins. LightDM
+supports systemd multi-seat setups out of the box with minimal
+configuration.</p>
+<p>Open <code>/etc/lightdm/lightdm.conf</code> in a text editor:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/lightdm/lightdm.conf</span></code></pre></div>
+<p>Locate the <code>[LightDM]</code> section and ensure
+<code>logind-check-graphical</code> is enabled:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[LightDM]</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dt">logind-check-graphical</span><span class="ot">=</span><span class="kw">true</span></span></code></pre></div>
+<p>Scroll to the <code>[Seat:*]</code> section to ensure LXDE is
+configured as the default session:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Seat:*]</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">user-session</span><span class="ot">=</span><span class="st">LXDE</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="dt">greeter-session</span><span class="ot">=</span><span class="st">lightdm-gtk-greeter</span></span></code></pre></div>
+<p>Save and exit the file.</p>
+<h3 id="4-audio-isolation">4. Audio Isolation</h3>
+<p>To prevent sound from one seat playing on another, route the audio
+per seat:</p>
+<ul>
+<li>Assign an individual USB audio card or USB headset to the secondary
+seat's USB hub.</li>
+<li>Because the entire USB hub was attached to <code>seat1</code> in
+Step 2, PulseAudio or PipeWire will automatically detect the sound card
+as belonging exclusively to <code>seat1</code>'s user session.</li>
+</ul>
+<h3 id="5-start-and-test-the-configuration">5. Start and Test the
+Configuration</h3>
+<p>Restart the display manager to apply the changes and launch both
+sessions:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart lightdm</span></code></pre></div>
+<p>Both monitors should now illuminate with independent LightDM login
+screens. Users can log into their respective accounts simultaneously,
+running fully isolated LXDE desktop environments powered by the single
+host machine.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/configure-lxde-multi-seat-computing-on-one-pc';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

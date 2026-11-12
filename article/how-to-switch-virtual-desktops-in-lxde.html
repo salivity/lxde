@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Switch Virtual Desktops in LXDE - lxde</title>
+    <meta name="description" content="Virtual desktops in the Lightweight X11 Desktop Environment (LXDE) help you organize running applications into separate workspaces. While you can switch between these screens using the desktop pager on your panel, utilizing keyboard shortcuts significantl">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-switch-virtual-desktops-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Switch Virtual Desktops in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-switch-virtual-desktops-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Virtual desktops in the Lightweight X11 Desktop Environment (LXDE) help you organize running applications into separate workspaces. While you can switch between these screens using the desktop pager on your panel, utilizing keyboard shortcuts significantl" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-switch-virtual-desktops-in-lxde">How to Switch Virtual
+Desktops in LXDE</h1>
+<p>Virtual desktops in the Lightweight X11 Desktop Environment (LXDE)
+help you organize running applications into separate workspaces. While
+you can switch between these screens using the desktop pager on your
+panel, utilizing keyboard shortcuts significantly speeds up your
+workflow. This guide details the default key bindings for navigating
+virtual desktops in LXDE and explains how to modify them using the
+underlying Openbox configuration.</p>
+<h3 id="default-keyboard-shortcuts">Default Keyboard Shortcuts</h3>
+<p>LXDE uses Openbox as its default window manager, which comes
+pre-configured with several global key bindings for workspace
+navigation:</p>
+<ul>
+<li><strong>Go to the Next Desktop (Right):</strong> Press
+<code>Ctrl</code> + <code>Alt</code> + <code>Right Arrow</code></li>
+<li><strong>Go to the Previous Desktop (Left):</strong> Press
+<code>Ctrl</code> + <code>Alt</code> + <code>Left Arrow</code></li>
+<li><strong>Move Active Window to Next Desktop:</strong> Press
+<code>Shift</code> + <code>Alt</code> + <code>Right Arrow</code></li>
+<li><strong>Move Active Window to Previous Desktop:</strong> Press
+<code>Shift</code> + <code>Alt</code> + <code>Left Arrow</code></li>
+</ul>
+<h3 id="customizing-desktop-shortcuts">Customizing Desktop
+Shortcuts</h3>
+<p>If your distribution does not have these bindings enabled by default,
+or if you prefer a different key combination (such as <code>Super</code>
++ <code>Number</code>), you can configure them directly in the Openbox
+configuration file.</p>
+<ol type="1">
+<li><p>Open your terminal.</p></li>
+<li><p>Open the configuration file in a text editor:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/openbox/lxde-rc.xml</span></code></pre></div>
+<p><em>(Note: On some systems, this file may simply be named
+<code>rc.xml</code> inside
+<code>~/.config/openbox/</code>.)</em></p></li>
+<li><p>Locate the <code>&lt;keyboard&gt;</code> section in the XML
+file.</p></li>
+<li><p>Add or modify the key bindings for desktop navigation:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Switch to Desktop on the Left --&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">keybind</span> <span class="ot">key=</span><span class="st">&quot;C-A-Left&quot;</span>&gt;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;DesktopLeft&quot;</span>&gt;</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">wrap</span>&gt;yes&lt;/<span class="kw">wrap</span>&gt;</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">action</span>&gt;</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">keybind</span>&gt;</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Switch to Desktop on the Right --&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">keybind</span> <span class="ot">key=</span><span class="st">&quot;C-A-Right&quot;</span>&gt;</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;DesktopRight&quot;</span>&gt;</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">wrap</span>&gt;yes&lt;/<span class="kw">wrap</span>&gt;</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">action</span>&gt;</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">keybind</span>&gt;</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Direct Jump to Desktop 1 --&gt;</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">keybind</span> <span class="ot">key=</span><span class="st">&quot;W-1&quot;</span>&gt;</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;GoToDesktop&quot;</span>&gt;</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">to</span>&gt;1&lt;/<span class="kw">to</span>&gt;</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">action</span>&gt;</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">keybind</span>&gt;</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Direct Jump to Desktop 2 --&gt;</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">keybind</span> <span class="ot">key=</span><span class="st">&quot;W-2&quot;</span>&gt;</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">action</span> <span class="ot">name=</span><span class="st">&quot;GoToDesktop&quot;</span>&gt;</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">to</span>&gt;2&lt;/<span class="kw">to</span>&gt;</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">action</span>&gt;</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">keybind</span>&gt;</span></code></pre></div>
+<p><em>Key Modifiers:</em></p>
+<ul>
+<li><code>C</code> = Control</li>
+<li><code>A</code> = Alt</li>
+<li><code>W</code> = Super / Windows key</li>
+<li><code>S</code> = Shift</li>
+</ul></li>
+<li><p>Save the file and exit the editor (<code>Ctrl</code> +
+<code>O</code>, then <code>Ctrl</code> + <code>X</code> in
+nano).</p></li>
+<li><p>Apply the changes immediately without rebooting by running:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">openbox</span> <span class="at">--reconfigure</span></span></code></pre></div></li>
+</ol>
+<p>Once reconfigured, your new keyboard shortcuts will be active
+immediately for navigating your LXDE workspaces.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/how-to-switch-virtual-desktops-in-lxde';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

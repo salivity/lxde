@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Required Libraries to Build PCManFM for LXDE - lxde</title>
+    <meta name="description" content="Building PCManFM, the default file manager of the Lightweight X11 Desktop Environment (LXDE), requires a specific set of foundational C libraries and development headers. Because modern versions of PCManFM are largely frontends for the core file-managemen">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/required-libraries-to-build-pc-man-fm-for-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Required Libraries to Build PCManFM for LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/required-libraries-to-build-pc-man-fm-for-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Building PCManFM, the default file manager of the Lightweight X11 Desktop Environment (LXDE), requires a specific set of foundational C libraries and development headers. Because modern versions of PCManFM are largely frontends for the core file-managemen" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="required-libraries-to-build-pcmanfm-for-lxde">Required Libraries
+to Build PCManFM for LXDE</h1>
+<p>Building PCManFM, the default file manager of the Lightweight X11
+Desktop Environment (LXDE), requires a specific set of foundational C
+libraries and development headers. Because modern versions of PCManFM
+are largely frontends for the core file-management backend, the
+dependency list centers on LibFM, GTK, and GLib. Below is the direct
+breakdown of the libraries strictly required to compile PCManFM from
+source.</p>
+<h3 id="1-libfm-and-libfm-gtk">1. LibFM and LibFM-GTK</h3>
+<p>The most critical strict dependency is <strong>LibFM</strong>
+(including <code>libfm</code> and <code>libfm-gtk</code>). During the
+redesign of PCManFM (v0.9.x and later), almost all file-handling logic,
+MIME-type handling, and file-manager GUI widgets were abstracted into
+this standalone library.</p>
+<ul>
+<li><strong>Required packages:</strong> <code>libfm-dev</code> (or
+<code>libfm-devel</code>), providing headers for both <code>libfm</code>
+and <code>libfm-gtk</code>.</li>
+<li><strong>Minimum version:</strong> Typically requires
+<code>libfm &gt;= 1.2.0</code> (matching the corresponding PCManFM
+release version).</li>
+</ul>
+<h3 id="2-gtk-toolkit">2. GTK+ Toolkit</h3>
+<p>PCManFM uses the GTK+ toolkit to render its graphical user interface.
+While originally built strictly against GTK+ 2, modern source trees
+support either GTK+ 2 or GTK+ 3, selectable during configuration (e.g.,
+via <code>--with-gtk=3</code>).</p>
+<ul>
+<li><strong>For GTK+ 2 builds:</strong>
+<code>gtk+-2.0 &gt;= 2.18.0</code> (headers: <code>libgtk2.0-dev</code>
+or <code>gtk2-devel</code>).</li>
+<li><strong>For GTK+ 3 builds:</strong>
+<code>gtk+-3.0 &gt;= 3.0.0</code> (headers: <code>libgtk-3-dev</code> or
+<code>gtk3-devel</code>).</li>
+</ul>
+<h3 id="3-glib-and-gio">3. GLib and GIO</h3>
+<p>As with all GTK-based applications, low-level data structures, event
+loops, and core I/O abstraction rely on the GLib suite.</p>
+<ul>
+<li><strong>Required libraries:</strong> <code>glib-2.0</code> and
+<code>gio-2.0</code> (headers: <code>libglib2.0-dev</code> or
+<code>glib2-devel</code>).</li>
+<li><strong>Minimum version:</strong>
+<code>glib-2.0 &gt;= 2.18.0</code>. GIO handles file monitoring,
+asynchronous file operations, and integration with the GVFS virtual
+filesystem layer.</li>
+</ul>
+<h3 id="4-x11-client-library-libx11">4. X11 Client Library (libX11)</h3>
+<p>Because PCManFM acts not only as a file manager but also manages the
+desktop window (drawing desktop icons and wallpaper) in LXDE, it
+requires direct interaction with the X Window System.</p>
+<ul>
+<li><strong>Required library:</strong> <code>x11</code> (headers:
+<code>libx11-dev</code> or <code>libX11-devel</code>).</li>
+</ul>
+<h3 id="5-essential-build-and-translation-utilities">5. Essential Build
+and Translation Utilities</h3>
+<p>While not shared runtime libraries, the configure and build system
+strictly fails without the following tools:</p>
+<ul>
+<li><strong>pkg-config:</strong> Required by the Autotools scripts to
+detect library flags and paths.</li>
+<li><strong>intltool / gettext:</strong> Required to compile the
+localization catalogs and translated desktop entry files.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/required-libraries-to-build-pc-man-fm-for-lxde';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

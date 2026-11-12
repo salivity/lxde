@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is the lxde-common Package in Linux? - lxde</title>
+    <meta name="description" content="The lxde-common package provides the core configuration files, default artwork, and session initialization scripts required to integrate the Lightweight X11 Desktop Environment (LXDE) across various Linux distributions. By serving as the central glue betw">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/what-is-the-lxde-common-package-in-linux">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is the lxde-common Package in Linux? - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/what-is-the-lxde-common-package-in-linux" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The lxde-common package provides the core configuration files, default artwork, and session initialization scripts required to integrate the Lightweight X11 Desktop Environment (LXDE) across various Linux distributions. By serving as the central glue betw" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-the-lxde-common-package-in-linux">What Is the
+lxde-common Package in Linux?</h1>
+<p>The <code>lxde-common</code> package provides the core configuration
+files, default artwork, and session initialization scripts required to
+integrate the Lightweight X11 Desktop Environment (LXDE) across various
+Linux distributions. By serving as the central glue between modular
+components such as the Openbox window manager, LXPanel, and PCManFM,
+this package ensures users receive a unified, functional desktop out of
+the box.</p>
+<h3 id="session-management-and-startup">Session Management and
+Startup</h3>
+<p>The primary role of <code>lxde-common</code> is orchestrating the
+desktop startup sequence. It supplies the <code>startlxde</code> shell
+script, which calls <code>lxsession</code> with the appropriate profile
+parameters. When a user selects an LXDE session from a display manager
+(such as LightDM or SDDM), this script initializes the essential
+background daemons, the X window manager, the panel, and the desktop
+file manager. Without <code>lxde-common</code>, these standalone
+applications would not launch automatically in a coordinated
+environment.</p>
+<h3 id="default-configurations">Default Configurations</h3>
+<p>LXDE is designed to be highly modular, meaning its components do not
+inherently depend on one another. The <code>lxde-common</code> package
+supplies the default global settings stored under <code>/etc/xdg/</code>
+to bridge this gap. These include:</p>
+<ul>
+<li><strong>Window Manager Settings:</strong> Default keybindings,
+window behaviors, and theme associations for Openbox
+(<code>rc.xml</code>).</li>
+<li><strong>Panel Layouts:</strong> Base configuration for
+<code>lxpanel</code>, determining taskbar placement, the layout of the
+application menu, the system tray, and default plugins.</li>
+<li><strong>Desktop and File Management:</strong> Initial preferences
+for PCManFM, controlling desktop icons, wallpaper rendering, and file
+browsing behavior.</li>
+<li><strong>Session Profiles:</strong> Configuration templates that
+define which programs launch upon login.</li>
+</ul>
+<p>When a user logs in for the first time, these global settings are
+copied or mapped to the user's home directory (<code>~/.config/</code>),
+allowing personal customization without breaking system-wide
+defaults.</p>
+<h3 id="system-integration-across-distributions">System Integration
+Across Distributions</h3>
+<p>Across major distributions such as Debian, Arch Linux, Fedora, and
+openSUSE, <code>lxde-common</code> maintains consistency while
+respecting distribution-specific packaging standards.</p>
+<p>In upstream-focused distributions like Arch Linux and Fedora,
+<code>lxde-common</code> delivers a clean, vanilla LXDE experience with
+minimal distribution-specific modifications. In Debian-based systems, it
+provides the baseline dependency structure for metapackages like
+<code>lxde</code> and <code>lxde-core</code>, ensuring that all
+mandatory runtime dependencies are satisfied. While derivative systems
+such as legacy Lubuntu often created specialized branding packages, they
+relied heavily on the design patterns and profiles established by
+<code>lxde-common</code>.</p>
+<h3 id="visual-assets-and-desktop-profiles">Visual Assets and Desktop
+Profiles</h3>
+<p>The package also provides generic graphical assets, including default
+wallpapers, LXDE logo branding, and desktop entry files compliant with
+freedesktop.org standards. By standardizing these elements,
+<code>lxde-common</code> ensures that applications appear properly
+categorized in the system application menu and that the graphical
+interface presents a consistent aesthetic across any distribution where
+LXDE is deployed.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/what-is-the-lxde-common-package-in-linux';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

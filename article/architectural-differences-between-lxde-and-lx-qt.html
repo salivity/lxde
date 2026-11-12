@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architectural Differences Between LXDE and LXQt - lxde</title>
+    <meta name="description" content="This article examines the core architectural differences between the Lightweight X11 Desktop Environment (LXDE) and its modern successor, LXQt. While both environments share the design philosophy of delivering a fast, resource-efficient, and modular deskt">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/architectural-differences-between-lxde-and-lx-qt">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Architectural Differences Between LXDE and LXQt - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/architectural-differences-between-lxde-and-lx-qt" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines the core architectural differences between the Lightweight X11 Desktop Environment (LXDE) and its modern successor, LXQt. While both environments share the design philosophy of delivering a fast, resource-efficient, and modular deskt" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="architectural-differences-between-lxde-and-lxqt">Architectural
+Differences Between LXDE and LXQt</h1>
+<p>This article examines the core architectural differences between the
+Lightweight X11 Desktop Environment (LXDE) and its modern successor,
+LXQt. While both environments share the design philosophy of delivering
+a fast, resource-efficient, and modular desktop interface, they diverge
+fundamentally in their underlying graphical toolkits, component
+integration, library dependencies, and readiness for modern display
+servers.</p>
+<h3 id="the-core-toolkit-gtk-vs-qt">The Core Toolkit: GTK vs. Qt</h3>
+<p>The most fundamental architectural distinction between LXDE and LXQt
+lies in the graphical widget toolkit used to build the desktop
+components:</p>
+<ul>
+<li><strong>LXDE is built on GTK+ 2:</strong> Originally developed
+around GTK+ 2, LXDE relied on C-based libraries for its rendering and UI
+controls. When the GNOME project transitioned to GTK 3, the LXDE
+development team faced severe migration challenges. GTK 3 introduced
+significant architectural overhauls, increased memory consumption, and
+deprecated older APIs without backward compatibility, leading developer
+Hong Jen Yee (PCMan) to abandon a full GTK 3 port.</li>
+<li><strong>LXQt is built on Qt:</strong> LXQt shifted entirely to C++
+using the Qt framework (initially Qt 5, and increasingly Qt 6). Qt
+provides an object-oriented codebase, cross-platform abstraction, and
+built-in support for hardware acceleration, enabling better
+maintainability without the memory overhead introduced by modern GTK
+iterations.</li>
+</ul>
+<h3 id="origins-and-component-lineage">Origins and Component
+Lineage</h3>
+<p>LXDE was engineered as an extremely loose collection of independent
+tools. Each component—such as <code>pcmanfm</code> (file manager),
+<code>lxpanel</code> (taskbar), and <code>lxsession</code> (session
+manager)—functioned with minimal coupling to the others, often
+communicating only through standard X11 protocols and Freedesktop.org
+specifications.</p>
+<p>LXQt was born out of a merger between the experimental
+<strong>LXDE-Qt</strong> project and <strong>Razor-qt</strong>, another
+lightweight Qt desktop project. As a result, LXQt’s internal components
+are modernized re-implementations or direct successors of these two
+codebases:</p>
+<ul>
+<li><strong>File Management:</strong> LXDE uses <code>pcmanfm</code>, a
+pure GTK+ file manager. LXQt uses <code>pcmanfm-qt</code>, completely
+rewritten to leverage Qt’s Model/View architecture.</li>
+<li><strong>Panel and Session:</strong> LXDE's <code>lxpanel</code> and
+<code>lxsession</code> were replaced by <code>lxqt-panel</code> and
+<code>lxqt-session</code>, integrating code from both Razor-qt and
+LXDE.</li>
+<li><strong>Configuration:</strong> LXDE relied on standalone tools like
+<code>lxappearance</code> (which modified GTK configuration files
+directly). LXQt features a centralized configuration center
+(<code>lxqt-config</code>) that coordinates global Qt theming, inputs,
+and system settings.</li>
+</ul>
+<h3 id="integration-with-kde-frameworks">Integration with KDE
+Frameworks</h3>
+<p>Unlike LXDE, which avoided large external desktop dependencies to
+maintain low overhead, LXQt strategically utilizes modular, non-GUI
+libraries from <strong>KDE Frameworks (KF5/KF6)</strong>. Instead of
+writing custom logic for window management interactions, screen
+handling, and system-level abstractions, LXQt utilizes tested modules
+such as <code>KWindowSystem</code> and <code>Solid</code>. This hybrid
+approach allows LXQt to benefit from upstream KDE maintenance while
+remaining completely independent from the heavyweight Plasma desktop
+environment.</p>
+<h3 id="window-management-and-display-protocols">Window Management and
+Display Protocols</h3>
+<ul>
+<li><strong>X11 Exclusivity in LXDE:</strong> LXDE is fundamentally
+architected around the X11 display protocol. Its standard components,
+such as <code>lxpanel</code> and default window manager Openbox, expect
+traditional X11 window properties (EWMH/NetWM) to draw panels, handle
+window layering, and monitor system events. Moving LXDE natively to
+Wayland is practically impossible without a total rewrite.</li>
+<li><strong>Display Server Flexibility in LXQt:</strong> Because Qt
+abstracts underlying windowing systems via its Qt Platform Abstraction
+(QPA) layer, LXQt is not rigidly bound to X11. While LXQt originally
+relied on Openbox on X11, it is WM-agnostic and can use KWin, Xfwm4, or
+modern Wayland compositors (such as Labwc or Wayfire). Starting with
+LXQt 2.0, the environment includes official support for Wayland
+sessions.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/architectural-differences-between-lxde-and-lx-qt';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

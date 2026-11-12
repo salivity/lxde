@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can LXDE Run Without a Compositing Manager? - lxde</title>
+    <meta name="description" content="LXDE (Lightweight X11 Desktop Environment) can run completely without a compositing manager, and doing so is actually its default configuration. Designed specifically for low-end, legacy, and resource-constrained hardware, LXDE relies on a simple stacking">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/can-lxde-run-without-a-compositing-manager">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Can LXDE Run Without a Compositing Manager? - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/can-lxde-run-without-a-compositing-manager" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="LXDE (Lightweight X11 Desktop Environment) can run completely without a compositing manager, and doing so is actually its default configuration. Designed specifically for low-end, legacy, and resource-constrained hardware, LXDE relies on a simple stacking" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="can-lxde-run-without-a-compositing-manager">Can LXDE Run Without
+a Compositing Manager?</h1>
+<p>LXDE (Lightweight X11 Desktop Environment) can run completely without
+a compositing manager, and doing so is actually its default
+configuration. Designed specifically for low-end, legacy, and
+resource-constrained hardware, LXDE relies on a simple stacking window
+manager to handle windows, meaning advanced graphical compositing is
+neither required nor enabled out of the box.</p>
+<h3 id="the-default-lxde-architecture">The Default LXDE
+Architecture</h3>
+<p>LXDE uses Openbox as its standard window manager. Openbox is a
+traditional, lightweight stacking window manager that renders windows
+directly to the display server without passing them through an
+off-screen buffer. Because of this architecture, LXDE does not require a
+standalone compositing manager—such as Picom, Compton, or xcompmgr—to
+render the desktop, taskbar, icons, or application windows.</p>
+<h3 id="advantages-of-running-without-compositing">Advantages of Running
+Without Compositing</h3>
+<p>Running LXDE without a compositor provides several operational
+advantages, especially on older systems:</p>
+<ul>
+<li><strong>Minimal Resource Usage:</strong> Without a compositor
+constantly processing window frames, transparency, and transitions, CPU
+and RAM usage remain exceptionally low.</li>
+<li><strong>Lower GPU Overhead:</strong> Systems lacking dedicated
+graphics hardware or hardware-accelerated drivers perform significantly
+faster because the CPU is not burdened with software-rendered
+compositing effects.</li>
+<li><strong>Maximum Responsiveness:</strong> Window drawing, moving, and
+resizing happen instantaneously with the least possible graphical
+latency.</li>
+</ul>
+<h3 id="the-trade-offs">The Trade-offs</h3>
+<p>While running without a compositing manager is ideal for performance,
+it does introduce a few visual compromises:</p>
+<ul>
+<li><strong>Screen Tearing:</strong> Without compositing or vertical
+sync (VSync) enforcement, fast-moving video playback or rapid scrolling
+can result in visible horizontal tearing.</li>
+<li><strong>Lack of Visual Effects:</strong> Modern graphical features
+like true window transparency, blur effects, fade animations, and drop
+shadows cannot be rendered. Applications requesting true alpha channels
+will often display solid black or distorted backgrounds behind
+transparent UI elements.</li>
+</ul>
+<h3 id="optional-compositing">Optional Compositing</h3>
+<p>If visual effects or tear-free video are required later, users can
+easily introduce an external compositor like Picom without modifying the
+base desktop components. However, for users seeking the lightest
+possible footprint, running LXDE completely bare without a compositing
+manager remains one of the most effective and stable options available
+on the Linux desktop.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/can-lxde-run-without-a-compositing-manager';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

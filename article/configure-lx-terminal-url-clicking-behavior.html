@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure LXTerminal URL Clicking Behavior - lxde</title>
+    <meta name="description" content="This guide explains how to configure and customize the URL-clicking behavior within the lightweight LXDE terminal emulator, LXTerminal. By default, LXTerminal detects web links inside the console, but opening them efficiently depends on mouse actions, con">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/configure-lx-terminal-url-clicking-behavior">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Configure LXTerminal URL Clicking Behavior - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/configure-lx-terminal-url-clicking-behavior" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide explains how to configure and customize the URL-clicking behavior within the lightweight LXDE terminal emulator, LXTerminal. By default, LXTerminal detects web links inside the console, but opening them efficiently depends on mouse actions, con" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="configure-lxterminal-url-clicking-behavior">Configure LXTerminal
+URL Clicking Behavior</h1>
+<p>This guide explains how to configure and customize the URL-clicking
+behavior within the lightweight LXDE terminal emulator, LXTerminal. By
+default, LXTerminal detects web links inside the console, but opening
+them efficiently depends on mouse actions, contextual menus, and
+system-level URL handlers. Below are the steps to control how links are
+opened, use modifier keys, and assign your preferred web browser to
+handle clicked links.</p>
+<h3 id="understanding-default-click-actions">Understanding Default Click
+Actions</h3>
+<p>In LXTerminal, URLs are automatically underlined when you hover over
+them, but simply clicking them with a standard left-click will not
+trigger navigation (this prevents accidental clicks while selecting
+text). You can interact with detected URLs in two ways:</p>
+<ol type="1">
+<li><strong>Modifier Click:</strong> Hold the <code>Ctrl</code> key and
+click the link with your left mouse button (<code>Ctrl</code> +
+Left-Click). This triggers the default action to launch the
+address.</li>
+<li><strong>Context Menu:</strong> Right-click directly on the
+hyperlinked text and select <strong>Open Link</strong> from the context
+menu. You can also choose <strong>Copy Link Address</strong> to paste
+the URL manually elsewhere.</li>
+</ol>
+<h3 id="adjusting-terminal-preferences">Adjusting Terminal
+Preferences</h3>
+<p>LXTerminal's core interface options can be modified directly through
+its configuration menu:</p>
+<ol type="1">
+<li>Launch LXTerminal.</li>
+<li>Select <strong>Edit</strong> from the top menu bar, then click
+<strong>Preferences</strong>.</li>
+<li>Under the <strong>General</strong> and <strong>Shortcuts</strong>
+tabs, you can review terminal controls. While LXTerminal maintains a
+lightweight profile and delegates link execution to the system layer
+rather than internal script injectors, you can manage terminal shortcuts
+to ensure keys like <code>Ctrl</code> or custom accelerators do not
+conflict with terminal mouse events.</li>
+</ol>
+<p>You can also inspect the raw configuration file by opening
+<code>~/.config/lxterminal/lxterminal.conf</code> in a text editor to
+view terminal-specific parameters.</p>
+<h3 id="setting-the-default-browser-for-clicked-urls">Setting the
+Default Browser for Clicked URLs</h3>
+<p>When you trigger a link click inside LXTerminal, it hands the request
+off to the desktop environment's URL-dispatching utility, primarily
+<code>xdg-open</code>. If URLs open in the wrong browser or fail to
+open, you must set the system's default web handler.</p>
+<p>To set your preferred browser using <code>xdg-settings</code>,
+run:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xdg-settings</span> set default-web-browser <span class="op">&lt;</span>browser-desktop-file<span class="op">&gt;</span></span></code></pre></div>
+<p><em>(Replace <code>&lt;browser-desktop-file&gt;</code> with your
+installed browser's desktop entry, such as <code>firefox.desktop</code>
+or <code>chromium-browser.desktop</code>.)</em></p>
+<p>Alternatively, on Debian- or Ubuntu-based distributions, set the
+system-wide terminal web browser alternative via:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--config</span> x-www-browser</span></code></pre></div>
+<p>Select the preferred browser from the numbered list. Once updated,
+any link triggered from LXTerminal via <code>Ctrl</code> + Left-Click or
+the right-click menu will immediately launch inside the chosen
+browser.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/configure-lx-terminal-url-clicking-behavior';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

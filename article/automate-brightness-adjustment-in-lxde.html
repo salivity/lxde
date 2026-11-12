@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automate Brightness Adjustment in LXDE - lxde</title>
+    <meta name="description" content="This guide demonstrates how to create and deploy an automated brightness adjustment loop in the lightweight LXDE desktop environment. By utilizing standard command-line utilities combined with a simple Bash script, you can automatically modulate your disp">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/automate-brightness-adjustment-in-lxde">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Automate Brightness Adjustment in LXDE - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/automate-brightness-adjustment-in-lxde" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide demonstrates how to create and deploy an automated brightness adjustment loop in the lightweight LXDE desktop environment. By utilizing standard command-line utilities combined with a simple Bash script, you can automatically modulate your disp" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="automate-brightness-adjustment-in-lxde">Automate Brightness
+Adjustment in LXDE</h1>
+<p>This guide demonstrates how to create and deploy an automated
+brightness adjustment loop in the lightweight LXDE desktop environment.
+By utilizing standard command-line utilities combined with a simple Bash
+script, you can automatically modulate your display's backlight
+depending on the time of day, reducing eye strain and conserving power
+without running heavy third-party software.</p>
+<h3 id="step-1-install-brightness-control-tools">Step 1: Install
+Brightness Control Tools</h3>
+<p>LXDE relies on native Linux utilities to modify hardware backlight
+levels. The most reliable and lightweight tool for this is
+<code>brightnessctl</code>. Install it using your distribution's package
+manager:</p>
+<p>For Debian/Ubuntu-based systems:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install brightnessctl</span></code></pre></div>
+<p>For Arch-based systems:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> pacman <span class="at">-S</span> brightnessctl</span></code></pre></div>
+<p>Verify that it works by adjusting your brightness manually:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brightnessctl</span> set 50%</span></code></pre></div>
+<h3 id="step-2-write-the-adjustment-loop-script">Step 2: Write the
+Adjustment Loop Script</h3>
+<p>Create a script that continuously checks the current hour and sets
+the display backlight accordingly.</p>
+<ol type="1">
+<li>Create a script file in your local binary directory:</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.local/bin</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.local/bin/auto_brightness.sh</span></code></pre></div>
+<ol start="2" type="1">
+<li>Add the following code:</li>
+</ol>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Configuration: Define brightness percentages</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="va">DAY_BRIGHTNESS</span><span class="op">=</span><span class="st">&quot;100%&quot;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="va">EVENING_BRIGHTNESS</span><span class="op">=</span><span class="st">&quot;60%&quot;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="va">NIGHT_BRIGHTNESS</span><span class="op">=</span><span class="st">&quot;25%&quot;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Configuration: Define hour boundaries (24-hour format)</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="va">DAY_START</span><span class="op">=</span>8</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="va">EVENING_START</span><span class="op">=</span>18</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="va">NIGHT_START</span><span class="op">=</span>22</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="fu">true</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="va">CURRENT_HOUR</span><span class="op">=</span><span class="va">$(</span><span class="fu">date</span> +%-H<span class="va">)</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="st">&quot;</span><span class="va">$CURRENT_HOUR</span><span class="st">&quot;</span> <span class="ot">-ge</span> <span class="st">&quot;</span><span class="va">$NIGHT_START</span><span class="st">&quot;</span> <span class="bu">]</span> <span class="kw">||</span> <span class="bu">[</span> <span class="st">&quot;</span><span class="va">$CURRENT_HOUR</span><span class="st">&quot;</span> <span class="ot">-lt</span> <span class="st">&quot;</span><span class="va">$DAY_START</span><span class="st">&quot;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">TARGET_BRIGHTNESS</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$NIGHT_BRIGHTNESS</span><span class="st">&quot;</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> <span class="bu">[</span> <span class="st">&quot;</span><span class="va">$CURRENT_HOUR</span><span class="st">&quot;</span> <span class="ot">-ge</span> <span class="st">&quot;</span><span class="va">$EVENING_START</span><span class="st">&quot;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">TARGET_BRIGHTNESS</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$EVENING_BRIGHTNESS</span><span class="st">&quot;</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        <span class="va">TARGET_BRIGHTNESS</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$DAY_BRIGHTNESS</span><span class="st">&quot;</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">fi</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Apply the target brightness smoothly</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    <span class="ex">brightnessctl</span> set <span class="st">&quot;</span><span class="va">$TARGET_BRIGHTNESS</span><span class="st">&quot;</span> <span class="op">&gt;</span> /dev/null <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check every 60 seconds</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> 60</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div>
+<ol start="3" type="1">
+<li>Save the file and make it executable:</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x ~/.local/bin/auto_brightness.sh</span></code></pre></div>
+<h3 id="step-3-configure-lxde-autostart">Step 3: Configure LXDE
+Autostart</h3>
+<p>To ensure the loop runs automatically when you log into LXDE,
+register the script in the LXDE session configuration.</p>
+<ol type="1">
+<li>Open your user-level LXDE autostart configuration file:</li>
+</ol>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.config/lxsession/LXDE/autostart</span></code></pre></div>
+<p><em>(If the file does not exist, copy the template from
+<code>/etc/xdg/lxsession/LXDE/autostart</code> or simply create an empty
+file).</em></p>
+<ol start="2" type="1">
+<li>Add the following line at the end of the file, replacing
+<code>your_username</code> with your actual username:</li>
+</ol>
+<pre class="text"><code>@/home/your_username/.local/bin/auto_brightness.sh</code></pre>
+<p>The <code>@</code> prefix instructs the LXDE session manager to
+automatically restart the script if it unexpectedly crashes.</p>
+<h3 id="step-4-test-the-setup">Step 4: Test the Setup</h3>
+<p>You can immediately test the loop in the background by running:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">~/.local/bin/auto_brightness.sh</span> <span class="kw">&amp;</span></span></code></pre></div>
+<p>The script will begin running immediately, evaluate the current
+system time, adjust the screen backlight to the corresponding profile,
+and sleep for 60 seconds before cycling again. Upon your next reboot or
+logout, LXDE will handle the background execution automatically.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/automate-brightness-adjustment-in-lxde';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

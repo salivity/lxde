@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set cgroup Resource Limits for an LXDE Session - lxde</title>
+    <meta name="description" content="This article explains how to configure control group (cgroup) resource limits for an entire LXDE desktop session. It covers the primary configuration methods using systemd—the modern cgroup manager on Linux—to enforce CPU, memory, and I/O constraints acro">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/set-cgroup-resource-limits-for-an-lxde-session">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Set cgroup Resource Limits for an LXDE Session - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/set-cgroup-resource-limits-for-an-lxde-session" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how to configure control group (cgroup) resource limits for an entire LXDE desktop session. It covers the primary configuration methods using systemd—the modern cgroup manager on Linux—to enforce CPU, memory, and I/O constraints acro" />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="set-cgroup-resource-limits-for-an-lxde-session">Set cgroup
+Resource Limits for an LXDE Session</h1>
+<p>This article explains how to configure control group (cgroup)
+resource limits for an entire LXDE desktop session. It covers the
+primary configuration methods using systemd—the modern cgroup manager on
+Linux—to enforce CPU, memory, and I/O constraints across all processes
+spawned within the user's graphical session, as well as the legacy PAM
+configuration alternative.</p>
+<h3 id="method-1-the-systemd-user-slice-recommended">Method 1: The
+Systemd User Slice (Recommended)</h3>
+<p>Modern Linux distributions manage cgroups via systemd. When a user
+logs into LXDE via a display manager (such as LightDM) or standard
+login, systemd-logind automatically places the user's session into a
+designated slice named <code>user-&lt;UID&gt;.slice</code>.</p>
+<p>To apply limits to the entire session for all users, create a drop-in
+configuration file for the user slice:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /etc/systemd/system/user-.slice.d/</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/systemd/system/user-.slice.d/limits.conf</span></code></pre></div>
+<p>To limit only a specific user account (for example, UID 1000):</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /etc/systemd/system/user-1000.slice.d/</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/systemd/system/user-1000.slice.d/limits.conf</span></code></pre></div>
+<p>Add your cgroup resource limit directives in the <code>[Slice]</code>
+section:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Slice]</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Limit total RAM usage for the session</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">MemoryMax</span><span class="ot">=</span><span class="st">4G</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Limit CPU consumption (e.g., 200% equals 2 full CPU cores)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="dt">CPUQuota</span><span class="ot">=</span><span class="st">200%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Set CPU scheduling weight (default is 100)</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="dt">CPUWeight</span><span class="ot">=</span><span class="dv">50</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Limit maximum number of processes/threads</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="dt">TasksMax</span><span class="ot">=</span><span class="dv">2048</span></span></code></pre></div>
+<p>Reload the systemd daemon to activate the configuration:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl daemon-reload</span></code></pre></div>
+<hr />
+<h3 id="method-2-wrapping-the-lxde-session-startup">Method 2: Wrapping
+the LXDE Session Startup</h3>
+<p>If you want to apply cgroup limits specifically to LXDE rather than
+the user's entire account, you can launch the session inside a custom
+systemd scope.</p>
+<ol type="1">
+<li><p>Open the LXDE desktop session definition file:
+<code>/usr/share/xsessions/LXDE.desktop</code></p></li>
+<li><p>Locate the execution line:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Exec</span><span class="ot">=</span><span class="st">/usr/bin/startlxde</span></span></code></pre></div></li>
+<li><p>Modify it to execute under <code>systemd-run</code>:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Exec</span><span class="ot">=</span><span class="st">systemd-run --user --scope --slice=lxde.slice /usr/bin/startlxde</span></span></code></pre></div></li>
+<li><p>Create the corresponding slice configuration at
+<code>~/.config/systemd/user/lxde.slice</code>:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Slice]</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dt">MemoryMax</span><span class="ot">=</span><span class="st">3G</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="dt">CPUQuota</span><span class="ot">=</span><span class="st">150%</span></span></code></pre></div></li>
+<li><p>Reload the user systemd instance:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> <span class="at">--user</span> daemon-reload</span></code></pre></div></li>
+</ol>
+<hr />
+<h3 id="method-3-legacy-control-via-libcgroup-and-pam">Method 3: Legacy
+Control via libcgroup and PAM</h3>
+<p>On systems not running systemd (such as distributions using SysVinit
+or OpenRC), resource limits are managed through <code>pam_cgroup</code>
+and <code>/etc/cgconfig.conf</code>.</p>
+<ol type="1">
+<li><p>Define the cgroup in <code>/etc/cgconfig.conf</code>:</p>
+<pre class="text"><code>group lxde_users {
+    memory {
+        memory.limit_in_bytes = 4294967296; # 4 GB
+    }
+    cpu {
+        cpu.shares = 512;
+    }
+}</code></pre></li>
+<li><p>Assign users or the session binary in
+<code>/etc/cgrules.conf</code>:</p>
+<pre class="text"><code># &lt;user&gt;:&lt;process&gt;   &lt;controllers&gt;   &lt;cgroup&gt;
+*:lxsession          memory,cpu      lxde_users/</code></pre></li>
+<li><p>Ensure <code>/etc/pam.d/common-session</code> or
+<code>/etc/pam.d/lightdm</code> includes the cgroup module:</p>
+<pre class="text"><code>session optional pam_cgroup.so</code></pre></li>
+</ol>
+<hr />
+<h3 id="verifying-active-limits">Verifying Active Limits</h3>
+<p>After logging into the LXDE session, verify that the limits are
+active:</p>
+<ul>
+<li><p>View the control group hierarchy and processes:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">systemd-cgls</span></span></code></pre></div></li>
+<li><p>Monitor real-time resource utilization by cgroup:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">systemd-cgtop</span></span></code></pre></div></li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/set-cgroup-resource-limits-for-an-lxde-session';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

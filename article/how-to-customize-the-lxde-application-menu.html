@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Customize the LXDE Application Menu - lxde</title>
+    <meta name="description" content="Customizing the application menu in the Lightweight X11 Desktop Environment (LXDE) allows you to declutter your workspace, organize your software, and create shortcuts for custom scripts. Because LXDE adheres to freedesktop.org (XDG) menu specifications,">
+    <link rel="canonical" href="https://salivity.github.io/lxde/article/how-to-customize-the-lxde-application-menu">
+    <link rel="search" type="application/opensearchdescription+xml" title="lxde" href="/lxde/opensearch.xml">
+    <link rel="icon" href="/lxde/favicon.ico">
+    <link rel="stylesheet" href="/lxde/css/style.css">
+    <link media="print" rel="stylesheet" href="/lxde/css/print.css">
+    <script src="/lxde/js/fuse.min.js"></script>
+    <script src="/lxde/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Customize the LXDE Application Menu - lxde" />
+    <meta property="og:url" content="https://salivity.github.io/lxde/article/how-to-customize-the-lxde-application-menu" />
+    <meta property="og:image" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/lxde/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Customizing the application menu in the Lightweight X11 Desktop Environment (LXDE) allows you to declutter your workspace, organize your software, and create shortcuts for custom scripts. Because LXDE adheres to freedesktop.org (XDG) menu specifications," />
+    <link rel="manifest" href="/lxde/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/lxde/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>lxde</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/lxde/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-customize-the-lxde-application-menu">How to Customize the
+LXDE Application Menu</h1>
+<p>Customizing the application menu in the Lightweight X11 Desktop
+Environment (LXDE) allows you to declutter your workspace, organize your
+software, and create shortcuts for custom scripts. Because LXDE adheres
+to freedesktop.org (XDG) menu specifications, you can customize the
+layout either by using graphical menu editors or by manually editing
+desktop entry files and XML configuration files.</p>
+<h3 id="method-1-using-a-graphical-menu-editor">Method 1: Using a
+Graphical Menu Editor</h3>
+<p>The easiest way to rearrange items and toggle visibility is by
+installing a third-party graphical editor designed for standard desktop
+menus.</p>
+<ol type="1">
+<li><strong>Install MenuLibre or Alacarte</strong>: Open a terminal and
+install either editor using your distribution's package manager:
+<ul>
+<li><p>On Debian/Ubuntu-based systems:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install menulibre</span></code></pre></div>
+<p><em>(Alternatively, you can install
+<code>alacarte</code>)</em></p></li>
+</ul></li>
+<li><strong>Launch the Editor</strong>: Run <code>menulibre</code> or
+<code>alacarte</code> from the terminal or search for "Menu Editor" in
+your current application list.</li>
+<li><strong>Modify Items</strong>:
+<ul>
+<li>Select a category from the left pane to view its applications.</li>
+<li>Toggle the visibility switch to hide unwanted programs without
+uninstalling them.</li>
+<li>Drag and drop entries to move them between categories.</li>
+<li>Click <strong>Save</strong> to apply the changes immediately.</li>
+</ul></li>
+</ol>
+<h3 id="method-2-manually-editing-desktop-files">Method 2: Manually
+Editing <code>.desktop</code> Files</h3>
+<p>For precise, individual control over application names, icons, and
+categories, you can edit desktop entry files.</p>
+<ol type="1">
+<li><p><strong>Locate the <code>.desktop</code> Files</strong>:</p>
+<ul>
+<li>System-wide applications: <code>/usr/share/applications/</code></li>
+<li>User-specific applications:
+<code>~/.local/share/applications/</code></li>
+</ul></li>
+<li><p><strong>Override System Defaults</strong>: To modify an existing
+application safely without administrative privileges, copy its file to
+your local directory:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /usr/share/applications/example.desktop ~/.local/share/applications/</span></code></pre></div></li>
+<li><p><strong>Edit the File</strong>: Open the copied file in a text
+editor (such as Leafpad or Nano):</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">leafpad</span> ~/.local/share/applications/example.desktop</span></code></pre></div></li>
+<li><p><strong>Adjust Key Parameters</strong>:</p>
+<ul>
+<li><strong>Name</strong>: Change <code>Name=Old Name</code> to
+<code>Name=New Name</code> to alter how it appears in the menu.</li>
+<li><strong>Categories</strong>: Edit
+<code>Categories=Network;WebBrowser;</code> to assign the program to
+different menu sections (e.g., <code>AudioVideo</code>,
+<code>Development</code>, <code>Office</code>,
+<code>System</code>).</li>
+<li><strong>Hide an Item</strong>: Add <code>NoDisplay=true</code> to
+the end of the file to remove it from the menu without deleting the
+software.</li>
+</ul></li>
+<li><p>Save the file. LXDE updates the menu dynamically.</p></li>
+</ol>
+<h3 id="method-3-altering-menu-structure-via-xml">Method 3: Altering
+Menu Structure via XML</h3>
+<p>To change the primary category layout or add entirely new menu
+folders, you must edit the menu definition file.</p>
+<ol type="1">
+<li><p><strong>Copy the Configuration File</strong>: Copy the
+system-wide menu definition to your user directory:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.config/menus</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /etc/xdg/menus/lxde-applications.menu ~/.config/menus/lxde-applications.menu</span></code></pre></div></li>
+<li><p><strong>Modify the XML Structure</strong>: Open
+<code>~/.config/menus/lxde-applications.menu</code> in a text editor.
+Within this file, you can:</p>
+<ul>
+<li>Rearrange <code>&lt;Menu&gt;</code> blocks to change the display
+order of categories.</li>
+<li>Remove entire <code>&lt;Menu&gt;</code> blocks to hide default
+categories.</li>
+<li>Define custom rules using <code>&lt;Include&gt;</code> and
+<code>&lt;Filename&gt;</code> tags to place specific
+<code>.desktop</code> files in non-standard menus.</li>
+</ul></li>
+<li><p><strong>Restart the Panel</strong>: To force LXDE to re-read the
+configuration, restart the panel by running:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lxpanelctl</span> restart</span></code></pre></div></li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/lxde/article/how-to-customize-the-lxde-application-menu';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/lxde/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/lxde/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
